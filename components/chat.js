@@ -7,17 +7,18 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CHAT_CONFIG, STARTER_PROMPTS } from "../lib/chat-config.js";
 import { readEventStream } from "../lib/event-stream.js";
-import { GUIDE_STEPS } from "../lib/practice-guide.js";
+import PracticeGuide from "./practice-guide.js";
+import { COURSE_SESSIONS } from "../lib/practice-guide.js";
 import Icon from "./icon.js";
 import RestaurantSources from "./restaurant-sources.js";
 
-export default function Chat({ restaurantSummary }) {
+export default function Chat({ restaurantSummary, initialSession = null }) {
   // 1. useState는 화면이 기억할 값입니다. 값이 바뀌면 React가 화면을 갱신합니다.
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [view, setView] = useState("chat");
+  const [view, setView] = useState(initialSession ? "guide" : "chat");
   const [copiedId, setCopiedId] = useState(null);
 
   // useRef는 HTML 요소 또는 요청 상태를 기억합니다. 바뀌어도 화면을 다시 그리지 않습니다.
@@ -172,7 +173,7 @@ export default function Chat({ restaurantSummary }) {
   }
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell${view === "guide" ? " guide-mode" : ""}`}>
       <a className="skip-link" href="#main-content">
         본문으로 이동
       </a>
@@ -200,15 +201,34 @@ export default function Chat({ restaurantSummary }) {
             <Icon name="chat" />
             AI와 대화하기{view === "chat" && <span className="active-dot" />}
           </button>
-          <button
+          <Link
+            href={`/guide/${initialSession || 1}`}
             className={view === "guide" ? "nav-item active" : "nav-item"}
             onClick={() => setView("guide")}
             aria-current={view === "guide" ? "page" : undefined}
           >
             <Icon name="book" />
-            실습 가이드<span className="tiny-badge">START</span>
-          </button>
+            실습 가이드<span className="tiny-badge">8회차</span>
+          </Link>
         </nav>
+        <div className="sidebar-course">
+          <div className="course-nav-label">회차별 수업</div>
+          <nav className="course-nav" aria-label="회차 선택">
+            {COURSE_SESSIONS.map((session) => (
+              <Link
+                key={session.number}
+                href={`/guide/${session.number}`}
+                aria-label={`${session.number}회차 ${session.label}`}
+                className={`course-link${view === "guide" && initialSession === session.number ? " selected" : ""}`}
+                aria-current={view === "guide" && initialSession === session.number ? "page" : undefined}
+                onClick={() => setView("guide")}
+              >
+                <span>{session.number}회차</span>
+                <strong>{session.label}</strong>
+              </Link>
+            ))}
+          </nav>
+        </div>
         {messages.length > 0 && (
           <div className="session">
             <div className="nav-label">진행 중인 대화</div>
@@ -262,77 +282,13 @@ export default function Chat({ restaurantSummary }) {
           </div>
         </header>
         {view === "guide" ? (
-          <div className="guide-scroll">
-            <div className="guide-content">
-              <span className="eyebrow">LEARN BY MAKING</span>
-              <h1>
-                내 손으로 만드는
-                <br />첫 번째 AI 챗봇
-              </h1>
-              <p className="guide-intro">
-                {GUIDE_STEPS.length}단계로 배우는, 우리 동네 데이터를 아는 AI.
-                <br />
-                코드 속 한글 주석과 README를 함께 읽어보세요.
-              </p>
-              <div className="guide-dataset">
-                <span className="eyebrow">오늘의 실습 데이터</span>
-                <h2>{restaurantSummary.filename}</h2>
-                <p>
-                  등록 업소 {restaurantSummary.total.toLocaleString()}개 ·
-                  기준일 {restaurantSummary.dates.join(", ")}
-                </p>
-                <div className="dataset-types">
-                  {Object.entries(restaurantSummary.byType).map(
-                    ([type, count]) => (
-                      <span key={type}>
-                        {type} <strong>{count.toLocaleString()}</strong>
-                      </span>
-                    ),
-                  )}
-                </div>
-                <p className="dataset-limits">
-                  사용할 수 있는 정보: 업소명·업종·도로명 주소·기준일
-                  <br />
-                  원본에 없는 정보: 메뉴·영업시간·가격·전화번호·별점
-                </p>
-              </div>
-              {GUIDE_STEPS.map((step) => (
-                <article className="guide-step" key={step.number}>
-                  <span className="step-number">{step.number}</span>
-                  <div>
-                    <h2>{step.title}</h2>
-                    <p>{step.text}</p>
-                    <div className="code-file">
-                      <Icon name="code" size={15} />
-                      {step.file}
-                    </div>
-                    <pre>
-                      <code>{step.code}</code>
-                    </pre>
-                    {step.prompts && (
-                      <div className="guide-prompts">
-                        {step.prompts.map((prompt) => (
-                          <button
-                            key={prompt}
-                            disabled={isLoading}
-                            onClick={() => sendMessage(prompt)}
-                          >
-                            <Icon name="chat" size={14} />
-                            {prompt}
-                            <Icon name="chevron" size={14} />
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </article>
-              ))}
-              <button className="guide-back" onClick={() => setView("chat")}>
-                AI와 대화해 보기
-                <Icon name="chevron" size={16} />
-              </button>
-            </div>
-          </div>
+          <PracticeGuide
+            sessionNumber={initialSession || 1}
+            restaurantSummary={restaurantSummary}
+            isLoading={isLoading}
+            onPrompt={sendMessage}
+            onChat={() => setView("chat")}
+          />
         ) : (
           <>
             <div className="chat-scroll">
