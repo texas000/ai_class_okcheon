@@ -1,0 +1,10 @@
+# 설치 파일, 빌드 결과, 비밀 키는 GitHub에 올리지 않습니다.
+node_modules/
+.next/
+out/
+.vercel/
+.env*
+!.env.example
+*.log
+.DS_Store
+coverage/
