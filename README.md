@@ -2,7 +2,7 @@
 
 코드를 처음 접하는 사람도 **질문하기 → 코드 바꾸기 → 배포하기**를 경험하는 한국어 AI 수업용 프로젝트입니다. React와 Next.js로 화면과 서버를 만들고, **okcheon_restaurant.csv의 옥천 업소 데이터를 검색해 NVIDIA AI가 참고하도록 연결합니다.** 기본 모델은 `z-ai/glm-5.3-flash`이며 답변은 스트리밍됩니다.
 
-**4회차 수업은 GitLab → Vercel 경로로 진행합니다.** 브라우저에서 `/guide/4`를 열어 전체 실습을 따라가세요. 아래 GitHub 배포 버튼은 기존 저장소로 빠르게 시작하는 별도 경로입니다.
+**4회차 수업은 GitHub 가입 → NVIDIA API 키 발급 → Vercel 바로 배포 경로로 진행합니다.** 코드를 수정하지 않고 아래 버튼으로 준비된 앱을 그대로 배포합니다. 브라우저에서 `/guide/4`를 열어 쉬운 단계별 안내를 따라가세요.
 
 **아래 버튼은 [texas000/ai_class_okcheon](https://github.com/texas000/ai_class_okcheon) 저장소에 연결되어 있습니다. `NVIDIA_API_KEY`를 입력하면 Vercel에서 배포할 수 있습니다.**
 
@@ -225,7 +225,7 @@ AI는 로컬 파일을 스스로 열지 않습니다. 서버가 관련 내용을
 | 1 | 자기소개와 수업의 목표 | 전체 수업 계획표, 만들고 싶은 앱 이야기 |
 | 2 | AI와 LLM 이해 (120분) | AI 개념, LLM 제작 시각 자료, 질문 비교·검증 활동지 |
 | 3 | Application 이해 (120분) | 입력·처리·결과, 화면·서버·API, 동작 체험과 앱 설계 활동지 |
-| 4 | React·Next.js 화면 만들기와 첫 배포 (120분) | 화면 체험, 이름·역할·색상 수정 (01~03), GitLab·Vercel 배포 |
+| 4 | 준비된 챗봇 바로 배포하기 (120분) | GitHub 가입, NVIDIA API 키 발급, Deploy with Vercel, 앱 주소 확인 |
 | 5 | 옥천 식당 데이터 연결 | CSV 읽기, 검색, AI에 자료 전달 (04~07) |
 | 6 | 답변 확인과 개선 | 원본 비교, 없는 정보 질문하기 (08~09) |
 | 7 | 최종 배포 점검과 발표 준비 | GitLab 변경 반영, 데이터 수정과 재배포 (10) |
@@ -257,32 +257,29 @@ AI는 로컬 파일을 스스로 열지 않습니다. 서버가 관련 내용을
 - 25분: 사용자·핵심 기능·화면 상태 설계, 종이 화면으로 짝 테스트
 - 10분: 앱 설명과 확인 질문, 다음 수업 준비
 
-**4회차 · React·Next.js 화면 만들기와 GitLab·Vercel 첫 배포 (120분, 휴식 포함)**
+**4회차 · 준비된 챗봇을 Vercel에 바로 배포하기 (120분, 휴식 포함)**
 
-- 10분: 계정·키 준비 확인과 코드·저장소·배포의 역할
-- 15분: React 컴포넌트, JSX, props, state와 이벤트
-- 15분: Next.js 페이지·서버 API, CSV와 NVIDIA 스트리밍 흐름
-- 20분: 이름·첫 인사·색상 미리보기와 코드 수정 지점
+- 15분: 준비물과 오늘 만들 결과 확인
+- 20분: GitHub 가입, 이메일 인증, 로그인
+- 20분: NVIDIA Build 로그인, 모델 선택, API 키 발급
+- 10분: 수업용 저장소 이름 확인
 - 10분: 휴식
-- 20분: GitLab 개인 프로젝트로 가져오기, 웹 편집기 수정·커밋
-- 20분: Vercel GitLab Import, Next.js 빌드·환경변수·첫 배포
-- 10분: 실제 질문·원본·모바일 확인, 변경 커밋과 자동 재배포
+- 30분: Deploy with Vercel, 계정 연결, API 키 입력, 배포
+- 15분: 완성된 앱에서 질문하고 앱 주소 기록
 
-수업 전에 GitLab·Vercel 가입·로그인과 NVIDIA API 키 발급을 마칩니다. 강사는 최신 템플릿과 모델 접근을 확인하세요. 브라우저 편집기가 기본 경로이며 로컬 Git·Node.js 작업은 선택 실습입니다. 빌드 대기나 권한 문제가 길어지면 강사 시연을 보고 배포 기록에 다음 행동을 적어 이어서 완료합니다.
+수업 전에는 GitHub와 NVIDIA 회원가입에 사용할 이메일과 휴대전화를 준비합니다. GitHub는 준비된 코드가 놓인 온라인 보관함, Vercel은 그 코드를 실행해 앱 주소를 만드는 서비스라고만 소개합니다. 브랜치, 커밋, Fork, Git 설치와 코드 수정은 4회차에서 다루지 않습니다.
 
-GitLab 템플릿은 개인 공간에 Fork합니다. GitHub의 공개 템플릿을 사용할 때는 **New project/repository → Import project → Repository by URL**에서 `https://github.com/texas000/ai_class_okcheon.git` 또는 강사가 제공하는 최신 저장소 주소를 입력합니다. 가져온 뒤 내 프로젝트의 웹 편집기에서 파일을 수정하고 Commit changes로 기록합니다. 이 가져오기는 원본의 향후 변경을 자동 동기화하지 않습니다. [GitLab 가져오기 공식 안내](https://docs.gitlab.com/user/import/third_party_systems/repo_by_url/)
+학생은 [NVIDIA Build](https://build.nvidia.com/)에 접속해 오른쪽 위 **Sign In**으로 로그인하거나 회원가입합니다. 사용할 AI 모델의 상세 페이지에서 **Get API Key → Generate Key**를 차례로 눌러 개인용 API 키를 만들고 복사합니다. 키는 비밀번호처럼 관리하며 GitHub 파일, 활동지, 단체 채팅방에 적지 않습니다.
 
-Vercel에서 **Add New → Project → GitLab 연결 → 내 저장소 Import**를 진행합니다. Next.js, `package.json`이 있는 프로젝트 루트, 기본 빌드 설정, Node.js 24.x를 확인하세요. `NVIDIA_API_KEY`와 선택 사항인 `NVIDIA_MODEL=z-ai/glm-5.3-flash`를 Production에 설정하고, Preview에서 테스트하면 Preview에도 설정합니다. 키 파일을 저장소에 올리거나 `NEXT_PUBLIC_` 접두사를 붙이지 않습니다. 환경변수를 바꾸면 재배포해야 합니다. [Vercel GitLab 연결](https://vercel.com/docs/git/vercel-for-gitlab), [빌드 설정](https://vercel.com/docs/builds/configure-a-build), [환경변수](https://vercel.com/docs/environment-variables)
+학생은 [수업용 저장소](https://github.com/texas000/ai_class_okcheon)에서 **Deploy with Vercel** 버튼을 누릅니다. Vercel 계정이 없다면 GitHub 계정으로 시작하고, `NVIDIA_API_KEY` 입력칸에 본인의 키를 넣은 뒤 다른 설정은 바꾸지 않고 배포합니다. API 키는 활동지나 GitHub 파일에 적지 않습니다.
 
-배포가 Ready가 되면 Production 주소에서 화면과 실제 답변·CSV 근거를 확인합니다. 연결한 GitLab의 Production Branch에 커밋하면 새 배포가 진행되고 다른 브랜치는 보통 Preview 배포로 확인합니다. 개인 프로젝트에 Maintainer 이상의 권한이 필요하며, Hobby는 비공개 GitLab 그룹 저장소를 지원하지 않습니다. [Git 배포와 계정·권한 조건](https://vercel.com/docs/git)
-
-4회차 본문은 `components/lesson-four.js`, 파일 지도·배포 단계·오류 도움말은 `lib/lesson-four.js`입니다. React 화면 체험은 `components/screen-playground.js`, 수동 점검표는 `components/deployment-checklist.js`, 기존 코드 실습 재사용은 `components/guide-code-steps.js`에서 수정합니다. 화면 체험과 점검표는 실제 코드를 변경하거나 배포를 실행하지 않습니다. 7회차는 첫 배포를 반복하기보다 최종 변경 반영·점검과 발표 준비를 진행합니다.
+배포가 Ready가 되면 완성된 Vercel 주소를 열고 “풍미당 주소 알려줘”라고 질문합니다. 답변과 참고 자료를 확인하고 앱 주소만 활동지에 기록합니다. 4회차 본문은 `components/lesson-four.js`, 가입·배포 단계와 오류 도움말은 `lib/lesson-four.js`, 점검표는 `components/deployment-checklist.js`에서 수정합니다.
 
 시간표는 `lib/lesson-plans.js`에서 수정합니다. 분 단위 시간과 전체 합계를 자동 계산하고 본문으로 이동하는 링크를 제공합니다. 수업 본문은 `components/lesson-two.js`, `components/lesson-three.js`, 공통 시간표·활동·확인 질문은 `components/lesson-blocks.js`에 있습니다. 2회차 기초 개념과 참고 링크는 `lib/lesson-two.js`, 3회차 단계별 설명은 `lib/lesson-plans.js`의 `APPLICATION_FLOW`, 동작 체험은 `components/application-flow.js`에서 바꿉니다.
 
 2~4회차 활동지는 화면에서 작성하고 **텍스트 파일로 내려받을 수 있습니다**. 서버·계정에 저장하지 않으며 새로고침·다른 회차 이동·채팅 전환으로 활동지가 사라질 수 있으니 먼저 내려받으세요. 질문 실험은 먼저 채팅에서 진행한 뒤 가이드로 돌아와 기록하세요. 작성 화면과 내려받기는 `components/lesson-worksheet.js`에서 관리합니다. 연결이 어려우면 메모장·종이와 짝 활동으로 같은 수업을 진행할 수 있습니다.
 
-3회차의 5단계 체험은 실제 API 호출 없이 동작을 설명합니다. 2회차의 질문 버튼은 채팅으로 이동해 실제 API 요청을 보냅니다. 코드 실습 01~02는 화면 수정과 함께 하는 4회차로 옮겼습니다. 앱의 요청·응답 설명은 [MDN의 브라우저·서버 안내](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/First_steps/Client-Server_overview)를 참고했습니다.
+3회차의 5단계 체험은 실제 API 호출 없이 동작을 설명합니다. 2회차의 질문 버튼은 채팅으로 이동해 실제 API 요청을 보냅니다. 4회차는 코드 실습 없이 준비된 앱을 배포합니다. 앱의 요청·응답 설명은 [MDN의 브라우저·서버 안내](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/First_steps/Client-Server_overview)를 참고했습니다.
 
 **LLM 제작 과정**은 ‘글쓰기 연습생이 배우는 학교’에 비유한 6단계 시각 자료입니다. 도서관 준비 → 글자 카드 → 이어쓰기 연습 → 답변 피드백 → 새 문제 시험 → 앱에서 만나기를 클릭하면 해당 SVG 그림과 실제 기술 설명이 표시됩니다. 단계마다 입력·결과물과 핵심 용어를 함께 제공합니다. 3단계의 이어쓰기 체험은 원래 예문과 다음 조각을 비교하는 설명용 활동이며 실제 모델 학습이나 API 호출을 실행하지 않습니다.
 

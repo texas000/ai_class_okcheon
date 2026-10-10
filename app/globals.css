@@ -1504,7 +1504,11 @@ a svg {
   .app-flow-footer { padding: 15px 12px; }
 }
 
-/* 4회차: React 화면 체험과 GitLab → Vercel 배포 안내입니다. */
+/* 4회차: GitHub 가입과 Vercel 바로 배포 안내입니다. */
+.lesson-primary-action { display: inline-flex; align-items: center; justify-content: center; margin: 0 0 20px; padding: 13px 18px; border: 1px solid #b99a76; border-radius: 9px; background: #fffaf0; color: #8d6944; font-size: 13px; font-weight: 600; text-decoration: none; }
+.lesson-primary-action:hover { background: #f3eadc; }
+.lesson-deploy-action { background: #191919; border-color: #191919; color: #fff; }
+.lesson-deploy-action:hover { background: #3b3b3b; }
 .release-pipeline { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .release-pipeline article { position: relative; padding: 20px; border: 1px solid #ded2bf; border-radius: 12px; background: #f3eee3; }
 .release-pipeline article:nth-child(even) { background: #edf1e7; border-color: #d6decb; }
