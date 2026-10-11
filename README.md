@@ -235,7 +235,7 @@ AI는 로컬 파일을 스스로 열지 않습니다. 서버가 관련 내용을
 
 `lib/practice-guide.js`의 **`COURSE_SESSIONS`**에서 `title`, `description`, `goals`, `activities`, `placeholders`를 수정하세요. `placeholders`의 `title`과 `text`를 실제 자료 안내로 바꾸면 해당 회차에 표시됩니다. `stepNumbers`로 기존 코드 실습을 배치하고, 화면 구성은 `components/practice-guide.js`에서 바꿉니다.
 
-1회차에는 전체 **수업 계획표(syllabus)**와 자기소개 폼을 담았습니다. 중복된 ‘자료 준비 중’ 카드는 표시하지 않습니다. 계획표는 `lib/lesson-one.js`, 배치는 `components/lesson-one.js`에서 수정하세요. AI·LLM 설명과 기존 6단계 그림은 **2회차로 이동**했습니다.
+1회차에는 전체 **수업 계획표(syllabus)**와 자기소개 폼을 담았습니다. 중복된 자료 카드는 표시하지 않습니다. 계획표는 `lib/lesson-one.js`, 배치는 `components/lesson-one.js`에서 수정하세요. AI·LLM 설명과 기존 6단계 그림은 **2회차로 이동**했습니다.
 
 **2회차 · AI와 LLM (120분, 휴식 포함)**
 

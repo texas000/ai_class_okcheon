@@ -47,11 +47,11 @@ export default function PracticeGuide({ sessionNumber, restaurantSummary, isLoad
 
         {session.placeholders.length > 0 && <section className="lesson-materials" aria-label="수업 자료 자리">
           <h3>수업 자료와 활동지</h3>
-          <p className="materials-intro">아래는 앞으로 수업 내용을 채워 넣을 자리예요.</p>
+          <p className="materials-intro">아래 안내를 확인해 주세요.</p>
           {session.placeholders.map((placeholder) => (
             <article className="lesson-placeholder" key={placeholder.title}>
               <span className="placeholder-icon"><Icon name="book" size={20} /></span>
-              <div><span className="placeholder-label">자료 준비 중</span><h4>{placeholder.title}</h4><p>{placeholder.text}</p></div>
+              <div><span className="placeholder-label">안내</span><h4>{placeholder.title}</h4><p>{placeholder.text}</p></div>
             </article>
           ))}
         </section>}
