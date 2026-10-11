@@ -46,6 +46,15 @@ export default function LessonFour() {
         { key: "test", label: "질문해 본 내용과 결과", example: "풍미당 주소 질문 / 답변 확인 / 참고 자료 확인" },
         { key: "help", label: "막힌 화면 또는 다음에 할 일", example: "어느 버튼에서 멈췄는지 간단히 기록" },
       ]} />
+      <LessonWorksheet id="lesson-4-agent-plan" title="5회차 준비 · 나의 AI 에이전트 설계 질문지" fields={[
+        { key: "agent_name", label: "만들고 싶은 AI 에이전트 이름", example: "예: 옥천 여행 도우미, 우리 농장 안내원, 복지 서비스 길잡이" },
+        { key: "user_and_purpose", label: "누가, 어떤 상황에서 사용하나요?", example: "이 AI는 ___가 ___할 때 도움을 줘요." },
+        { key: "data", label: "AI가 참고할 데이터", example: "어떤 자료를 준비할까요? 자료의 출처와 표에 들어갈 항목도 적어보세요." },
+        { key: "data_example", label: "데이터에 넣을 실제 예시 3개", example: "이름 / 설명 / 위치처럼 한 줄에 어떤 정보가 들어갈지 예시를 적어보세요." },
+        { key: "questions", label: "사용자가 물어볼 질문 3개", example: "이 AI에게 실제로 묻고 싶은 질문을 세 가지 적어보세요." },
+        { key: "ideal_answers", label: "어떤 답변을 받으면 좋을까요?", example: "길이, 말투, 표·목록 여부, 꼭 포함할 정보와 출처 표시 방법을 적어보세요." },
+        { key: "unknown_rule", label: "데이터에 답이 없을 때 어떻게 말할까요?", example: "추측하지 않고 ‘자료에서 찾지 못했어요’라고 안내하는 등 원하는 규칙을 적어보세요." },
+      ]} />
       <Review items={[
         { question: "GitHub에서 코드를 수정해야 하나요?", answer: "아니요. 4회차에서는 가입하고 수업 저장소를 확인하기만 해요. 준비된 코드를 그대로 배포합니다." },
         { question: "GitHub와 Vercel은 무엇이 다른가요?", answer: "GitHub는 코드가 놓인 온라인 보관함이고, Vercel은 그 코드를 실행해 웹 주소를 만들어 주는 서비스예요." },
