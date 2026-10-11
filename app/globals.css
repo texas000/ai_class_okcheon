@@ -1395,7 +1395,7 @@ a svg {
 .prompt-comparison article { display: flex; flex-direction: column; padding: 19px; border: 1px solid var(--line); border-radius: 12px; background: #fffdf8; }
 .prompt-comparison h3 { font-size: 13px; margin: 0 0 11px; color: #a26b45; }
 .prompt-comparison p { font-size: 12px; line-height: 1.95; margin: 0 0 16px; color: var(--muted); flex: 1; }
-.prompt-comparison button, .lesson-action, .worksheet-header button { font-size: 11px; padding: 9px 12px; border: 1px solid #d2b89e; border-radius: 7px; background: #f5e9d9; color: #95603c; }
+.prompt-comparison button, .lesson-action, .worksheet-header button, .worksheet-actions button { font-size: 11px; padding: 9px 12px; border: 1px solid #d2b89e; border-radius: 7px; background: #f5e9d9; color: #95603c; }
 .lesson-action { margin-top: 15px; }
 .prompt-comparison button:disabled, .lesson-action:disabled { opacity: 0.5; }
 .answer-detail { margin-top: 16px; border-top: 1px solid #d6dccd; padding-top: 13px; font-size: 12px; line-height: 1.9; color: #737c6a; }
@@ -1414,9 +1414,15 @@ a svg {
 .lesson-worksheet > p { font-size: 11px; line-height: 1.85; color: var(--muted); margin: 12px 0 18px; }
 .worksheet-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 .worksheet-fields label { min-width: 0; }
-.worksheet-fields label > span { display: block; font-size: 12px; margin-bottom: 9px; }
+.worksheet-fields label > span, .worksheet-name > span { display: block; font-size: 12px; margin-bottom: 9px; }
+.worksheet-name { display: block; margin-bottom: 18px; }
+.worksheet-name input { display: block; width: min(100%, 420px); padding: 12px; border: 1px solid #ded7ca; border-radius: 8px; background: #faf7f0; color: #5e5a53; font: inherit; font-size: 12px; }
 .worksheet-fields textarea { display: block; width: 100%; min-height: 105px; padding: 12px; border: 1px solid #ded7ca; border-radius: 8px; background: #faf7f0; color: #5e5a53; font: inherit; font-size: 12px; line-height: 1.8; resize: vertical; }
 .worksheet-fields textarea::placeholder { color: #a39888; }
+.worksheet-actions { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
+.worksheet-actions button { font-weight: 600; cursor: pointer; }
+.worksheet-actions button:disabled { cursor: wait; opacity: 0.65; }
+.worksheet-actions span { font-size: 10px; color: var(--muted); }
 .lesson-worksheet > .worksheet-status { margin-bottom: 0; color: #718063; }
 .input-output-map { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 12px; }
 .input-output-map > div { background: #f3eee3; padding: 22px; border: 1px solid #ddd3c3; border-radius: 12px; }
@@ -1484,6 +1490,7 @@ a svg {
   .teaching-grid, .restaurant-analogy, .worksheet-fields { grid-template-columns: 1fr; }
   .class-activity, .lesson-worksheet { padding: 18px; }
   .worksheet-header { align-items: flex-start; flex-direction: column; }
+  .worksheet-actions { align-items: flex-start; flex-direction: column; }
   .concept-map { gap: 6px; padding: 12px; }
   .concept-map > * { padding: 9px; font-size: 10px; }
   .input-output-map { grid-template-columns: 1fr; gap: 9px; }
