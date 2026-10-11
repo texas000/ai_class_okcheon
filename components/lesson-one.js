@@ -41,7 +41,6 @@ export default function LessonOne() {
           { key: "ai_experience", label: "AI를 사용해 본 경험", example: "사용한 적이 없다면 ‘처음이에요’라고 적어도 좋아요." },
           { key: "class_goal", label: "이번 수업에서 배우고 싶은 것", example: "AI에게 질문하기, 앱 만들기, 배포하기 등 기대하는 내용을 적어보세요." },
           { key: "app_idea", label: "만들어 보고 싶은 앱 아이디어", example: "누구에게 어떤 도움을 주는 앱이면 좋을까요? 아직 없다면 관심 분야를 적어보세요." },
-          { key: "promise", label: "함께 지키고 싶은 수업 약속", example: "서로의 질문을 존중하기, 비밀번호를 공유하지 않기 등 한 가지를 적어보세요." },
         ]} />
       </section>
 

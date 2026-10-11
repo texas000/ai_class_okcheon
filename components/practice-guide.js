@@ -5,6 +5,7 @@ import LessonOne from "./lesson-one.js";
 import LessonTwo from "./lesson-two.js";
 import LessonThree from "./lesson-three.js";
 import LessonFour from "./lesson-four.js";
+import LessonSeven from "./lesson-seven.js";
 import GuideCodeSteps from "./guide-code-steps.js";
 
 // 회차의 내용은 lib/practice-guide.js에서 바꾸고, 화면 배치는 이곳에서 바꿉니다.
@@ -21,7 +22,7 @@ export default function PracticeGuide({ sessionNumber, restaurantSummary, isLoad
           <div className="lesson-meta"><span>AI CLASS · {session.number}회차 / 8회차</span><span>{session.duration ? `총 ${session.duration}분 · 활동지 포함` : session.number === 1 ? "자기소개 · 수업 안내" : "수업 자료 추가 예정"}</span></div>
           <h1 id="lesson-title">{session.title}</h1>
           <p>{session.description}</p>
-          {session.number >= 5 && session.number <= 7 && <small>이 회차의 구성은 초안이며, 수업 진행에 맞게 조정할 수 있어요.</small>}
+          {session.number >= 5 && session.number <= 6 && <small>이 회차의 구성은 초안이며, 수업 진행에 맞게 조정할 수 있어요.</small>}
         </section>
 
         <div className="lesson-overview">
@@ -39,6 +40,7 @@ export default function PracticeGuide({ sessionNumber, restaurantSummary, isLoad
         {session.number === 2 && <LessonTwo isLoading={isLoading} onPrompt={onPrompt} />}
         {session.number === 3 && <LessonThree />}
         {session.number === 4 && <LessonFour codePractice={codePractice} />}
+        {session.number === 7 && <LessonSeven />}
 
         {session.placeholders.length > 0 && <section className="lesson-materials" aria-label="수업 자료 자리">
           <h3>수업 자료와 활동지</h3>
