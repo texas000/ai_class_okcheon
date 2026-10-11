@@ -6,6 +6,7 @@ import LessonTwo from "./lesson-two.js";
 import LessonThree from "./lesson-three.js";
 import LessonFour from "./lesson-four.js";
 import LessonFive from "./lesson-five.js";
+import LessonSix from "./lesson-six.js";
 import LessonSeven from "./lesson-seven.js";
 import GuideCodeSteps from "./guide-code-steps.js";
 
@@ -23,7 +24,6 @@ export default function PracticeGuide({ sessionNumber, restaurantSummary, isLoad
           <div className="lesson-meta"><span>AI CLASS · {session.number}회차 / 8회차</span><span>{session.duration ? `총 ${session.duration}분 · 활동지 포함` : session.number === 1 ? "자기소개 · 수업 안내" : "수업 자료 추가 예정"}</span></div>
           <h1 id="lesson-title">{session.title}</h1>
           <p>{session.description}</p>
-          {session.number === 6 && <small>이 회차의 구성은 초안이며, 수업 진행에 맞게 조정할 수 있어요.</small>}
         </section>
 
         <div className="lesson-overview">
@@ -42,6 +42,7 @@ export default function PracticeGuide({ sessionNumber, restaurantSummary, isLoad
         {session.number === 3 && <LessonThree />}
         {session.number === 4 && <LessonFour codePractice={codePractice} />}
         {session.number === 5 && <LessonFive />}
+        {session.number === 6 && <LessonSix />}
         {session.number === 7 && <LessonSeven />}
 
         {session.placeholders.length > 0 && <section className="lesson-materials" aria-label="수업 자료 자리">
