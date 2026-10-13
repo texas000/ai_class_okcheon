@@ -148,13 +148,24 @@ test("일반 코딩·CSV 개념 질문에는 식당 참고 자료를 추가하�
 });
 
 test("참고 프롬프트에 원본 필드와 집계를 넣고 없는 메뉴·영업시간은 만들지 않음", () => {
-  const result = ask("풍미당 영업시간과 메뉴 가격 알려줘.");
+  const result = ask("풍미당 인허가일자와 면적, 영업시간을 알려줘.");
   const context = restaurantContext(result);
   assert.match(context, /okcheon_restaurant.csv/);
   assert.match(context, /중앙로 23-1/);
   assert.match(context, /AI에전달한업소수/);
   assert.match(context, /영업\/정상/);
   assert.match(context, /0437321827/);
+  assert.equal(result.sources[0].approvedAt, "1978-12-02");
+  assert.equal(result.sources[0].siteArea, "12.50");
+  assert.equal(result.sources[0].facilityArea, "12.5");
+  assert.equal(
+    result.sources[0].details["지번주소"],
+    "충청북도 옥천군 옥천읍 금구리 146",
+  );
+  assert.match(context, /"인허가일자":"1978-12-02"/);
+  assert.match(context, /"소재지면적":"12.50"/);
+  assert.match(context, /"시설총규모":"12.5"/);
+  assert.match(context, /"좌표정보\(X\)":"250921.256390189"/);
   assert.equal(result.sources[0].menu, undefined);
   assert.equal(result.sources[0].hours, undefined);
 });

@@ -35,6 +35,9 @@ export default function RestaurantSources({ sources, info }) {
                 </span>
               </div>
               <p>{source.address}</p>
+              {source.approvedAt && <p>인허가일자 {source.approvedAt}</p>}
+              {source.siteArea && <p>소재지면적 {source.siteArea}</p>}
+              {source.facilityArea && <p>시설총규모 {source.facilityArea}</p>}
               {source.phone && <p>전화번호 {source.phone}</p>}
             </li>
           ))}
