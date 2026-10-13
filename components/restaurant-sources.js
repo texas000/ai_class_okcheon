@@ -6,7 +6,7 @@ export default function RestaurantSources({ sources, info }) {
     <details className="restaurant-sources">
       <summary>참고한 CSV 자료 · {sources.length}곳</summary>
       <p className="source-meta">
-        {info.filename} · 기준일 {info.dates.join(", ")}
+        {info.filename} · 최신 데이터 갱신일 {info.dates.join(", ")}
         <br />
         전체 {info.total.toLocaleString()}개 업소 중 검색 조건에 맞는{" "}
         {info.matched.toLocaleString()}곳
@@ -31,10 +31,11 @@ export default function RestaurantSources({ sources, info }) {
               <div>
                 <strong>{source.name}</strong>
                 <span>
-                  연번 {source.id} · {source.type}
+                  {source.type} · {source.status}
                 </span>
               </div>
               <p>{source.address}</p>
+              {source.phone && <p>전화번호 {source.phone}</p>}
             </li>
           ))}
         </ul>

@@ -10,32 +10,32 @@ import {
 
 test("CSV는 BOM, 따옴표 안의 쉼표와 줄바꿈을 보존", () => {
   const rows = parseRestaurants(
-    '\ufeff연번,업종명,업소명,소재지(도로명),데이터기준일\r\n1,일반음식점,"테스트,식당","충청북도 옥천군 옥천읍 테스트로 1,\n2층",2026-09-16\r\n',
+    '\ufeff관리번호,사업장명,업태구분명,도로명주소,영업상태명,데이터갱신시점\r\n1,"테스트,식당",한식,"충청북도 옥천군 옥천읍 테스트로 1,\n2층",영업/정상,2026-10-09 12:00:00\r\n',
   );
   assert.equal(rows[0].name, "테스트,식당");
   assert.equal(rows[0].address, "충청북도 옥천군 옥천읍 테스트로 1,\n2층");
   assert.equal(rows[0].district, "옥천읍");
 });
 
-test("필수 컬럼, 빈 데이터·값과 중복 연번을 검증", () => {
+test("필수 컬럼, 빈 데이터·값과 중복 관리번호를 검증", () => {
   assert.throws(() => parseRestaurants("이름,주소\n식당,옥천"), /필수 컬럼/);
   assert.throws(
-    () => parseRestaurants("연번,업종명,업소명,소재지(도로명),데이터기준일\n"),
+    () => parseRestaurants("관리번호,사업장명,업태구분명,도로명주소,영업상태명,데이터갱신시점\n"),
     /데이터가 없습니다/,
   );
   assert.throws(
     () =>
       parseRestaurants(
-        "연번,업종명,업소명,소재지(도로명),데이터기준일\n1,일반음식점,,옥천,2026-09-16",
+        "관리번호,사업장명,업태구분명,도로명주소,영업상태명,데이터갱신시점\n1,,한식,옥천,영업/정상,2026-10-09",
       ),
     /빈 값/,
   );
   assert.throws(
     () =>
       parseRestaurants(
-        "연번,업종명,업소명,소재지(도로명),데이터기준일\n1,일반음식점,A,옥천,2026-09-16\n1,일반음식점,B,옥천,2026-09-16",
+        "관리번호,사업장명,업태구분명,도로명주소,영업상태명,데이터갱신시점\n1,A,한식,옥천,영업/정상,2026-10-09\n1,B,한식,옥천,영업/정상,2026-10-09",
       ),
-    /중복 연번/,
+    /중복 관리번호/,
   );
 });
 
@@ -45,13 +45,12 @@ const ask = (query) =>
 
 test("실제 CSV의 업종별·지역별 집계 합계가 전체와 일치", () => {
   const summary = getRestaurantSummary(records);
-  assert.equal(summary.total, 1020);
-  assert.deepEqual(summary.byType, {
-    일반음식점: 818,
-    휴게음식점: 184,
-    제과점영업: 18,
-  });
-  assert.deepEqual(summary.dates, ["2026-09-16", "2026-10-14"]);
+  assert.equal(summary.total, 1493);
+  assert.equal(summary.byType["한식"], 823);
+  assert.equal(summary.byType["호프/통닭"], 137);
+  assert.deepEqual(summary.byStatus, { "영업/정상": 803, 폐업: 690 });
+  assert.deepEqual(summary.dates, ["2026-10-09"]);
+  assert.ok(records.every((row) => row.address.includes("옥천군")));
   assert.equal(
     Object.values(summary.byDistrict).reduce((sum, count) => sum + count, 0),
     summary.total,
@@ -71,12 +70,12 @@ test("지역과 자연스러운 한국어 조사로 검색", () => {
     "청산면에 어떤 식당이 있는지 3곳과 주소를 알려줘.",
   ]) {
     const result = ask(query);
-    assert.equal(result.info.matched, 57);
+    assert.equal(result.info.matched, 85);
     assert.ok(result.sources.every((row) => row.district === "청산면"));
   }
   assert.equal(
     ask("옥천읍에 어떤 식당이 있는지 5곳 알려줘.").info.matched,
-    678,
+    987,
   );
 });
 
@@ -84,7 +83,8 @@ test("새로 합친 일반음식점을 이름과 주소로 검색", () => {
   const result = ask("옥이네 밥집 주소 알려줘.");
   const added = result.sources.find((row) => row.name === "옥이네 밥집");
   assert.ok(added);
-  assert.equal(added.type, "일반음식점");
+  assert.equal(added.type, "한식");
+  assert.equal(added.status, "영업/정상");
   assert.equal(
     added.address,
     "충청북도 옥천군 군북면 비야대정로 236",
@@ -101,7 +101,7 @@ test("정확한 업소명, 주소 키워드, 존재하지 않는 이름을 검�
   assert.equal(ask("옥천 우주정거장식당 주소 알려줘.").info.matched, 0);
 });
 
-test("카페 이름 검색과 제과점 업종 검색을 구분", () => {
+test("카페 이름 검색과 업태·영업 상태 검색을 구분", () => {
   const cafes = ask("옥천읍에 이름에 카페나 커피가 들어간 업소 3곳 알려줘.");
   assert.ok(cafes.info.matched > 0);
   assert.ok(
@@ -110,9 +110,13 @@ test("카페 이름 검색과 제과점 업종 검색을 구분", () => {
         row.district === "옥천읍" && /카페|커피|coffee|cafe/i.test(row.name),
     ),
   );
-  const bakeries = ask("옥천읍에 빵집 알려줘.");
-  assert.equal(bakeries.info.matched, 14);
-  assert.ok(bakeries.sources.every((row) => row.type === "제과점영업"));
+  const korean = ask("옥천읍에 한식 영업 중 식당 알려줘.");
+  assert.equal(korean.info.matched, 263);
+  assert.ok(
+    korean.sources.every(
+      (row) => row.type === "한식" && row.status === "영업/정상",
+    ),
+  );
 });
 
 test("후속 주소 질문은 이전 식당을 검색하고 새 지역은 이전 조건을 덮어씀", () => {
@@ -129,7 +133,7 @@ test("후속 주소 질문은 이전 식당을 검색하고 새 지역은 이전
     ...history,
     { role: "user", content: "청산면 식당 알려줘." },
   ]);
-  assert.equal(newArea.info.matched, 57);
+  assert.equal(newArea.info.matched, 85);
 });
 
 test("일반 코딩·CSV 개념 질문에는 식당 참고 자료를 추가하지 않음", () => {
@@ -149,6 +153,8 @@ test("참고 프롬프트에 원본 필드와 집계를 넣고 없는 메뉴·�
   assert.match(context, /okcheon_restaurant.csv/);
   assert.match(context, /중앙로 23-1/);
   assert.match(context, /AI에전달한업소수/);
+  assert.match(context, /영업\/정상/);
+  assert.match(context, /0437321827/);
   assert.equal(result.sources[0].menu, undefined);
   assert.equal(result.sources[0].hours, undefined);
 });

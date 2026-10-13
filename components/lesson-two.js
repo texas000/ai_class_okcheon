@@ -6,7 +6,7 @@ import LlmJourney from "./llm-journey.js";
 const PROMPTS = [
   { label: "A · 짧은 질문", text: "풍미당에 대해 알려줘." },
   { label: "B · 조건을 더한 질문", text: "풍미당의 업소명과 도로명 주소를 표로 정리해줘." },
-  { label: "C · 근거와 한계까지", text: "풍미당의 업소명과 도로명 주소를 표로 정리해줘. 제공된 CSV만 근거로 삼고, 데이터 기준일도 알려줘. 메뉴나 영업시간은 추측하지 마." },
+  { label: "C · 근거와 한계까지", text: "풍미당의 사업장명과 도로명 주소, 영업 상태를 표로 정리해줘. 제공된 CSV만 근거로 삼고, 데이터 갱신 시점도 알려줘. 메뉴나 영업시간은 추측하지 마." },
 ];
 
 export default function LessonTwo({ isLoading, onPrompt }) {
@@ -40,10 +40,10 @@ export default function LessonTwo({ isLoading, onPrompt }) {
       <div className="prompt-recipe"><div><span>01</span><strong>목적</strong><p>무엇을 알고 싶나요?</p></div><div><span>02</span><strong>맥락·조건</strong><p>대상, 범위, 참고 자료</p></div><div><span>03</span><strong>출력 형식</strong><p>표, 목록, 길이</p></div><div><span>04</span><strong>확인 규칙</strong><p>출처와 모르는 정보</p></div></div>
       <div className="prompt-comparison">{PROMPTS.map((prompt) => <article key={prompt.label}><h3>{prompt.label}</h3><p>{prompt.text}</p><button disabled={isLoading} onClick={() => onPrompt(prompt.text)}>이 질문으로 대화하기 ↗</button></article>)}</div>
       <p className="course-note">버튼은 채팅으로 이동해 실제 요청을 전송해요. 실습 가이드 버튼으로 돌아와 기록하세요. 이 앱에는 이미 CSV 사용 규칙이 있어서 A에서도 출처가 나올 수 있어요. 달라지지 않은 점도 관찰 결과예요.</p>
-      <Activity title="질문을 바꾸고 차이를 기록해요" steps={["A와 B를 실행해 결과의 형식·정보 범위를 비교해요. 어떤 조건이 달라졌나요?", "C를 실행하고 근거와 데이터 기준일이 표시되는지 살펴봐요. 답변 내용도 CSV와 비교해요.", "나만의 질문을 하나 작성해요. 예: 같은 업소의 이름·주소를 목록으로 요청하거나, 데이터 기준일을 함께 요청해요.", "짝에게 가장 도움이 된 질문을 보여줘요. 같은 질문을 다시 해도 표현이나 선택된 결과가 달라질 수 있어요."]} />
+      <Activity title="질문을 바꾸고 차이를 기록해요" steps={["A와 B를 실행해 결과의 형식·정보 범위를 비교해요. 어떤 조건이 달라졌나요?", "C를 실행하고 근거와 데이터 갱신 시점이 표시되는지 살펴봐요. 답변 내용도 CSV와 비교해요.", "나만의 질문을 하나 작성해요. 예: 같은 업소의 이름·주소를 목록으로 요청하거나, 영업 상태를 함께 요청해요.", "짝에게 가장 도움이 된 질문을 보여줘요. 같은 질문을 다시 해도 표현이나 선택된 결과가 달라질 수 있어요."]} />
     </LessonSection>
     <LessonSection id="ai-check" eyebrow="01:30–01:50 · 근거 확인" title="AI의 말, 어디까지 믿어도 될까요?" intro="그럴듯하지만 틀린 정보를 생성하는 현상을 환각이라고 불러요. LLM은 매번 원본의 사실을 자동으로 검증하지 않아요.">
-      <div className="teaching-grid"><article><h3>확인 가능한 질문</h3><p>‘풍미당 주소 알려줘’를 물어봐요. 답변 아래 ‘참고한 CSV 자료’를 펼쳐 업소명과 도로명 주소를 대조해요. 원본 기준일과 오늘의 실제 상황이 다를 수도 있어요.</p><button className="lesson-action" disabled={isLoading} onClick={() => onPrompt("풍미당 주소 알려줘.")}>주소 질문 보내기 ↗</button></article><article><h3>자료에 없는 질문</h3><p>‘풍미당의 영업시간과 메뉴 가격 알려줘’를 물어봐요. CSV에는 이 항목이 없어요. 확인이 필요하다고 안내하는지, 임의로 숫자를 만들지 않는지 살펴봐요.</p><button className="lesson-action" disabled={isLoading} onClick={() => onPrompt("풍미당의 영업시간과 메뉴 가격 알려줘.")}>없는 정보 질문 보내기 ↗</button></article></div>
+      <div className="teaching-grid"><article><h3>확인 가능한 질문</h3><p>‘풍미당 주소와 영업 상태 알려줘’를 물어봐요. 답변 아래 ‘참고한 CSV 자료’를 펼쳐 사업장명과 도로명 주소를 대조해요. 원본 갱신 시점과 오늘의 실제 상황이 다를 수도 있어요.</p><button className="lesson-action" disabled={isLoading} onClick={() => onPrompt("풍미당 주소와 영업 상태 알려줘.")}>주소 질문 보내기 ↗</button></article><article><h3>자료에 없는 질문</h3><p>‘풍미당의 영업시간과 메뉴 가격 알려줘’를 물어봐요. CSV에는 이 항목이 없어요. 확인이 필요하다고 안내하는지, 임의로 숫자를 만들지 않는지 살펴봐요.</p><button className="lesson-action" disabled={isLoading} onClick={() => onPrompt("풍미당의 영업시간과 메뉴 가격 알려줘.")}>없는 정보 질문 보내기 ↗</button></article></div>
       <Activity title="사실·추측·확인 필요를 나눠요" steps={["답변에서 사실처럼 보이는 문장 하나를 골라요. 참고 자료에 같은 내용이 있는지 확인해요.", "근거가 없거나 자료가 오래되었다면 ‘확인 필요’로 표시하고 어디서 확인할지 적어요.", "자료에 없는 정보를 요청했을 때의 안내 문장을 짝과 비교해요. 모른다고 말하는 답변도 유용할 수 있어요."]} />
       <aside className="lesson-takeaway"><h3>질문하기 전의 작은 습관</h3><p>비밀번호, API 키, 개인 연락처 등은 실습 질문에 넣지 않아요. 외부 AI API에 보낼 때는 질문과 참고 자료가 외부 서비스로 전달돼요. 공개된 식당 자료로 실습하고, 중요한 정보는 원본과 최신 출처를 확인해요.</p></aside>
       <LessonWorksheet id="lesson-2-ai-notes" title="2회차 · 질문 비교와 검증 활동지" fields={[
@@ -57,7 +57,7 @@ export default function LessonTwo({ isLoading, onPrompt }) {
       <Review items={[
         { question: "AI, 머신러닝, LLM은 모두 같은 뜻인가요?", answer: "AI는 넓은 분야, 머신러닝은 데이터에서 패턴을 배우는 방법, 오늘의 LLM은 딥러닝으로 많은 텍스트를 학습한 언어 모델이에요." },
         { question: "CSV를 질문에 붙이면 모델을 새로 학습시키나요?", answer: "이 앱에서는 참고 자료를 문맥으로 제공해 추론해요. 모델 가중치를 바꾸는 학습과 달라요." },
-        { question: "질문이 구체적이면 답변은 항상 정확한가요?", answer: "원하는 결과에 도움이 되지만 정확성을 보장하지는 않아요. 원본, 기준일, 모르는 정보를 확인해야 해요." },
+        { question: "질문이 구체적이면 답변은 항상 정확한가요?", answer: "원하는 결과에 도움이 되지만 정확성을 보장하지는 않아요. 원본, 데이터 갱신 시점, 모르는 정보를 확인해야 해요." },
       ]} />
       <aside className="lesson-example"><strong>다음 시간까지 · 내가 쓰는 앱 하나 관찰하기</strong><p>어떤 버튼을 눌렀는지, 무엇을 입력했는지, 어떤 결과가 나타났는지 메모해오세요. 다음 3회차에는 그 화면 뒤에서 일어나는 일을 배워요.</p></aside>
       <div className="lesson-references"><span>개념 참고 자료</span>{LESSON_TWO_REFERENCES.map((source) => <a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title} ↗</a>)}</div>

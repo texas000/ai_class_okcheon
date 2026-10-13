@@ -60,11 +60,11 @@ export default function PracticeGuide({ sessionNumber, restaurantSummary, isLoad
           <div className="guide-dataset">
             <span className="eyebrow">오늘의 실습 데이터</span>
             <h2>{restaurantSummary.filename}</h2>
-            <p>등록 업소 {restaurantSummary.total.toLocaleString()}개 · 기준일 {restaurantSummary.dates.join(", ")}</p>
+            <p>음식점 기록 {restaurantSummary.total.toLocaleString()}개 · 최신 갱신일 {restaurantSummary.dates.join(", ")}</p>
             <div className="dataset-types">
               {Object.entries(restaurantSummary.byType).map(([type, count]) => <span key={type}>{type} <strong>{count.toLocaleString()}</strong></span>)}
             </div>
-            <p className="dataset-limits">사용할 수 있는 정보: 업소명·업종·도로명 주소·기준일<br />원본에 없는 정보: 메뉴·영업시간·가격·전화번호·별점</p>
+            <p className="dataset-limits">사용할 수 있는 정보: 사업장명·업태·도로명 주소·영업 상태·전화번호·데이터 갱신 시점<br />원본에 없는 정보: 메뉴·영업시간·가격·별점</p>
           </div>
         )}
         {session.number !== 4 && codePractice}

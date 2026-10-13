@@ -308,7 +308,7 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
                     <Icon name="book" size={14} />
                     <span>
                       옥천 업소 {restaurantSummary.total.toLocaleString()}개 ·{" "}
-                      {restaurantSummary.dates.join(", ")} 기준
+                      최신 갱신일 {restaurantSummary.dates.join(", ")}
                     </span>
                   </div>
                   <div className="starter-grid">
