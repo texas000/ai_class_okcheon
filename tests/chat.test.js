@@ -148,7 +148,7 @@ test("채팅 서버의 요청과 오류 처리", async (t) => {
       const events = await collect(response);
       assert.equal(events[0].sources[0].name, "풍미당");
       assert.equal(events[0].sourceInfo.matched, 1);
-      assert.equal(events[0].sourceInfo.total, 1013);
+      assert.equal(events[0].sourceInfo.total, 1020);
       assert.equal(events[1].delta, "풍미당은 중앙로 23-1에 있습니다.");
       assert.equal(events.at(-1).done, true);
     },

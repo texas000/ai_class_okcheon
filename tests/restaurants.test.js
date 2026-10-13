@@ -45,13 +45,13 @@ const ask = (query) =>
 
 test("실제 CSV의 업종별·지역별 집계 합계가 전체와 일치", () => {
   const summary = getRestaurantSummary(records);
-  assert.equal(summary.total, 1013);
+  assert.equal(summary.total, 1020);
   assert.deepEqual(summary.byType, {
-    일반음식점: 811,
+    일반음식점: 818,
     휴게음식점: 184,
     제과점영업: 18,
   });
-  assert.deepEqual(summary.dates, ["2026-09-16"]);
+  assert.deepEqual(summary.dates, ["2026-09-16", "2026-10-14"]);
   assert.equal(
     Object.values(summary.byDistrict).reduce((sum, count) => sum + count, 0),
     summary.total,
@@ -76,7 +76,18 @@ test("지역과 자연스러운 한국어 조사로 검색", () => {
   }
   assert.equal(
     ask("옥천읍에 어떤 식당이 있는지 5곳 알려줘.").info.matched,
-    672,
+    678,
+  );
+});
+
+test("새로 합친 일반음식점을 이름과 주소로 검색", () => {
+  const result = ask("옥이네 밥집 주소 알려줘.");
+  const added = result.sources.find((row) => row.name === "옥이네 밥집");
+  assert.ok(added);
+  assert.equal(added.type, "일반음식점");
+  assert.equal(
+    added.address,
+    "충청북도 옥천군 군북면 비야대정로 236",
   );
 });
 
