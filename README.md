@@ -135,7 +135,7 @@ app/
 components/
   chat.js                 입력, 실습 가이드, 대화 상태, 답변 표시를 담당합니다.
   practice-guide.js       회차 선택, 목표·활동·자료 자리와 코드 실습을 표시합니다.
-  lesson-one.js           1회차 수업 계획표와 AI·LLM 입문 설명을 표시합니다.
+  lesson-one.js           1회차 아이스브레이킹, 앱 아이디어와 AI Chat 체험을 표시합니다.
   llm-journey.js          ‘글쓰기 학교’ SVG 그림, 단계 선택, 이어쓰기 체험입니다.
   restaurant-sources.js   답변 아래에서 참고한 원본 CSV 행을 보여줍니다.
   icon.js                 작은 SVG 아이콘을 그립니다.
@@ -145,7 +145,7 @@ lib/
   event-stream.js         한글과 SSE 이벤트를 조각에서 복원하는 공통 함수입니다.
   restaurants.js          CSV 읽기, 검증, 검색, 집계, AI 참고 자료 생성입니다.
   practice-guide.js       8회차 수업 구성, 자료 placeholder, 기존 10개 코드 실습입니다.
-  lesson-one.js           1회차 계획표의 수업 내용·결과물, AI 개념과 LLM 제작 단계입니다.
+  lesson-one.js           전체 수업 계획표의 회차별 내용과 결과물입니다.
   llm-journey.js          LLM 제작 6단계의 비유·기술 설명·용어·입력과 결과물입니다.
 scripts/deploy-button.js README 배포 버튼을 만드는 도구입니다.
 tests/chat.test.js       서버 요청·스트리밍·오류 처리를 검증합니다.
@@ -222,7 +222,7 @@ AI는 로컬 파일을 스스로 열지 않습니다. 서버가 관련 내용을
 
 | 회차 | 주제 | 포함된 코드 실습 |
 | --- | --- | --- |
-| 1 | 자기소개와 첫 앱 아이디어 | 전체 수업 계획표, 관심사와 만들고 싶은 앱 이야기 |
+| 1 | 자기소개와 첫 앱 아이디어 (120분) | 직업·취미·앱 아이디어 아이스브레이킹, AI Chat 결과물 체험 |
 | 2 | AI와 LLM 이해 (120분) | AI 개념, LLM 제작 시각 자료, 질문 비교·검증 활동지 |
 | 3 | Application 이해 (120분) | 입력·처리·결과, 화면·서버·API, 동작 체험과 앱 설계 활동지 |
 | 4 | 준비된 챗봇 바로 배포하기 (120분) | GitHub 가입, NVIDIA API 키 발급, Deploy with Vercel, 앱 주소 확인 |
@@ -235,7 +235,18 @@ AI는 로컬 파일을 스스로 열지 않습니다. 서버가 관련 내용을
 
 `lib/practice-guide.js`의 **`COURSE_SESSIONS`**에서 `title`, `description`, `goals`, `activities`, `placeholders`를 수정하세요. `placeholders`의 `title`과 `text`를 실제 자료 안내로 바꾸면 해당 회차에 표시됩니다. `stepNumbers`로 기존 코드 실습을 배치하고, 화면 구성은 `components/practice-guide.js`에서 바꿉니다.
 
-1회차에는 전체 **수업 계획표(syllabus)**와 자기소개 폼을 담았습니다. 중복된 자료 카드는 표시하지 않습니다. 계획표는 `lib/lesson-one.js`, 배치는 `components/lesson-one.js`에서 수정하세요. AI·LLM 설명과 기존 6단계 그림은 **2회차로 이동**했습니다.
+1회차에는 폼 없이 진행하는 2시간 아이스브레이킹, 전체 **수업 계획표(syllabus)**와 AI Chat 결과물 체험을 담았습니다. 직업 또는 하는 일, 취미, 만들고 싶은 앱을 30초 동안 소개하고 모범 답변을 참고해 앱 아이디어를 한 문장으로 만듭니다. 계획표는 `lib/lesson-one.js`, 시간 구성은 `lib/lesson-plans.js`, 본문은 `components/lesson-one.js`에서 수정하세요.
+
+**1회차 · 자기소개와 첫 앱 아이디어 (120분, 휴식 포함)**
+
+- 10분: 이름과 오늘의 기분으로 시작
+- 20분: 직업·취미·만들고 싶은 앱 30초 자기소개
+- 20분: 상황별 모범 답변과 아이디어 힌트
+- 10분: 휴식
+- 20분: 자주 사용하는 앱의 도움과 결과 관찰
+- 20분: 내 앱 아이디어를 한 문장으로 만들기
+- 10분: 8회차 과정과 회차별 결과물 확인
+- 10분: AI Chat으로 이동해 최종 결과물 미리 체험
 
 **2회차 · AI와 LLM (120분, 휴식 포함)**
 
@@ -311,7 +322,7 @@ ChatGPT, Claude, Gemini, Copilot 등 어떤 AI 서비스를 사용해도 됩니�
 
 시간표는 `lib/lesson-plans.js`에서 수정합니다. 분 단위 시간과 전체 합계를 자동 계산하고 본문으로 이동하는 링크를 제공합니다. 수업 본문은 `components/lesson-two.js`, `components/lesson-three.js`, 공통 시간표·활동·확인 질문은 `components/lesson-blocks.js`에 있습니다. 2회차 기초 개념과 참고 링크는 `lib/lesson-two.js`, 3회차 단계별 설명은 `lib/lesson-plans.js`의 `APPLICATION_FLOW`, 동작 체험은 `components/application-flow.js`에서 바꿉니다.
 
-1~4회차 활동지는 화면에서 작성해 **기본 메일 앱으로 제출**하거나 텍스트 파일로 내려받을 수 있습니다. 1회차에는 자기소개, 관심사, AI 경험과 앱 아이디어를 적는 활동지가 있습니다. 제출 버튼을 누르면 받는 사람 `texas000@naver.com`, 제목과 활동지 내용이 채워진 새 메일이 열립니다. 실제 전송을 완료하려면 사용자가 메일 앱에서 보내기를 한 번 더 눌러야 합니다.
+2~4회차 활동지는 화면에서 작성해 **기본 메일 앱으로 제출**하거나 텍스트 파일로 내려받을 수 있습니다. 제출 버튼을 누르면 받는 사람 `texas000@naver.com`, 제목과 활동지 내용이 채워진 새 메일이 열립니다. 실제 전송을 완료하려면 사용자가 메일 앱에서 보내기를 한 번 더 눌러야 합니다. 1회차는 활동지 없이 대화와 짝 활동으로 진행합니다.
 
 별도의 메일 서비스, 발신 도메인 또는 이메일 API 키는 필요하지 않습니다. 기기에 기본 메일 앱과 이메일 계정이 설정되어 있어야 하며, 설정되어 있지 않다면 활동지를 텍스트 파일로 내려받아 직접 첨부할 수 있습니다. 앱은 활동지 내용을 서버나 데이터베이스에 저장하지 않습니다. 새로고침·다른 회차 이동·채팅 전환으로 화면의 작성 내용이 사라질 수 있으니 필요한 경우 먼저 내려받으세요. 작성 화면은 `components/lesson-worksheet.js`에서 관리합니다.
 

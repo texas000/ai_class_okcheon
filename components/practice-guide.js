@@ -21,7 +21,7 @@ export default function PracticeGuide({ sessionNumber, restaurantSummary, isLoad
     <div className="guide-scroll" key={session.number}>
       <div className="guide-content course-content">
         <section className="lesson-header" aria-labelledby="lesson-title">
-          <div className="lesson-meta"><span>AI CLASS · {session.number}회차 / 8회차</span><span>{session.duration ? `총 ${session.duration}분 · 활동지 포함` : session.number === 1 ? "자기소개 · 수업 안내" : "수업 자료 추가 예정"}</span></div>
+          <div className="lesson-meta"><span>AI CLASS · {session.number}회차 / 8회차</span><span>{session.duration ? `총 ${session.duration}분 · 실습 포함` : "수업 자료 추가 예정"}</span></div>
           <h1 id="lesson-title">{session.title}</h1>
           <p>{session.description}</p>
         </section>
