@@ -6,9 +6,12 @@ import { SYLLABUS_DETAILS } from "../lib/lesson-one.js";
 
 export default function LessonOne() {
   return <div className="lesson-content lesson-one">
-    <LessonSection id="course-roadmap" eyebrow="COURSE ROADMAP" title="8회차 동안 이렇게 결과물을 만들어요" intro="오늘의 앱 아이디어가 데이터와 AI를 만나 실제로 접속할 수 있는 나만의 앱으로 발전합니다.">
+    <LessonSection id="course-roadmap" eyebrow="COURSE ROADMAP" title="8회차 동안 이렇게 결과물을 만들어요" intro="강의는 아래 날짜의 19시부터 21시까지 진행해요. 오늘의 앱 아이디어가 데이터와 AI를 만나 실제로 접속할 수 있는 나만의 앱으로 발전합니다.">
       <section className="syllabus" aria-labelledby="syllabus-title">
-        <div className="syllabus-table-wrap"><table className="syllabus-table"><caption className="sr-only">회차별 수업 내용과 결과물</caption><thead><tr><th scope="col">회차</th><th scope="col">무엇을 배우나요?</th><th scope="col">함께 만들 결과물</th></tr></thead><tbody>{SYLLABUS_DETAILS.map((item) => <tr key={item.number}><th scope="row"><Link href={`/guide/${item.number}`}>{item.number}회차</Link></th><td><strong>{COURSE_SESSIONS.find((session) => session.number === item.number).title}</strong><span>{item.topic}</span></td><td>{item.outcome}</td></tr>)}</tbody></table></div>
+        <div className="syllabus-table-wrap"><table className="syllabus-table"><caption>강의 일정 (19시~21시)</caption><thead><tr><th scope="col">회차</th><th scope="col">날짜</th><th scope="col">무엇을 배우나요?</th><th scope="col">함께 만들 결과물</th></tr></thead><tbody>{SYLLABUS_DETAILS.map((item) => {
+          const session = COURSE_SESSIONS.find((course) => course.number === item.number);
+          return <tr key={item.number}><th scope="row"><Link href={`/guide/${item.number}`}>{item.number}회차</Link></th><td className="syllabus-date">{session.date}</td><td><strong>{session.title}</strong><span>{item.topic}</span></td><td>{item.outcome}</td></tr>;
+        })}</tbody></table></div>
       </section>
     </LessonSection>
 

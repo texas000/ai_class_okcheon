@@ -883,14 +883,16 @@ a svg {
 .lesson-one > section, .lesson-content > section { margin-top: 32px; }
 .lesson-section-heading h2 { font-size: 21px; letter-spacing: -0.5px; margin: 8px 0; }
 .lesson-section-heading p { font-size: 12px; line-height: 1.8; color: var(--muted); margin: 0 0 18px; }
-.syllabus-table-wrap { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
-.syllabus-table { border-collapse: collapse; width: 100%; text-align: left; font-size: 12px; line-height: 1.6; }
+.syllabus-table-wrap { border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; }
+.syllabus-table { border-collapse: collapse; width: 100%; min-width: 760px; text-align: left; font-size: 12px; line-height: 1.6; }
+.syllabus-table caption { padding: 13px 15px; text-align: left; background: #faf8f2; border-bottom: 1px solid var(--line); font-size: 13px; font-weight: 600; color: var(--ink); }
 .syllabus-table th, .syllabus-table td { padding: 11px 15px; border-bottom: 1px solid var(--line); }
 .syllabus-table thead { background: #f1eee6; color: #736b5d; font-size: 11px; }
 .syllabus-table tbody tr:last-child > * { border-bottom: 0; }
 .syllabus-table tbody th { width: 72px; white-space: nowrap; font-weight: 500; color: var(--accent); }
 .syllabus-table tbody th a { text-decoration: none; }
 .syllabus-table tbody th a:hover { text-decoration: underline; }
+.syllabus-table .syllabus-date { width: 118px; white-space: nowrap; color: var(--accent); font-weight: 550; }
 .syllabus-table td strong { display: block; font-size: 12px; font-weight: 550; }
 .syllabus-table td span { display: block; color: var(--muted); font-size: 11px; margin-top: 3px; }
 .syllabus-table td:last-child { width: 30%; color: var(--muted); font-size: 11px; }
