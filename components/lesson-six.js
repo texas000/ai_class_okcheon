@@ -12,6 +12,29 @@ const VIBE_PROMPT = `나는 비개발자이고, 지금 만든 AI 에이전트를
 
 export default function LessonSix() {
   return <div className="lesson-content">
+    <LessonSection id="vibe-windows" eyebrow="수업 전 준비 · WINDOWS" title="내 컴퓨터에서 바이브코딩 준비하기" intro="빈 폴더에서 Codex나 Claude Code로 앱을 만들고 실행해요. VS Code와 Git은 이번 로컬 실습의 필수 준비물이 아니에요.">
+      <div className="course-table-wrap"><table className="course-table"><caption>Windows 로컬 실습 필수 준비물</caption>
+        <thead><tr><th>필수 준비물</th><th>하는 일</th><th>준비 방법</th></tr></thead>
+        <tbody>
+          <tr><td>Node.js LTS</td><td>앱 서버 실행과 라이브러리 설치</td><td><a href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">공식 다운로드</a>에서 Windows용 LTS 설치 파일을 받아요. 수업은 24.x LTS로 맞춰요. npm도 함께 설치돼요.</td></tr>
+          <tr><td>Codex 또는 Claude Code</td><td>프롬프트로 앱 생성·수정·디버깅</td><td>둘 중 하나를 설치하고 사용할 계정으로 로그인해요. <a href="https://learn.chatgpt.com/docs/codex/cli" target="_blank" rel="noreferrer">Codex 설치 안내</a> · <a href="https://code.claude.com/docs/en/setup" target="_blank" rel="noreferrer">Claude Code 설치 안내</a></td></tr>
+          <tr><td>Edge 또는 Chrome</td><td>앱 화면과 동작 확인</td><td>Windows에 있는 Edge를 사용해도 돼요.</td></tr>
+          <tr><td>빈 프로젝트 폴더</td><td>코드와 로컬 데이터 저장</td><td>학생마다 새 폴더를 만들어요. package.json이나 코드 파일은 AI가 만들므로 미리 준비하지 않아도 돼요.</td></tr>
+        </tbody>
+      </table></div>
+      <aside className="lesson-takeaway"><h3>추가 설치가 필요 없는 것</h3><p>PowerShell은 Windows에 기본으로 있어요. SQLite 드라이버와 필요한 라이브러리, 업로드·임시 폴더는 AI가 프로젝트를 만들면서 준비해요. 파일 서버도 앱 서버 안에서 구현하므로 별도 서버 프로그램을 설치하지 않아요.</p><p>VS Code는 직접 파일을 살펴보고 싶을 때, Git은 변경 이력을 관리하거나 선택한 도구·기능이 요구할 때 추가해요. 뒤의 GitHub·Vercel 배포 실습은 로컬 실행을 확인한 다음 진행해요.</p></aside>
+      <div className="lesson-code-example"><span className="code-file">Node.js 설치 후 새 PowerShell 창에서 확인</span><pre><code>{`node --version
+npm.cmd --version`}</code></pre></div>
+      <p>두 명령 모두 버전 번호가 나오면 준비됐어요. 명령을 찾지 못하면 터미널이나 AI 도구를 종료하고 다시 열어요. PowerShell에서는 npm 스크립트 실행 정책 문제를 피하기 위해 npm.cmd를 사용해요.</p>
+      <Activity title="빈 폴더에서 첫 앱 만들기" steps={["동기화 폴더 밖에 영문 이름의 새 프로젝트 폴더를 만들어요.", "Codex 앱에서 그 폴더를 열거나, PowerShell에서 폴더로 이동해 codex 또는 claude를 실행해요.", "아래 수강생별 자료에서 본인 이름의 프롬프트 전체를 복사해 입력해요.", "AI가 알려주는 초기화·실행 명령을 따르고, 터미널에 표시된 로컬 주소를 브라우저에서 열어요."]} />
+      <p><a href="/materials/lesson-one-local-build-prompts.md" target="_blank" rel="noreferrer">수강생별 로컬 앱 개발 시작 프롬프트 열기 ↗</a></p>
+      <div className="lesson-code-example"><span className="code-file">앱 생성 후 일반적인 실행 명령 · 실제 README의 안내를 우선해요</span><pre><code>{`npm.cmd install
+npm.cmd run dev`}</code></pre></div>
+      <p>DB 초기화와 샘플 입력은 AI가 만든 명령을 따라요. 서버 터미널은 켜 둔 채 표시된 주소(예: http://127.0.0.1:3000)에 접속해요. 서버를 종료할 때는 Ctrl+C를 눌러요.</p>
+      <Activity title="오류를 AI와 함께 고치기" steps={["어떤 입력을 넣고 어떤 버튼을 눌렀는지 기록해요.", "서버를 실행한 터미널의 오류 문구를 확인해요.", "화면에서 오류가 나면 브라우저에서 F12를 눌러 Console과 Network 탭을 확인해요.", "기대 결과, 실제 결과, 오류 문구를 AI에게 전달하고 기존 DB와 업로드 파일을 유지하면서 수정해 달라고 요청해요.", "수정 후 같은 동작을 다시 실행해 결과를 확인해요. 오류를 전달할 때 API 키와 비밀번호는 제외해요."]} />
+      <aside className="lesson-example"><strong>AI 도구 로그인과 앱의 AI API 키는 별개예요</strong><p>슬라이드·웹소설 앱도 처음에는 API 키 없이 데모 모드로 확인해요. 실제 AI 생성 기능을 연결할 때만 앱의 .env.local에 API 설정을 넣어요. SQLite 설치 중 컴파일 오류가 생기면 오류를 AI에게 전달하고, 추가 도구는 필요할 때 설치해요.</p></aside>
+    </LessonSection>
+
     <LessonSection id="vibe-ready" eyebrow="00:00–00:20 · 현재 상태 확인" title="바꾸기 전에 정상 동작부터 확인해요" intro="5회차에 만든 AI 에이전트의 정상 화면과 답변을 기준점으로 남기면 변경 뒤의 차이를 쉽게 찾을 수 있어요.">
       <Activity title="기준점 만들기" steps={["현재 배포 주소에서 에이전트 이름과 첫인사를 확인해요.", "데이터에 답이 있는 대표 질문과 답이 없는 질문을 각각 보내요.", "답변과 참고 자료가 맞는지 확인하고 현재 화면을 캡처해요.", "오늘 바꾸고 싶은 작은 변화 한 가지를 정해요."]} />
       <aside className="lesson-takeaway"><h3>오늘은 한 가지면 충분해요</h3><p>질문 카드, 안내 문구, 결과 표시, 색상처럼 눈으로 확인할 수 있는 작은 변화가 좋아요. 앱 전체를 새로 만들거나 여러 기능을 한꺼번에 바꾸지 않습니다.</p></aside>

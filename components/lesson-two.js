@@ -2,6 +2,7 @@ import { AI_CONCEPTS, LESSON_TWO_REFERENCES } from "../lib/lesson-two.js";
 import { Activity, LessonSchedule, LessonSection, Review } from "./lesson-blocks.js";
 import LessonWorksheet from "./lesson-worksheet.js";
 import LlmJourney from "./llm-journey.js";
+import ChatbotStructure from "./chatbot-structure.js";
 
 const PROMPTS = [
   { label: "A · 짧은 질문", text: "풍미당에 대해 알려줘." },
@@ -35,6 +36,8 @@ export default function LessonTwo({ isLoading, onPrompt }) {
       </div>
       <aside className="lesson-example"><strong>함께 생각해보기 · “오늘 점심으로 ___”</strong><p>빈칸 후보를 두 개 적어보세요. LLM은 문맥에 따른 다음 토큰 후보의 확률을 계산하고 토큰을 이어 답해요. 자연스러운 문장을 만드는 것과 사실을 확인하는 것은 달라요. 실제 토큰 구분은 모델마다 달라요.</p></aside>
       <aside className="lesson-takeaway"><h3>우리는 LLM을 직접 학습시키나요?</h3><p>이번 수업은 이미 학습된 모델을 NVIDIA API로 불러오는 앱을 만들어요. 옥천 CSV를 검색해 질문과 함께 보내는 것은 참고 자료를 제공하는 과정이에요. 우리 앱이 모델의 가중치를 새로 학습시키지는 않아요.</p></aside>
+      <div id="chatbot-structure"><ChatbotStructure /></div>
+      <aside className="lesson-example"><strong>검색과 답변 만들기는 역할이 달라요</strong><p>검색 코드는 근거가 될 식당 자료를 고르고, LLM은 그 자료를 참고해 문장을 만들어요. 식당 질문에서 검색 결과가 없으면 찾지 못했다고 안내하도록 규칙을 보내요. 영업시간·메뉴 가격처럼 CSV에 없는 정보는 확인이 필요해요. 일반 AI 질문에는 식당 context를 붙이지 않아요.</p></aside>
     </LessonSection>
     <LessonSection id="prompt-lab" eyebrow="01:05–01:30 · 질문 실험" title="좋은 질문은 무엇이 다를까요?" intro="휴식 후, 같은 목적의 질문을 A → B → C로 바꿔봐요. 풍미당 한 곳을 대상으로 조건과 표현을 비교해요. 질문이 구체적이어도 정확성이 보장되지는 않으므로 결과를 확인해요.">
       <div className="prompt-recipe"><div><span>01</span><strong>목적</strong><p>무엇을 알고 싶나요?</p></div><div><span>02</span><strong>맥락·조건</strong><p>대상, 범위, 참고 자료</p></div><div><span>03</span><strong>출력 형식</strong><p>표, 목록, 길이</p></div><div><span>04</span><strong>확인 규칙</strong><p>출처와 모르는 정보</p></div></div>
@@ -57,6 +60,7 @@ export default function LessonTwo({ isLoading, onPrompt }) {
       <Review items={[
         { question: "AI, 머신러닝, LLM은 모두 같은 뜻인가요?", answer: "AI는 넓은 분야, 머신러닝은 데이터에서 패턴을 배우는 방법, 오늘의 LLM은 딥러닝으로 많은 텍스트를 학습한 언어 모델이에요." },
         { question: "CSV를 질문에 붙이면 모델을 새로 학습시키나요?", answer: "이 앱에서는 참고 자료를 문맥으로 제공해 추론해요. 모델 가중치를 바꾸는 학습과 달라요." },
+        { question: "식당을 검색하는 건 LLM인가요?", answer: "이 앱에서는 우리 서버의 코드가 먼저 CSV를 검색해요. 검색한 식당 자료를 질문·대화·규칙과 함께 LLM에 보내고, LLM이 이를 참고해 답변 문장을 만들어요." },
         { question: "질문이 구체적이면 답변은 항상 정확한가요?", answer: "원하는 결과에 도움이 되지만 정확성을 보장하지는 않아요. 원본, 데이터 갱신 시점, 모르는 정보를 확인해야 해요." },
       ]} />
       <aside className="lesson-example"><strong>다음 시간까지 · 내가 쓰는 앱 하나 관찰하기</strong><p>어떤 버튼을 눌렀는지, 무엇을 입력했는지, 어떤 결과가 나타났는지 메모해오세요. 다음 3회차에는 그 화면 뒤에서 일어나는 일을 배워요.</p></aside>
