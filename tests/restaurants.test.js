@@ -9,7 +9,9 @@ import {
   parseRestaurants,
   restaurantContext,
   searchRestaurants,
+  sampleRestaurants,
 } from "../lib/restaurants.js";
+import { RECOMMENDATION_PROMPTS, restaurantTypeLabel } from "../lib/chat-config.js";
 
 test("CSV는 BOM, 따옴표 안의 쉼표와 줄바꿈을 보존", () => {
   const rows = parseRestaurants(
@@ -67,6 +69,51 @@ test("CSV 캐시는 같은 파일을 재사용하고 수정·파싱 실패 후�
 const records = await loadRestaurants();
 const ask = (query) =>
   searchRestaurants(records, [{ role: "user", content: query }]);
+
+test("추천 버튼은 업종별 전체 영업 중 후보에서 중복 없이 3곳 선택", () => {
+  const predicates = [
+    (row) => row.type.includes("식육"),
+    (row) => row.type === "호프/통닭" || /치킨|통닭/.test(row.name),
+    (row) => row.type === "한식",
+    (row) => row.type === "분식",
+    (row) => row.type === "중국식",
+  ];
+  for (const [index, button] of RECOMMENDATION_PROMPTS.entries()) {
+    const result = ask(button.prompt);
+    const eligible = records.filter((row) => row.status === "영업/정상" && predicates[index](row));
+    assert.equal(result.info.matched, eligible.length);
+    assert.equal(result.sources.length, Math.min(3, eligible.length));
+    assert.equal(new Set(result.sources.map((row) => row.id)).size, result.sources.length);
+    assert.ok(result.sources.every((row) => eligible.includes(row)));
+    assert.equal(result.info.selection.method, "random");
+    assert.equal(result.info.shown, result.sources.length);
+    assert.ok(!button.title.includes("식육"));
+  }
+  assert.equal(restaurantTypeLabel("식육(숯불구이)"), "고깃집(숯불구이)");
+});
+
+test("추첨은 제한 이전의 전체 후보를 사용하며 원본과 빈 후보를 안전하게 처리", () => {
+  const fixture = Array.from({ length: 30 }, (_, id) => ({ id }));
+  const before = [...fixture];
+  assert.deepEqual(sampleRestaurants(fixture, 3, (length) => length - 1).map((row) => row.id), [29, 28, 27]);
+  assert.deepEqual(fixture, before);
+  assert.deepEqual(sampleRestaurants([], 3), []);
+  assert.equal(sampleRestaurants(fixture.slice(0, 2), 3).length, 2);
+  const result = ask("안남면 영업 중인 한식 식당 랜덤으로 3곳 추천해줘.");
+  assert.ok(result.sources.length > 0);
+  assert.ok(result.sources.every((row) => row.district === "안남면" && row.type === "한식" && row.status === "영업/정상"));
+});
+
+test("무작위 추천의 주소 후속 질문은 직전 답변의 업소를 다시 추첨하지 않음", () => {
+  const selected = ask(RECOMMENDATION_PROMPTS[0].prompt).sources;
+  const result = searchRestaurants(records, [
+    { role: "user", content: RECOMMENDATION_PROMPTS[0].prompt },
+    { role: "assistant", content: selected.map((row) => row.name).join(" / ") },
+    { role: "user", content: "그곳 주소는?" },
+  ]);
+  assert.equal(result.info.selection, undefined);
+  assert.deepEqual(new Set(result.sources.map((row) => row.name)), new Set(selected.map((row) => row.name)));
+});
 
 test("실제 CSV의 업종별·지역별 집계 합계가 전체와 일치", () => {
   const summary = getRestaurantSummary(records);

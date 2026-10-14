@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import MessageMarkdown from "./message-markdown.js";
-import { CHAT_CONFIG, STARTER_PROMPTS } from "../lib/chat-config.js";
+import { CHAT_CONFIG, STARTER_PROMPTS, RECOMMENDATION_PROMPTS } from "../lib/chat-config.js";
 import { readEventStream } from "../lib/event-stream.js";
 import PracticeGuide from "./practice-guide.js";
 import { COURSE_SESSIONS } from "../lib/practice-guide.js";
@@ -325,6 +325,16 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
                       옥천 업소 {restaurantSummary.total.toLocaleString()}개 ·{" "}
                       최신 갱신일 {restaurantSummary.dates.join(", ")}
                     </span>
+                  </div>
+                  <div className="recommendations" aria-label="종류별 랜덤 식당 추천">
+                    <p>오늘은 뭘 먹을까요? <span>영업 중인 식당 3곳을 랜덤으로 골라드려요.</span></p>
+                    <div className="recommendation-buttons">
+                      {RECOMMENDATION_PROMPTS.map((item) => (
+                        <button key={item.title} onClick={() => sendMessage(item.prompt)} disabled={isLoading}>
+                          {item.title}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                   <div className="starter-grid">
                     {STARTER_PROMPTS.map((starter) => (

@@ -188,6 +188,23 @@ test("채팅 서버의 요청과 오류 처리", async (t) => {
     assert.equal(events.at(-1).done, true);
   });
 
+  await t.test("랜덤 추천의 선택 업소가 모델과 브라우저에 동일하게 전달", async () => {
+    let names;
+    globalThis.fetch = async (_url, options) => {
+      const body = JSON.parse(options.body);
+      const context = JSON.parse(body.messages[0].content.split("[옥천 식당 CSV 참고 자료]\n")[1].split("\n[참고 자료 끝]")[0]);
+      assert.equal(context.선택방식.method, "random");
+      assert.equal(context.업소.length, 3);
+      assert.ok(context.업소.every((row) => row.원본CSV필드.영업상태명 === "영업/정상" && row.원본CSV필드.업태구분명.includes("식육")));
+      names = context.업소.map((row) => row.원본CSV필드.사업장명);
+      return upstreamStream(event({ choices: [{ delta: { content: names.join(", ") } }] }) + "data: [DONE]\n\n");
+    };
+    const events = await collect(await POST(request([{ role: "user", content: "옥천 영업 중인 고깃집 식당을 랜덤으로 3곳 추천해줘." }])));
+    assert.deepEqual(events[0].sources.map((row) => row.name), names);
+    assert.equal(events[0].sourceInfo.selection.method, "random");
+    assert.equal(events.at(-1).done, true);
+  });
+
   await t.test("NVIDIA 완료를 기다리지 않고 첫 조각을 전달", async () => {
     let source;
     globalThis.fetch = async () =>

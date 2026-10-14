@@ -1,3 +1,5 @@
+import { restaurantTypeLabel } from "../lib/chat-config.js";
+
 // AI 답변과 별개로 서버가 검색한 실제 CSV 행을 보여줍니다.
 // 참고 자료를 펼쳐 이름과 주소를 직접 비교할 수 있습니다.
 export default function RestaurantSources({ sources, info }) {
@@ -13,6 +15,7 @@ export default function RestaurantSources({ sources, info }) {
         {info.matched > sources.length &&
           ` · 그중 ${sources.length}곳을 AI에 전달`}
       </p>
+      {info.selection && <p className="source-meta">영업 중인 후보에서 {sources.length}곳 무작위 선택 · 맛이나 평점 순위가 아니에요.</p>}
       {info.orderBy && (
         <p className="source-meta">
           인허가일자 {info.orderBy.direction === "desc" ? "내림차순" : "오름차순"} · 날짜가 유효한 {info.orderBy.validDateCount.toLocaleString()}곳 비교
@@ -40,7 +43,7 @@ export default function RestaurantSources({ sources, info }) {
               <div>
                 <strong>{source.name}</strong>
                 <span>
-                  {source.type} · {source.status}
+                  {restaurantTypeLabel(source.type)} · {source.status}
                 </span>
               </div>
               <p>{source.address}</p>
