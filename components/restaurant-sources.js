@@ -15,9 +15,10 @@ export default function RestaurantSources({ sources, info }) {
       </p>
       {info.orderBy && (
         <p className="source-meta">
-          인허가일자 오름차순 · 날짜가 유효한 {info.orderBy.validDateCount.toLocaleString()}곳 비교
+          인허가일자 {info.orderBy.direction === "desc" ? "내림차순" : "오름차순"} · 날짜가 유효한 {info.orderBy.validDateCount.toLocaleString()}곳 비교
           {info.orderBy.excludedDateCount > 0 && ` · 날짜 누락·오류 ${info.orderBy.excludedDateCount.toLocaleString()}곳 제외`}
           {info.orderBy.earliestDateTies > 1 && ` · 가장 이른 날짜 ${info.orderBy.earliestDate}에 ${info.orderBy.earliestDateTies}곳`}
+          {info.orderBy.latestDateTies > 1 && ` · 가장 최근 날짜 ${info.orderBy.latestDate}에 ${info.orderBy.latestDateTies}곳`}
         </p>
       )}
       {info.nameSearch.length > 0 && (
@@ -29,7 +30,7 @@ export default function RestaurantSources({ sources, info }) {
       {sources.length === 0 ? (
         <p className="source-empty">
           {info.orderBy && info.matched > 0
-            ? "조건에 맞는 업소는 있지만 유효한 인허가일자가 없어 가장 오래된 업소를 확인할 수 없어요."
+            ? "조건에 맞는 업소는 있지만 유효한 인허가일자가 없어 날짜순 순위를 확인할 수 없어요."
             : "조건에 맞는 업소를 찾지 못했어요. 지역이나 가게 이름을 바꿔 질문해 보세요."}
         </p>
       ) : (

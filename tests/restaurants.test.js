@@ -295,3 +295,60 @@ test("날짜 누락·오류를 제외하고 동일한 가장 이른 날짜의 �
   assert.equal(noDate.info.orderBy.validDateCount, 0);
   assert.equal(noDate.info.orderBy.earliestDate, null);
 });
+
+test("최근에 생긴·최신·새로 생긴 요청은 인허가일자 DESC로 전체 검색", () => {
+  for (const query of [
+    "가장 최근에 생긴 식당 알려줘.",
+    "제일 최근에 생긴 식당은?",
+    "최근생긴식당 알려줘.",
+    "최신 식당 알려줘.",
+    "새로 생긴 식당 알려줘.",
+    "최근 순으로 식당 3곳 알려줘.",
+    "인허가일자 내림차순으로 식당 알려줘.",
+    "order by 인허가일자 desc",
+  ]) {
+    const result = ask(query);
+    assert.equal(result.info.matched, 1493, query);
+    assert.equal(result.sources[0].name, "제이파운드케이크", query);
+    assert.equal(result.sources[0].approvedAt, "2026-10-08");
+    assert.equal(result.info.orderBy.direction, "desc");
+    assert.equal(result.info.orderBy.latestDate, "2026-10-08");
+    assert.equal(result.info.orderBy.latestDateTies, 1);
+    assert.ok(result.sources.every((row, index, rows) => index === 0 || rows[index - 1].approvedAt >= row.approvedAt));
+    assert.match(restaurantContext(result), /"인허가일자":"2026-10-08"/);
+  }
+  assert.equal(ask("옥천 식당의 최근 데이터 갱신일 알려줘.").info.orderBy, undefined);
+});
+
+test("최근 순은 지역·영업 상태를 먼저 적용하고 후속 질문에서 방향을 전환", () => {
+  const open = ask("현재 영업 중인 가장 최근에 생긴 식당 알려줘.");
+  assert.equal(open.sources[0].name, "제이파운드케이크");
+  assert.ok(open.sources.every((row) => row.status === "영업/정상"));
+  const local = ask("청산면에서 가장 최근에 생긴 식당 알려줘.");
+  assert.ok(local.sources.length > 0);
+  assert.ok(local.sources.every((row) => row.district === "청산면"));
+  for (const [previous, current, expected] of [
+    ["청산면에서 가장 오래된 식당 알려줘.", "그중 가장 최근에 생긴 식당은?", "desc"],
+    ["청산면에서 가장 최근에 생긴 식당 알려줘.", "그중 가장 오래된 식당은?", "asc"],
+  ]) {
+    const result = searchRestaurants(records, [{ role: "user", content: previous }, { role: "assistant", content: "청산면의 결과입니다." }, { role: "user", content: current }]);
+    assert.equal(result.info.orderBy.direction, expected);
+    assert.ok(result.sources.length > 0);
+    assert.ok(result.sources.every((row) => row.district === "청산면"));
+  }
+});
+
+test("DESC는 최신 날짜가 뒤쪽에 있어도 제한 전에 선택하며 오류 날짜와 동률 처리", () => {
+  const dates = [...Array(13).fill("1980-01-01"), "2026-02-30", "", "2026-10-14", "2026-10-14"];
+  const fixture = parseRestaurants("관리번호,사업장명,업태구분명,도로명주소,영업상태명,데이터갱신시점,인허가일자\n" + dates.map((date, index) => `${index},테스트${index},한식,옥천군 옥천읍,영업/정상,2026-10-14,${date}`).join("\n"));
+  const result = searchRestaurants(fixture, [{ role: "user", content: "가장 최근에 생긴 식당 알려줘." }], 1);
+  assert.equal(result.sources.length, 1);
+  assert.equal(result.sources[0].approvedAt, "2026-10-14");
+  assert.equal(result.info.orderBy.latestDateTies, 2);
+  assert.equal(result.info.orderBy.excludedDateCount, 2);
+  assert.equal(result.info.orderBy.validDateCount, 15);
+  const empty = searchRestaurants(fixture.filter((row) => !row.approvedAt || row.approvedAt === "2026-02-30"), [{ role: "user", content: "최신 식당 알려줘." }]);
+  assert.equal(empty.info.orderBy.latestDate, null);
+  assert.equal(empty.info.orderBy.validDateCount, 0);
+  assert.equal(empty.sources.length, 0);
+});

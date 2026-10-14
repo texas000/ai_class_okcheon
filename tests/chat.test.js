@@ -171,6 +171,23 @@ test("채팅 서버의 요청과 오류 처리", async (t) => {
     assert.equal(events.at(-1).done, true);
   });
 
+  await t.test("최근에 생긴 요청은 DESC 정렬과 최신 인허가 날짜를 모델과 화면에 전달", async () => {
+    globalThis.fetch = async (_url, options) => {
+      const body = JSON.parse(options.body);
+      const context = JSON.parse(body.messages[0].content.split("[옥천 식당 CSV 참고 자료]\n")[1].split("\n[참고 자료 끝]")[0]);
+      assert.equal(context.정렬.direction, "desc");
+      assert.equal(context.정렬.latestDate, "2026-10-08");
+      assert.equal(context.업소[0].원본CSV필드.사업장명, "제이파운드케이크");
+      assert.equal(context.업소[0].원본CSV필드.인허가일자, "2026-10-08");
+      return upstreamStream(event({ choices: [{ delta: { content: "제이파운드케이크의 인허가일자는 2026-10-08입니다." } }] }) + "data: [DONE]\n\n");
+    };
+    const events = await collect(await POST(request([{ role: "user", content: "가장 최근에 생긴 식당 알려줘." }])));
+    assert.equal(events[0].sources[0].name, "제이파운드케이크");
+    assert.equal(events[0].sourceInfo.orderBy.direction, "desc");
+    assert.equal(events[0].sourceInfo.orderBy.latestDate, "2026-10-08");
+    assert.equal(events.at(-1).done, true);
+  });
+
   await t.test("NVIDIA 완료를 기다리지 않고 첫 조각을 전달", async () => {
     let source;
     globalThis.fetch = async () =>
