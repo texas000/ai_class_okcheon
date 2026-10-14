@@ -198,7 +198,7 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
             <Icon name="sparkles" size={23} />
           </span>
           <span>
-            {CHAT_CONFIG.name}
+            AI Class
             <small>처음 만나는 AI, 함께 만드는 내일</small>
           </span>
         </Link>
@@ -309,8 +309,8 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
             <div className="chat-scroll">
               {messages.length === 0 ? (
                 <div className="welcome">
-                  <div className="welcome-symbol">
-                    <Icon name="sparkles" size={37} />
+                  <div className="welcome-symbol" role="img" aria-label="요리사 모자 로고">
+                    <Icon name="chef" size={37} />
                     <span className="orbit orbit-one" />
                     <span className="orbit orbit-two" />
                   </div>

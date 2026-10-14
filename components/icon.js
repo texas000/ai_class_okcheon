@@ -1,6 +1,12 @@
 // 별도 아이콘 라이브러리 없이 SVG로 그린 작은 그림입니다.
 export default function Icon({ name, size = 20, ...props }) {
   const paths = {
+    chef: (
+      <>
+        <path d="M7 16v5h10v-5M7 18h10M7 16v-4a4 4 0 1 1 1-7.8 4.5 4.5 0 0 1 8 0A4 4 0 1 1 17 12v4" />
+        <path d="M10 13v3m4-3v3" />
+      </>
+    ),
     plus: <path d="M12 5v14M5 12h14" />,
     arrow: (
       <>
