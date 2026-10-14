@@ -154,6 +154,23 @@ test("채팅 서버의 요청과 오류 처리", async (t) => {
     },
   );
 
+  await t.test("가장 오래된 업소는 서버의 정렬 결과와 날짜를 NVIDIA와 브라우저에 전달", async () => {
+    globalThis.fetch = async (_url, options) => {
+      const body = JSON.parse(options.body);
+      const json = body.messages[0].content.split("[옥천 식당 CSV 참고 자료]\n")[1].split("\n[참고 자료 끝]")[0];
+      const context = JSON.parse(json);
+      assert.equal(context.정렬.direction, "asc");
+      assert.equal(context.정렬.validDateCount, 1493);
+      assert.equal(context.업소[0].원본CSV필드.사업장명, "송정집");
+      assert.equal(context.업소[0].원본CSV필드.인허가일자, "1977-03-28");
+      return upstreamStream(event({ choices: [{ delta: { content: "송정집은 인허가일자가 1977-03-28이며 폐업 기록입니다." } }] }) + "data: [DONE]\n\n");
+    };
+    const events = await collect(await POST(request([{ role: "user", content: "가장 오래된 식당 알려줘." }])));
+    assert.equal(events[0].sources[0].name, "송정집");
+    assert.equal(events[0].sourceInfo.orderBy.earliestDate, "1977-03-28");
+    assert.equal(events.at(-1).done, true);
+  });
+
   await t.test("NVIDIA 완료를 기다리지 않고 첫 조각을 전달", async () => {
     let source;
     globalThis.fetch = async () =>

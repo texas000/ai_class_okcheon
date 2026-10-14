@@ -1,5 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { mkdtemp, writeFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import {
   getRestaurantSummary,
   loadRestaurants,
@@ -37,6 +40,28 @@ test("필수 컬럼, 빈 데이터·값과 중복 관리번호를 검증", () =>
       ),
     /중복 관리번호/,
   );
+});
+
+test("CSV 캐시는 같은 파일을 재사용하고 수정·파싱 실패 후에는 새 데이터를 읽음", async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), "ai-class-csv-"));
+  const filename = path.join(directory, "restaurants.csv");
+  const header = "관리번호,사업장명,업태구분명,도로명주소,영업상태명,데이터갱신시점\n";
+  try {
+    await writeFile(filename, header + "1,처음식당,한식,옥천군 옥천읍,영업/정상,2026-10-14\n");
+    const [first, concurrent] = await Promise.all([loadRestaurants(filename), loadRestaurants(filename)]);
+    assert.strictEqual(first, concurrent);
+    assert.strictEqual(await loadRestaurants(filename), first);
+    await writeFile(filename, header + "1,수정한식당,한식,옥천군 옥천읍,영업/정상,2026-10-14\n");
+    const updated = await loadRestaurants(filename);
+    assert.notStrictEqual(updated, first);
+    assert.equal(updated[0].name, "수정한식당");
+    await writeFile(filename, "잘못된,컬럼\n");
+    await assert.rejects(loadRestaurants(filename), /필수 컬럼/);
+    await writeFile(filename, header + "1,복구식당,한식,옥천군 옥천읍,영업/정상,2026-10-14\n");
+    assert.equal((await loadRestaurants(filename))[0].name, "복구식당");
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
 });
 
 const records = await loadRestaurants();
@@ -168,4 +193,105 @@ test("참고 프롬프트에 원본 필드와 집계를 넣고 없는 메뉴·�
   assert.match(context, /"좌표정보\(X\)":"250921.256390189"/);
   assert.equal(result.sources[0].menu, undefined);
   assert.equal(result.sources[0].hours, undefined);
+});
+
+test("목록·주소 질문은 기본 필드로 압축하고 화면의 전체 원본과 집계는 보존", () => {
+  const result = ask("옥천읍에 어떤 식당이 있는지 5곳 알려줘.");
+  const text = restaurantContext(result);
+  const context = JSON.parse(text.split("[옥천 식당 CSV 참고 자료]\n")[1].split("\n[참고 자료 끝]")[0]);
+  assert.equal(context.검색조건에맞는업소수, result.info.matched);
+  assert.equal(context.AI에전달한업소수, result.sources.length);
+  assert.equal(context.업소.length, result.sources.length);
+  for (const [index, row] of context.업소.entries()) {
+    assert.equal(row.원본CSV필드.사업장명, result.sources[index].name);
+    assert.equal(row.원본CSV필드.도로명주소, result.sources[index].address);
+    assert.equal(row.원본CSV필드.영업상태명, result.sources[index].status);
+    assert.equal(row.원본CSV필드.데이터갱신시점, result.sources[index].updatedAt);
+    assert.equal(row.원본CSV필드["좌표정보(X)"], undefined);
+    assert.equal(row.address, undefined); // 같은 값의 별칭을 중복으로 보내지 않아요.
+  }
+  assert.ok(result.sources.some((row) => row.details["인허가일자"]));
+});
+
+test("상세 필드·일반 소개·후속 상세 질문에는 전체 원본 정보를 유지", () => {
+  for (const question of ["풍미당 인허가일자와 면적 알려줘.", "풍미당 좌표 알려줘.", "풍미당에 대해 알려줘.", "풍미당 최종수정시점 알려줘."]) {
+    assert.match(restaurantContext(ask(question)), /"좌표정보\(X\)":"250921.256390189"/);
+  }
+  const result = searchRestaurants(records, [
+    { role: "user", content: "풍미당에 대해 알려줘." },
+    { role: "assistant", content: "풍미당입니다." },
+    { role: "user", content: "그곳 주소는?" },
+  ]);
+  assert.match(restaurantContext(result), /"인허가일자":"1978-12-02"/);
+});
+
+test("가장 오래된 질문은 CSV 전체를 인허가일자 ASC로 정렬하고 폐업 기록도 포함", () => {
+  const before = records.map((record) => record.id);
+  for (const query of [
+    "가장 오래된 식당 알려줘.",
+    "가장오래된식당 알려줘.",
+    "제일 오래된식당은?",
+    "옥천에서 제일 오래된 식당은?",
+    "오래된 순으로 식당 3곳 알려줘.",
+    "인허가일자 오름차순으로 식당 알려줘.",
+    "order by 인허가일자 asc",
+  ]) {
+    const result = ask(query);
+    assert.equal(result.info.matched, 1493);
+    assert.equal(result.sources[0].name, "송정집");
+    assert.equal(result.sources[0].approvedAt, "1977-03-28");
+    assert.equal(result.sources[0].status, "폐업");
+    assert.equal(result.info.orderBy.direction, "asc");
+    assert.equal(result.info.orderBy.validDateCount, 1493);
+    assert.equal(result.info.orderBy.earliestDate, "1977-03-28");
+    assert.match(restaurantContext(result), /"인허가일자":"1977-03-28"/);
+    assert.match(restaurantContext(result), /"정렬":\{"field":"인허가일자","direction":"asc"/);
+    assert.ok(result.sources.every((row, index, rows) => index === 0 || rows[index - 1].approvedAt <= row.approvedAt));
+  }
+  assert.deepEqual(records.map((record) => record.id), before);
+});
+
+test("지역·영업 조건을 적용한 뒤 가장 오래된 업소를 찾음", () => {
+  const open = ask("현재 영업 중인 가장 오래된 식당 알려줘.");
+  assert.equal(open.sources[0].name, "중앙식당");
+  assert.equal(open.sources[0].approvedAt, "1977-06-20");
+  assert.ok(open.sources.every((row) => row.status === "영업/정상"));
+  const local = ask("옥천읍에서 가장 오래된 식당 알려줘.");
+  assert.equal(local.sources[0].name, "풍미당");
+  assert.ok(local.sources.every((row) => row.district === "옥천읍"));
+  const history = [{ role: "user", content: "청산면 식당 알려줘." }, { role: "assistant", content: "청산면의 목록입니다." }];
+  const followup = searchRestaurants(records, [...history, { role: "user", content: "그중 가장 오래된 식당은?" }]);
+  assert.equal(followup.sources[0].name, "선광집");
+  assert.ok(followup.sources.every((row) => row.district === "청산면"));
+  // 새 전체 순위 질문은 앞서 물었던 지역·업소로 범위를 좁히지 않아요.
+  const reset = searchRestaurants(records, [...history, { role: "user", content: "가장 오래된 식당 주소 알려줘." }]);
+  assert.equal(reset.sources[0].name, "송정집");
+});
+
+test("인허가 날짜 정렬은 결과 개수 제한 전에 수행", () => {
+  const fixture = parseRestaurants(
+    "관리번호,사업장명,업태구분명,도로명주소,영업상태명,데이터갱신시점,인허가일자\n" +
+    Array.from({ length: 16 }, (_, index) => `${index},테스트${index},한식,옥천군 옥천읍,영업/정상,2026-10-14,${index === 15 ? "1950-01-01" : "2000-01-01"}`).join("\n"),
+  );
+  const result = searchRestaurants(fixture, [{ role: "user", content: "가장 오래된 식당 알려줘." }], 1);
+  assert.equal(result.sources.length, 1);
+  assert.equal(result.sources[0].name, "테스트15");
+  assert.equal(result.info.orderBy.validDateCount, 16);
+});
+
+test("날짜 누락·오류를 제외하고 동일한 가장 이른 날짜의 업소를 함께 식별", () => {
+  const header = "관리번호,사업장명,업태구분명,도로명주소,영업상태명,데이터갱신시점,인허가일자\n";
+  const make = (dates) => parseRestaurants(header + dates.map((date, index) => `${index},테스트${index},한식,옥천군 옥천읍,영업/정상,2026-10-14,${date}`).join("\n"));
+  const dates = ["", "2026-02-30", "1900-02-29", "날짜없음", "0000-01-01", "2000-02-29", "1980-01-01", "1980-01-01"];
+  const result = searchRestaurants(make(dates), [{ role: "user", content: "가장 오래된 식당 알려줘." }]);
+  assert.equal(result.info.matched, 8);
+  assert.equal(result.info.shown, 3);
+  assert.equal(result.info.orderBy.excludedDateCount, 5);
+  assert.equal(result.info.orderBy.earliestDateTies, 2);
+  assert.deepEqual(result.sources.map((row) => row.approvedAt), ["1980-01-01", "1980-01-01", "2000-02-29"]);
+  const noDate = searchRestaurants(make(["", "2026-02-30"]), [{ role: "user", content: "가장 오래된 식당 알려줘." }]);
+  assert.equal(noDate.sources.length, 0);
+  assert.equal(noDate.info.matched, 2);
+  assert.equal(noDate.info.orderBy.validDateCount, 0);
+  assert.equal(noDate.info.orderBy.earliestDate, null);
 });

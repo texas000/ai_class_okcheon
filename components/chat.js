@@ -3,8 +3,7 @@
 // "use client": 입력, 클릭, 상태 변경처럼 브라우저에서 동작하는 React 화면입니다.
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import MessageMarkdown from "./message-markdown.js";
 import { CHAT_CONFIG, STARTER_PROMPTS } from "../lib/chat-config.js";
 import { readEventStream } from "../lib/event-stream.js";
 import PracticeGuide from "./practice-guide.js";
@@ -58,6 +57,18 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
     const replyId = crypto.randomUUID();
     let reply = "";
     let sourceData = {};
+    let renderFrame = null;
+    let replyVisible = false;
+    const publishReply = () => {
+      if (renderFrame !== null) cancelAnimationFrame(renderFrame);
+      renderFrame = null;
+      if (controller.signal.aborted || !reply.trim()) return;
+      replyVisible = true;
+      setMessages([
+        ...nextMessages,
+        { id: replyId, role: "assistant", content: reply, ...sourceData },
+      ]);
+    };
     requestRef.current = controller;
     setMessages(nextMessages);
     setInput("");
@@ -103,6 +114,7 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
         // 서버가 먼저 보낸 CSV 참고 자료를 답변과 함께 보관합니다.
         if (Array.isArray(data.sources) && data.sourceInfo) {
           sourceData = { sources: data.sources, sourceInfo: data.sourceInfo };
+          if (replyVisible) publishReply();
           continue;
         }
         if (data.done) {
@@ -111,16 +123,18 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
         }
         if (typeof data.delta !== "string") continue;
         reply += data.delta;
-        setMessages([
-          ...nextMessages,
-          { id: replyId, role: "assistant", content: reply, ...sourceData },
-        ]);
+        // 첫 글자는 바로 표시하고, 이후 조각은 화면 프레임별로 묶어 Markdown 재계산을 줄여요.
+        if (!replyVisible) publishReply();
+        else if (renderFrame === null) renderFrame = requestAnimationFrame(publishReply);
       }
+      publishReply(); // 마지막 프레임 전 완료돼도 마지막 글자가 빠지지 않아요.
       if (!completed || !reply.trim())
         throw new Error(
           "답변이 끝나기 전에 연결이 끊겼어요. 다시 시도해 주세요.",
         );
     } catch (cause) {
+      if (renderFrame !== null) cancelAnimationFrame(renderFrame);
+      renderFrame = null;
       if (controller.signal.aborted) return;
       // 일부라도 받은 답변은 화면에 남기고 '응답 중단'으로 표시합니다.
       // 실패한 질문은 입력창으로 돌려주므로 전송을 다시 눌러 재시도할 수 있습니다.
@@ -146,6 +160,7 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
           : cause.message,
       );
     } finally {
+      if (renderFrame !== null) cancelAnimationFrame(renderFrame);
       requestRef.current = null;
       setIsLoading(false);
       inputRef.current?.focus();
@@ -377,23 +392,7 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
                         </div>
                         {message.role === "assistant" ? (
                           <div className="markdown">
-                            <ReactMarkdown
-                              remarkPlugins={[remarkGfm]}
-                              components={{
-                                a: ({ children, href, title }) => (
-                                  <a
-                                    href={href}
-                                    title={title}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                  >
-                                    {children}
-                                  </a>
-                                ),
-                              }}
-                            >
-                              {message.content}
-                            </ReactMarkdown>
+                            <MessageMarkdown content={message.content} />
                           </div>
                         ) : (
                           <p className="user-content">{message.content}</p>
