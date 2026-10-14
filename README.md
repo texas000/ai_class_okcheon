@@ -1,4 +1,4 @@
-# 옥천 식당 전문가 — 나의 첫 번째 AI 챗봇
+# AI Class — 나의 첫 번째 AI 챗봇
 
 코드를 처음 접하는 사람도 **질문하기 → 코드 바꾸기 → 배포하기**를 경험하는 한국어 AI 수업용 프로젝트입니다. React와 Next.js로 화면과 서버를 만들고, **okcheon_restaurant.csv의 옥천 업소 데이터를 검색해 NVIDIA AI가 참고하도록 연결합니다.** 기본 모델은 `z-ai/glm-5.3-flash`이며 답변은 스트리밍됩니다.
 
@@ -175,7 +175,7 @@ package-lock.json         설치하는 라이브러리 버전을 고정합니다
 
 ### 실습 A: 옥천 식당 도우미
 
-`lib/chat-config.js`의 `name`은 `"옥천 식당 전문가"`, `greeting`은 `"옥천의 어떤 식당이 궁금하세요?"`입니다. `lib/ai-config.js`의 `SYSTEM_PROMPT`도 같은 역할을 사용합니다. 식당 정보는 CSV만 근거로 답하고 없는 정보는 추측하지 않는 기존 규칙을 함께 유지하세요.
+`lib/chat-config.js`의 화면 이름은 `"AI Class"`, `greeting`은 `"옥천의 어떤 식당이 궁금하세요?"`입니다. `lib/ai-config.js`의 `SYSTEM_PROMPT`에서는 AI 역할을 `"옥천 식당 전문가"`로 정합니다. 식당 정보는 CSV만 근거로 답하고 없는 정보는 추측하지 않는 기존 규칙을 함께 유지하세요.
 
 ```js
 // SYSTEM_PROMPT의 첫 문장을 바꿔보세요.
