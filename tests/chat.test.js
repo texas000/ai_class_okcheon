@@ -188,6 +188,25 @@ test("채팅 서버의 요청과 오류 처리", async (t) => {
     assert.equal(events.at(-1).done, true);
   });
 
+  await t.test("가장 큰 업소의 시설총규모 DESC와 m² 단위가 모델과 화면에 전달", async () => {
+    globalThis.fetch = async (_url, options) => {
+      const body = JSON.parse(options.body);
+      const context = JSON.parse(body.messages[0].content.split("[옥천 식당 CSV 참고 자료]\n")[1].split("\n[참고 자료 끝]")[0]);
+      assert.equal(context.정렬.field, "시설총규모");
+      assert.equal(context.정렬.direction, "desc");
+      assert.equal(context.정렬.unit, "m²");
+      assert.equal(context.정렬.largestArea, 1328.5);
+      assert.equal(context.업소[0].원본CSV필드.사업장명, "(주)그린에셀");
+      assert.equal(context.업소[0].원본CSV필드.시설총규모, "1328.5");
+      return upstreamStream(event({ choices: [{ delta: { content: "(주)그린에셀 · 시설총규모 1328.5 m² · 폐업" } }] }) + "data: [DONE]\n\n");
+    };
+    const events = await collect(await POST(request([{ role: "user", content: "가장 큰 식당 알려줘." }])));
+    assert.equal(events[0].sources[0].facilityArea, "1328.5");
+    assert.equal(events[0].sourceInfo.orderBy.field, "시설총규모");
+    assert.equal(events[0].sourceInfo.orderBy.unit, "m²");
+    assert.equal(events.at(-1).done, true);
+  });
+
   await t.test("랜덤 추천의 선택 업소가 모델과 브라우저에 동일하게 전달", async () => {
     let names;
     globalThis.fetch = async (_url, options) => {

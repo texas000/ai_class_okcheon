@@ -10,6 +10,7 @@ import {
   restaurantContext,
   searchRestaurants,
   sampleRestaurants,
+  facilityAreaNumber,
 } from "../lib/restaurants.js";
 import { RECOMMENDATION_PROMPTS, restaurantTypeLabel } from "../lib/chat-config.js";
 
@@ -69,6 +70,63 @@ test("CSV 캐시는 같은 파일을 재사용하고 수정·파싱 실패 후�
 const records = await loadRestaurants();
 const ask = (query) =>
   searchRestaurants(records, [{ role: "user", content: query }]);
+
+test("가장 큰 식당은 전체 CSV 시설총규모를 숫자 DESC로 비교하고 m² 단위 전달", () => {
+  for (const query of ["가장 큰 식당 알려줘.", "제일 넓은 식당은?", "가장큰식당 알려줘.", "규모가 가장 큰 식당 알려줘.", "시설총규모 내림차순으로 식당 알려줘.", "order by 시설총규모 desc"]) {
+    const result = ask(query);
+    assert.equal(result.info.matched, records.length, query);
+    assert.equal(result.sources[0].name, "(주)그린에셀", query);
+    assert.equal(result.sources[0].facilityArea, "1328.5");
+    assert.equal(result.sources[0].status, "폐업");
+    assert.equal(result.info.orderBy.field, "시설총규모");
+    assert.equal(result.info.orderBy.direction, "desc");
+    assert.equal(result.info.orderBy.unit, "m²");
+    assert.equal(result.info.orderBy.largestArea, 1328.5);
+    assert.ok(result.sources.every((row, index, rows) => !index || facilityAreaNumber(rows[index - 1].facilityArea) >= facilityAreaNumber(row.facilityArea)));
+    assert.match(restaurantContext(result), /"시설총규모":"1328.5"/);
+  }
+  assert.equal(ask("풍미당 시설총규모 알려줘.").info.orderBy, undefined);
+});
+
+test("시설총규모 순위는 지역·영업 조건을 적용하고 날짜 순위와 후속 전환", () => {
+  const open = ask("영업 중인 가장 큰 식당 알려줘.");
+  assert.equal(open.sources[0].name, "명가 하우스웨딩(웨딩홀)");
+  assert.equal(open.sources[0].facilityArea, "926.64");
+  assert.ok(open.sources.every((row) => row.status === "영업/정상"));
+  const local = ask("청산면에서 가장 큰 식당 알려줘.");
+  assert.ok(local.sources.length);
+  assert.ok(local.sources.every((row) => row.district === "청산면"));
+  for (const [previous, current, field, direction] of [
+    ["청산면에서 가장 오래된 식당 알려줘.", "그중 가장 큰 식당은?", "시설총규모", "desc"],
+    ["청산면에서 가장 큰 식당 알려줘.", "그중 가장 오래된 식당은?", "인허가일자", "asc"],
+    ["청산면에서 가장 큰 식당 알려줘.", "그중 가장 최근에 생긴 식당은?", "인허가일자", "desc"],
+  ]) {
+    const result = searchRestaurants(records, [{ role: "user", content: previous }, { role: "assistant", content: "청산면 검색 결과" }, { role: "user", content: current }]);
+    assert.equal(result.info.orderBy.field, field);
+    assert.equal(result.info.orderBy.direction, direction);
+    assert.ok(result.sources.length);
+    assert.ok(result.sources.every((row) => row.district === "청산면"));
+  }
+});
+
+test("면적 숫자 비교는 제한 전에 수행하며 결측·오류·0·소수·동률 처리", () => {
+  for (const value of [null, undefined, "", " ", "-1", "NaN", "Infinity", "1,2", "12m²"]) assert.equal(facilityAreaNumber(value), null);
+  assert.equal(facilityAreaNumber("1,328.50"), 1328.5);
+  assert.equal(facilityAreaNumber("0"), 0);
+  const areas = [...Array(13).fill("99"), "1000.5", "1000.50", "", "oops", "-3", "0"];
+  const fixture = parseRestaurants("관리번호,사업장명,업태구분명,도로명주소,영업상태명,데이터갱신시점,시설총규모,소재지면적\n" + areas.map((area, index) => `${index},테스트${index},한식,옥천군 옥천읍,영업/정상,2026-10-14,${area},9999`).join("\n"));
+  const result = searchRestaurants(fixture, [{ role: "user", content: "가장 큰 식당 알려줘." }], 1);
+  assert.equal(result.sources[0].facilityArea, "1000.5");
+  assert.equal(result.sources.length, 1);
+  assert.equal(result.info.orderBy.largestAreaTies, 2);
+  assert.equal(result.info.orderBy.excludedAreaCount, 3);
+  assert.equal(result.info.orderBy.validAreaCount, 16);
+  assert.equal(fixture[0].facilityArea, "99");
+  const empty = searchRestaurants(fixture.filter((row) => facilityAreaNumber(row.facilityArea) === null), [{ role: "user", content: "가장 큰 식당 알려줘." }]);
+  assert.equal(empty.sources.length, 0);
+  assert.equal(empty.info.orderBy.largestArea, null);
+  assert.equal(empty.info.orderBy.validAreaCount, 0);
+});
 
 test("추천 버튼은 업종별 전체 영업 중 후보에서 중복 없이 3곳 선택", () => {
   const predicates = [

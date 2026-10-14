@@ -16,7 +16,14 @@ export default function RestaurantSources({ sources, info }) {
           ` · 그중 ${sources.length}곳을 AI에 전달`}
       </p>
       {info.selection && <p className="source-meta">영업 중인 후보에서 {sources.length}곳 무작위 선택 · 맛이나 평점 순위가 아니에요.</p>}
-      {info.orderBy && (
+      {info.orderBy?.field === "시설총규모" && (
+        <p className="source-meta">
+          시설총규모 내림차순 · 면적이 유효한 {info.orderBy.validAreaCount.toLocaleString()}곳 비교 · 단위 m²
+          {info.orderBy.excludedAreaCount > 0 && ` · 면적 누락·오류 ${info.orderBy.excludedAreaCount.toLocaleString()}곳 제외`}
+          {info.orderBy.largestAreaTies > 1 && ` · 최대 면적 ${info.orderBy.largestArea} m²에 ${info.orderBy.largestAreaTies}곳`}
+        </p>
+      )}
+      {info.orderBy?.field === "인허가일자" && (
         <p className="source-meta">
           인허가일자 {info.orderBy.direction === "desc" ? "내림차순" : "오름차순"} · 날짜가 유효한 {info.orderBy.validDateCount.toLocaleString()}곳 비교
           {info.orderBy.excludedDateCount > 0 && ` · 날짜 누락·오류 ${info.orderBy.excludedDateCount.toLocaleString()}곳 제외`}
@@ -33,7 +40,7 @@ export default function RestaurantSources({ sources, info }) {
       {sources.length === 0 ? (
         <p className="source-empty">
           {info.orderBy && info.matched > 0
-            ? "조건에 맞는 업소는 있지만 유효한 인허가일자가 없어 날짜순 순위를 확인할 수 없어요."
+            ? `조건에 맞는 업소는 있지만 유효한 ${info.orderBy.field}가 없어 순위를 확인할 수 없어요.`
             : "조건에 맞는 업소를 찾지 못했어요. 지역이나 가게 이름을 바꿔 질문해 보세요."}
         </p>
       ) : (
@@ -48,8 +55,8 @@ export default function RestaurantSources({ sources, info }) {
               </div>
               <p>{source.address}</p>
               {source.approvedAt && <p>인허가일자 {source.approvedAt}</p>}
-              {source.siteArea && <p>소재지면적 {source.siteArea}</p>}
-              {source.facilityArea && <p>시설총규모 {source.facilityArea}</p>}
+              {source.siteArea && <p>소재지면적 {source.siteArea} m²</p>}
+              {source.facilityArea && <p>시설총규모 {source.facilityArea} m²</p>}
               {source.phone && <p>전화번호 {source.phone}</p>}
             </li>
           ))}
