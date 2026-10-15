@@ -12,7 +12,7 @@ const VIBE_PROMPT = `나는 비개발자이고, 지금 만든 AI 에이전트를
 
 export default function LessonSix() {
   return <div className="lesson-content">
-    <LessonSection id="vibe-ready" eyebrow="00:00–00:20 · 현재 상태 확인" title="바꾸기 전에 정상 동작부터 확인해요" intro="5회차에 만든 AI 에이전트의 정상 화면과 답변을 기준점으로 남기면 변경 뒤의 차이를 쉽게 찾을 수 있어요.">
+    <LessonSection id="vibe-ready" eyebrow="00:00–00:20 · 현재 상태 확인" title="바꾸기 전에 정상 동작부터 확인해요" intro="5회차에 연결한 AI API·DB·파일 저장소의 정상 동작을 기준점으로 남기면 변경 뒤의 차이를 쉽게 찾을 수 있어요.">
       <Activity title="기준점 만들기" steps={["현재 배포 주소에서 에이전트 이름과 첫인사를 확인해요.", "데이터에 답이 있는 대표 질문과 답이 없는 질문을 각각 보내요.", "답변과 참고 자료가 맞는지 확인하고 현재 화면을 캡처해요.", "오늘 바꾸고 싶은 작은 변화 한 가지를 정해요."]} />
       <aside className="lesson-takeaway"><h3>오늘은 한 가지면 충분해요</h3><p>질문 카드, 안내 문구, 결과 표시, 색상처럼 눈으로 확인할 수 있는 작은 변화가 좋아요. 앱 전체를 새로 만들거나 여러 기능을 한꺼번에 바꾸지 않습니다.</p></aside>
     </LessonSection>
@@ -29,7 +29,7 @@ export default function LessonSix() {
     </LessonSection>
 
     <LessonSection id="vibe-test" eyebrow="01:25–01:45 · 결과 확인" title="새 기능과 기존 기능을 함께 시험해요" intro="새 기능만 보지 말고 데이터 검색과 AI 답변이 전처럼 작동하는지도 확인합니다.">
-      <Activity title="변경 전후 비교하기" steps={["정해 둔 성공 기준대로 새 변화가 보이는지 확인해요.", "5회차의 대표 질문을 다시 보내 답변과 참고 자료를 비교해요.", "데이터에 없는 질문에도 추측하지 않고 안내하는지 확인해요.", "문제가 있으면 새 기능을 더 만들지 않고 마지막 변경부터 점검해요."]} />
+      <Activity title="변경 전후 비교하기" steps={["정해 둔 성공 기준대로 새 변화가 보이는지 확인해요.", "5회차에 확인한 AI 요청·DB 저장·파일 업로드 중 앱에 해당하는 흐름을 다시 실행해요.", "환경변수와 기존 저장 데이터가 유지되는지 확인해요.", "문제가 있으면 새 기능을 더 만들지 않고 마지막 변경부터 점검해요."]} />
     </LessonSection>
 
     <LessonSection id="vibe-deploy" eyebrow="01:45–02:00 · 저장과 배포" title="개선한 앱을 Vercel에 반영해요" intro="변경 내용을 알 수 있는 기록을 남기고 새 배포가 완료될 때까지 기다립니다.">
