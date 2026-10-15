@@ -1,66 +1,51 @@
-import { Activity, LessonSchedule, LessonSection, Review } from "./lesson-blocks.js";
-import LessonWorksheet from "./lesson-worksheet.js";
-import DeploymentChecklist from "./deployment-checklist.js";
-import { DEPLOY_TROUBLESHOOTING, GITHUB_REPOSITORY_URL, GITHUB_SIGNUP_STEPS, LESSON_FOUR_REFERENCES, NVIDIA_BUILD_URL, NVIDIA_KEY_STEPS, VERCEL_DEPLOY_URL, VERCEL_STEPS } from "../lib/lesson-four.js";
-
-function DeploySteps({ steps }) {
-  return <ol className="deploy-step-list">{steps.map((step, index) => <li key={step.title}><span className="deploy-step-number">{String(index + 1).padStart(2, "0")}</span><div><h3>{step.title}</h3><p>{step.text}</p><aside><strong>확인</strong> {step.check}</aside></div></li>)}</ol>;
-}
+import { Activity, LessonSchedule, LessonSection } from "./lesson-blocks.js";
+import LessonQuestions from "./lesson-questions.js";
+import LessonDeployment from "./lesson-deployment.js";
 
 export default function LessonFour() {
   return <div className="lesson-content">
-    <LessonSchedule number={4} preparation="GitHub와 NVIDIA 가입에 사용할 이메일과 휴대전화를 준비해요. 계정이 이미 있다면 로그인해 둡니다. NVIDIA API 키는 수업 중에 직접 발급받고, 코드는 수정하지 않은 채 준비된 앱을 그대로 배포해요." />
-    <LessonSection id="deploy-ready" eyebrow="00:00–00:15 · 오늘의 목표" title="오늘은 버튼을 눌러 내 앱 주소를 만들어요" intro="어려운 코드 공부는 잠시 미뤄둡니다. 준비된 챗봇을 복사해 인터넷에서 열 수 있는 주소를 만드는 것이 오늘의 목표예요.">
-      <div className="release-pipeline" aria-label="GitHub 가입, NVIDIA API 키 발급, Vercel 배포, 완성된 앱 열기 순서"><article><span>01</span><h3>GitHub 가입</h3><p>무료 계정을 만들어요</p></article><article><span>02</span><h3>API 키 발급</h3><p>NVIDIA에서 키를 만들어요</p></article><article><span>03</span><h3>Vercel 배포</h3><p>키를 넣고 실행해요</p></article><article><span>04</span><h3>내 앱 열기</h3><p>완성된 주소를 확인해요</p></article></div>
-      <aside className="lesson-example"><strong>오늘 기억할 두 가지</strong><p><b>GitHub</b>는 앱을 만드는 데 필요한 파일이 놓인 온라인 보관함이고, <b>Vercel</b>은 그 파일을 실제 웹사이트로 실행해 주는 서비스예요. 오늘은 보관함 속 파일을 고치지 않고 그대로 사용합니다.</p></aside>
-      <Activity title="완성 목표 확인하기" steps={["GitHub 계정을 만들어요.", "NVIDIA Build에서 개인용 API 키를 발급받아요.", "수업용 저장소에서 Deploy with Vercel 버튼을 누르고 API 키를 입력해요.", "완성된 앱 주소에서 질문을 한 번 보내요."]} />
+    <LessonSchedule number={4} preparation="3회차에 준비한 Node.js, 로그인한 AI 코딩 도구, 프로젝트 폴더, 앱 설계도와 시작 프롬프트를 열어주세요. 준비가 안 된 항목은 시작 전에 강사와 확인해요." />
+    <LessonSection id="build-ready" eyebrow="00:00–00:10 · 준비 확인" title="오늘은 내 앱을 직접 만들어요" intro="설명 → 생성 → 실행 → 확인 → 수정 순서로 진행해요. 오늘의 목표는 핵심 기능 하나가 내 컴퓨터에서 끝까지 동작하는 첫 버전이에요.">
+      <Activity title="3회차 준비물 꺼내기" steps={["AI 코딩 도구에 로그인하고 준비한 프로젝트 폴더를 열어요.", "앱 설계도에서 사용자·핵심 기능·확인 기준을 다시 읽어요.", "수강생별 시작 프롬프트와 공개 가능한 샘플 자료를 준비해요."]} />
     </LessonSection>
-    <LessonSection id="github-signup" eyebrow="00:15–00:35 · 계정 만들기" title="GitHub는 가입만 하면 돼요" intro="GitHub를 배울 필요는 없어요. Vercel이 수업 코드를 복사할 수 있도록 무료 계정을 하나 준비합니다.">
-      <a className="lesson-primary-action" href="https://github.com/signup" target="_blank" rel="noreferrer">GitHub 가입 화면 열기 ↗</a>
-      <DeploySteps steps={GITHUB_SIGNUP_STEPS} />
-      <aside className="lesson-takeaway"><h3>낯선 영어가 보여도 괜찮아요</h3><p><b>Sign up</b>은 가입, <b>Sign in</b>은 로그인이에요. 가입이 끝나면 아래 수업 저장소를 열고 이름만 확인합니다. 초록색 Code 버튼, 브랜치, 커밋 같은 메뉴는 오늘 사용하지 않아요.</p></aside>
+    <LessonSection id="build-first-request" eyebrow="00:10–00:25 · 첫 요청" title="내가 원하는 앱을 AI에게 설명해요" intro="3회차에 정리한 요청을 보내고, AI가 이해한 작업 범위와 실행 방법을 확인해요.">
+      <Activity title="첫 개발 요청 보내기" steps={["아래 자료에서 내 이름의 시작 프롬프트를 찾아 전체 내용을 읽어요.", "핵심 기능과 입력·결과 예시가 설계와 맞는지 확인하고 AI에게 보내요.", "샘플 데이터나 데모 모드로 먼저 확인하고 필요한 API 연결은 다음 단계로 정해요.", "AI가 제안한 작업 순서와 수정할 폴더를 확인해요."]} />
+      <p><a href="/materials/lesson-one-local-build-prompts.md" target="_blank" rel="noreferrer">수강생별 로컬 앱 개발 시작 프롬프트 ↗</a></p>
     </LessonSection>
-    <LessonSection id="nvidia-key" eyebrow="00:35–00:55 · API 키 발급" title="NVIDIA Build에서 내 API 키를 만들어요" intro="API 키는 앱이 NVIDIA의 AI 모델을 사용할 수 있게 해주는 개인용 열쇠예요. Vercel에 배포할 때 이 키가 꼭 필요합니다.">
-      <a className="lesson-primary-action" href={NVIDIA_BUILD_URL} target="_blank" rel="noreferrer">NVIDIA Build 열기 ↗</a>
-      <DeploySteps steps={NVIDIA_KEY_STEPS} />
-      <aside className="lesson-example"><strong>API 키는 비밀번호처럼 다뤄요</strong><p>발급받은 키는 본인만 사용합니다. GitHub 파일, 활동지, 단체 채팅방에 붙여 넣거나 화면 캡처로 공유하지 않아요. 이 수업에서는 Vercel의 <code>NVIDIA_API_KEY</code> 입력칸에만 붙여 넣습니다.</p></aside>
+    <LessonSection id="build-local" eyebrow="00:25–00:50 · 생성과 실행" title="첫 앱을 내 컴퓨터에서 실행해요" intro="AI가 파일을 만들면 프로젝트 README의 설치·실행 안내를 따라요. Windows 예시이며 macOS에서는 npm.cmd 대신 npm을 사용해요.">
+      <Activity title="생성된 앱 실행하기" steps={["AI가 만든 파일이 준비한 프로젝트 폴더에 있는지 확인해요.", "README에서 설치·DB 초기화·실행 명령을 확인해요.", "AI가 안내한 명령을 프로젝트 폴더에서 실행해요.", "터미널에 표시된 로컬 주소를 브라우저에서 열어요."]} />
+      <div className="lesson-code-example"><span className="code-file">앱 생성 후 일반적인 실행 명령 · 실제 README의 안내를 우선해요</span><pre><code>{`npm.cmd install
+npm.cmd run dev`}</code></pre></div>
+      <p>DB 초기화와 샘플 입력은 AI가 만든 명령을 따라요. 서버 터미널은 켜 둔 채 표시된 주소(예: http://127.0.0.1:3000)에 접속해요. 서버를 종료할 때는 Ctrl+C를 눌러요.</p>
+
+      <aside className="lesson-example"><strong>로컬 주소는 내 컴퓨터에서 확인하는 주소예요</strong><p>127.0.0.1이나 localhost 주소는 다른 사람의 컴퓨터에서 열리지 않아요. 먼저 내 컴퓨터에서 실행을 확인하고, 공유할 앱 주소는 이후 배포 단계에서 만들어요.</p></aside>
     </LessonSection>
-    <LessonSection id="repository-check" eyebrow="00:55–01:05 · 원본 확인" title="선생님이 준비한 앱을 열어요" intro="이 링크에는 오늘 배포할 완성된 코드가 들어 있습니다. 파일을 누르거나 수정할 필요는 없어요.">
-      <a className="lesson-primary-action" href={GITHUB_REPOSITORY_URL} target="_blank" rel="noreferrer">수업용 GitHub 저장소 열기 ↗</a>
-      <div className="teaching-grid"><article><h3>확인할 것</h3><p>화면 위쪽에 <b>texas000 / ai_class_okcheon</b>이 보이면 맞게 들어온 거예요.</p></article><article><h3>하지 않아도 되는 것</h3><p>코드 읽기, 파일 다운로드, Fork, Git 설치, 명령어 입력은 모두 하지 않아도 됩니다.</p></article></div>
+    <LessonSection id="build-test" eyebrow="01:00–01:25 · 시험과 수정" title="직접 사용해보고 오류를 고쳐요" intro="예상 결과와 실제 결과를 비교하며 같은 동작을 다시 시험해요.">
+      <Activity title="오류를 AI와 함께 고치기" steps={["어떤 입력을 넣고 어떤 버튼을 눌렀는지 기록해요.", "서버를 실행한 터미널의 오류 문구를 확인해요.", "화면에서 오류가 나면 브라우저에서 F12를 눌러 Console과 Network 탭을 확인해요.", "기대 결과, 실제 결과, 오류 문구를 AI에게 전달하고 기존 DB와 업로드 파일을 유지하면서 수정해 달라고 요청해요.", "수정 후 같은 동작을 다시 실행해 결과를 확인해요. 오류를 전달할 때 API 키와 비밀번호는 제외해요."]} />
+
+      <Activity title="세 가지 상황 확인하기" steps={["대표 입력으로 핵심 기능이 끝까지 동작하는지 확인해요.", "입력이 비었거나 결과가 없을 때 다음 행동을 안내하는지 확인해요.", "오류를 고친 뒤 대표 동작도 다시 실행해요."]} />
     </LessonSection>
-    <LessonSection id="vercel-deploy" eyebrow="01:15–01:45 · 바로 배포" title="버튼 하나로 Vercel에 배포해요" intro="아래 버튼은 수업 코드를 Vercel로 바로 가져갑니다. 프로젝트 이름이나 빌드 설정은 기본값 그대로 두세요.">
-      <a className="lesson-primary-action lesson-deploy-action" href={VERCEL_DEPLOY_URL} target="_blank" rel="noreferrer">Deploy with Vercel ↗</a>
-      <DeploySteps steps={VERCEL_STEPS} />
-      <aside className="lesson-example"><strong>API 키는 비밀번호예요</strong><p><code>NVIDIA_API_KEY</code>라는 이름은 그대로 두고 값 칸에 내 키를 붙여 넣어요. 키를 GitHub 파일, 활동지, 단체 채팅방에 적거나 화면 캡처로 공유하면 안 됩니다.</p></aside>
+    <LessonSection id="build-change" eyebrow="01:25–01:45 · 첫 바이브코딩 반복" title="작은 변화 하나를 요청하고 확인해요" intro="앱 이름, 안내 문구, 결과 배치처럼 눈으로 확인할 수 있는 변화 하나를 고르세요.">
+      <Activity title="요청 → 수정 → 확인" steps={["어느 화면의 무엇을 어떻게 바꿀지 한 문장으로 요청해요.", "기존 기능과 데이터를 유지하고 한 가지만 수정해 달라고 해요.", "화면에서 바뀐 부분과 기존 핵심 기능을 함께 확인해요.", "변경 전후의 차이와 확인 결과를 메모해요."]} />
     </LessonSection>
-    <LessonSection id="deploy-review" eyebrow="01:45–02:00 · 확인과 정리" title="완성된 앱을 열고 질문해요" intro="배포가 끝나면 Visit을 눌러 내 앱을 엽니다. 주소를 복사해 두면 다음 수업에도 다시 들어갈 수 있어요.">
-      <DeploymentChecklist />
-      <Activity title="내 앱 사용해보기" steps={["완성된 앱에서 ‘풍미당 주소 알려줘’라고 질문해요.", "답변 아래 참고 자료를 펼쳐 주소가 같은지 확인해요.", "휴대전화에서도 내 앱 주소를 열어봐요.", "앱 주소만 활동지에 적고 API 키는 절대 적지 않아요."]} />
-      <div className="lesson-section-heading deployment-help-heading"><span className="eyebrow">막혔을 때</span><h2>어느 화면에서 멈췄나요?</h2><p>오류를 혼자 해결하려고 설정을 많이 바꾸지 말고, 현재 화면을 강사에게 보여주세요.</p></div>
-      <Review items={DEPLOY_TROUBLESHOOTING} />
-      <LessonWorksheet id="lesson-4-release-notes" title="4회차 · 나의 첫 배포 기록" fields={[
-        { key: "github", label: "GitHub 가입 확인", example: "가입 완료 / 로그인 완료" },
-        { key: "nvidia", label: "NVIDIA API 키 발급 확인", example: "발급 완료 여부만 기록해요. 실제 키는 절대 적지 않아요." },
-        { key: "deployment", label: "내 Vercel 앱 주소", example: "https://내-프로젝트.vercel.app (API 키는 적지 않아요)" },
-        { key: "test", label: "질문해 본 내용과 결과", example: "풍미당 주소 질문 / 답변 확인 / 참고 자료 확인" },
-        { key: "help", label: "막힌 화면 또는 다음에 할 일", example: "어느 버튼에서 멈췄는지 간단히 기록" },
+    <LessonSection id="build-review" eyebrow="01:45–02:00 · 저장과 공유" title="첫 앱의 결과와 다음 할 일을 남겨요" intro="프로젝트 폴더와 실행 방법을 보관하고, 짝에게 핵심 기능을 보여주세요. 5회차에는 데이터와 AI 역할을 구체화해요.">
+      <LessonQuestions id="lesson-4-local-build" title="4회차 · 첫 앱 제작 기록" questions={[
+        { key: "app", question: "앱 이름과 핵심 기능은 무엇인가요?", hint: "누가 어떤 입력으로 무엇을 할 수 있나요?" },
+        { key: "run", question: "프로젝트는 어디에 있고, 어떻게 실행하나요?", hint: "폴더 이름 / 실행 명령 / 로컬 주소 (API 키는 적지 않아요)" },
+        { key: "test", question: "어떤 동작을 시험했고, 기대한 결과가 나왔나요?", hint: "대표 입력 / 기대 결과 / 실제 결과" },
+        { key: "change", question: "AI와 어떤 오류를 고치거나 작은 변화를 만들었나요?", hint: "요청 내용 / 바뀐 점 / 다시 확인한 결과" },
+        { key: "next", question: "다음에 무엇을 만들거나 개선할까요?", hint: "추가할 자료 / 연결할 AI 기능 / 남은 오류" },
       ]} />
-      <LessonWorksheet id="lesson-4-agent-plan" title="5회차 준비 · 나의 AI 에이전트 설계 질문지" fields={[
-        { key: "agent_name", label: "만들고 싶은 AI 에이전트 이름", example: "예: 옥천 여행 도우미, 우리 농장 안내원, 복지 서비스 길잡이" },
-        { key: "user_and_purpose", label: "누가, 어떤 상황에서 사용하나요?", example: "이 AI는 ___가 ___할 때 도움을 줘요." },
-        { key: "data", label: "AI가 참고할 데이터", example: "어떤 자료를 준비할까요? 자료의 출처와 표에 들어갈 항목도 적어보세요." },
-        { key: "data_example", label: "데이터에 넣을 실제 예시 3개", example: "이름 / 설명 / 위치처럼 한 줄에 어떤 정보가 들어갈지 예시를 적어보세요." },
-        { key: "questions", label: "사용자가 물어볼 질문 3개", example: "이 AI에게 실제로 묻고 싶은 질문을 세 가지 적어보세요." },
-        { key: "ideal_answers", label: "어떤 답변을 받으면 좋을까요?", example: "길이, 말투, 표·목록 여부, 꼭 포함할 정보와 출처 표시 방법을 적어보세요." },
-        { key: "unknown_rule", label: "데이터에 답이 없을 때 어떻게 말할까요?", example: "추측하지 않고 ‘자료에서 찾지 못했어요’라고 안내하는 등 원하는 규칙을 적어보세요." },
+      <LessonQuestions id="lesson-4-agent-plan" title="5회차 준비 · 나의 AI 에이전트 설계 질문" questions={[
+        { key: "agent_name", question: "만들고 싶은 AI 에이전트의 이름은 무엇인가요?", hint: "예: 옥천 여행 도우미, 우리 농장 안내원, 복지 서비스 길잡이" },
+        { key: "user_and_purpose", question: "누가, 어떤 상황에서 사용하나요?", hint: "이 AI는 ___가 ___할 때 도움을 줘요." },
+        { key: "data", question: "AI는 어떤 데이터를 참고해야 할까요?", hint: "어떤 자료를 준비할까요? 자료의 출처와 표에 들어갈 항목도 적어보세요." },
+        { key: "data_example", question: "데이터에 넣을 실제 예시 세 가지는 무엇인가요?", hint: "이름 / 설명 / 위치처럼 한 줄에 어떤 정보가 들어갈지 예시를 적어보세요." },
+        { key: "questions", question: "사용자는 어떤 질문 세 가지를 물어볼까요?", hint: "이 AI에게 실제로 묻고 싶은 질문을 세 가지 적어보세요." },
+        { key: "ideal_answers", question: "어떤 답변을 받으면 좋을까요?", hint: "길이, 말투, 표·목록 여부, 꼭 포함할 정보와 출처 표시 방법을 적어보세요." },
+        { key: "unknown_rule", question: "데이터에 답이 없을 때 어떻게 말할까요?", hint: "추측하지 않고 ‘자료에서 찾지 못했어요’라고 안내하는 등 원하는 규칙을 적어보세요." },
       ]} />
-      <Review items={[
-        { question: "GitHub에서 코드를 수정해야 하나요?", answer: "아니요. 4회차에서는 가입하고 수업 저장소를 확인하기만 해요. 준비된 코드를 그대로 배포합니다." },
-        { question: "GitHub와 Vercel은 무엇이 다른가요?", answer: "GitHub는 코드가 놓인 온라인 보관함이고, Vercel은 그 코드를 실행해 웹 주소를 만들어 주는 서비스예요." },
-        { question: "다른 사람에게 무엇을 공유하면 되나요?", answer: "완성된 Vercel 앱 주소만 공유해요. NVIDIA API 키는 누구에게도 공유하지 않습니다." },
-      ]} />
-      <div className="lesson-references"><span>바로가기</span>{LESSON_FOUR_REFERENCES.map((source) => <a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.title} ↗</a>)}</div>
     </LessonSection>
+    <details className="answer-detail"><summary>선택 보충 자료 · 수업용 챗봇을 GitHub·Vercel로 배포하기</summary><LessonDeployment /></details>
   </div>;
 }

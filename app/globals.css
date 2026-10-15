@@ -910,7 +910,7 @@ a svg {
 .journey-kicker { color: #9b7958; font-size: 10px; letter-spacing: 0.5px; }
 .journey-intro h3 { font-size: 20px; letter-spacing: -0.6px; margin: 7px 0; }
 .journey-intro p { color: #7d7364; font-size: 12px; line-height: 1.8; margin: 0; }
-.journey-stages { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; padding: 20px 20px 18px; }
+.journey-stages { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; padding: 20px 20px 18px; }
 .journey-stages button { position: relative; display: flex; flex-direction: column; align-items: center; gap: 7px; border: 1px solid transparent; border-radius: 10px; padding: 13px 4px 11px; background: transparent; color: var(--muted); }
 .journey-stages button:not(:last-child)::after { content: "→"; position: absolute; right: -10px; top: 28px; color: #b8ad9c; }
 .journey-stages button:hover { background: #f4efe4; }
@@ -1368,7 +1368,7 @@ a svg {
   }
 }
 
-/* 2·3회차: 120분 시간표, 개념 그림, 동작 체험, 작성 가능한 활동지입니다. */
+/* 2·3회차: 120분 시간표, 개념 그림, 동작 체험, 함께 이야기할 질문 블록입니다. */
 .course-section { scroll-margin-top: 24px; }
 .lesson-timeline { list-style: none; padding: 0; margin: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
 .lesson-timeline li { display: grid; grid-template-columns: 145px 1fr; gap: 18px; padding: 15px 20px; border-bottom: 1px solid var(--line); background: #fffdf8; }
@@ -1404,7 +1404,7 @@ a svg {
 .prompt-comparison article { display: flex; flex-direction: column; padding: 19px; border: 1px solid var(--line); border-radius: 12px; background: #fffdf8; }
 .prompt-comparison h3 { font-size: 13px; margin: 0 0 11px; color: #a26b45; }
 .prompt-comparison p { font-size: 12px; line-height: 1.95; margin: 0 0 16px; color: var(--muted); flex: 1; }
-.prompt-comparison button, .lesson-action, .worksheet-header button, .worksheet-actions button { font-size: 11px; padding: 9px 12px; border: 1px solid #d2b89e; border-radius: 7px; background: #f5e9d9; color: #95603c; }
+.prompt-comparison button, .lesson-action { font-size: 11px; padding: 9px 12px; border: 1px solid #d2b89e; border-radius: 7px; background: #f5e9d9; color: #95603c; }
 .lesson-action { margin-top: 15px; }
 .prompt-comparison button:disabled, .lesson-action:disabled { opacity: 0.5; }
 .answer-detail { margin-top: 16px; border-top: 1px solid #d6dccd; padding-top: 13px; font-size: 12px; line-height: 1.9; color: #737c6a; }
@@ -1416,23 +1416,17 @@ a svg {
 .lesson-review summary { font-size: 13px; line-height: 1.8; }
 .lesson-review summary span { color: #ae835e; margin-right: 10px; font-size: 11px; }
 .lesson-review p { font-size: 12px; line-height: 1.95; color: var(--muted); margin: 12px 0 0; }
-.lesson-worksheet { margin-top: 20px; padding: 23px; background: #fffdf8; border: 1px solid #d5c8b7; border-radius: 12px; }
-.worksheet-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.worksheet-header h3 { font-size: 15px; line-height: 1.7; margin: 0; }
-.worksheet-header button { flex-shrink: 0; }
-.lesson-worksheet > p { font-size: 11px; line-height: 1.85; color: var(--muted); margin: 12px 0 18px; }
-.worksheet-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-.worksheet-fields label { min-width: 0; }
-.worksheet-fields label > span, .worksheet-name > span { display: block; font-size: 12px; margin-bottom: 9px; }
-.worksheet-name { display: block; margin-bottom: 18px; }
-.worksheet-name input { display: block; width: min(100%, 420px); padding: 12px; border: 1px solid #ded7ca; border-radius: 8px; background: #faf7f0; color: #5e5a53; font: inherit; font-size: 12px; }
-.worksheet-fields textarea { display: block; width: 100%; min-height: 105px; padding: 12px; border: 1px solid #ded7ca; border-radius: 8px; background: #faf7f0; color: #5e5a53; font: inherit; font-size: 12px; line-height: 1.8; resize: vertical; }
-.worksheet-fields textarea::placeholder { color: #a39888; }
-.worksheet-actions { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
-.worksheet-actions button { font-weight: 600; cursor: pointer; }
-.worksheet-actions button:disabled { cursor: wait; opacity: 0.65; }
-.worksheet-actions span { font-size: 10px; color: var(--muted); }
-.lesson-worksheet > .worksheet-status { margin-bottom: 0; color: #718063; }
+/* 질문은 입력 폼 대신 읽고 토론할 수 있는 블록으로 보여줍니다. */
+.lesson-questions { margin-top: 20px; padding: 23px; background: #fffdf8; border: 1px solid #d5c8b7; border-radius: 12px; }
+.lesson-questions h3 { font-size: 15px; line-height: 1.7; margin: 0; }
+.lesson-questions-intro { font-size: 12px; line-height: 1.85; color: var(--muted); margin: 10px 0 18px; }
+.lesson-question-list { margin: 0; padding-left: 22px; }
+.lesson-question-list li { padding: 14px 0 14px 5px; font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }
+.lesson-question-list li + li { border-top: 1px solid #e5ddcf; }
+.lesson-question-list li::marker { color: var(--accent); font-weight: 600; }
+.lesson-question-list h4 { font-size: 13px; line-height: 1.8; margin: 0; }
+.lesson-question-list p { font-size: 12px; line-height: 1.85; color: var(--muted); margin: 7px 0 0; }
+
 .input-output-map { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 12px; }
 .input-output-map > div { background: #f3eee3; padding: 22px; border: 1px solid #ddd3c3; border-radius: 12px; }
 .input-output-map > span { color: #b09374; }
@@ -1527,10 +1521,8 @@ a svg {
   .lesson-timeline li { grid-template-columns: 94px 1fr; gap: 10px; padding: 13px; }
   .timeline-time { font-size: 10px; }
   .lesson-timeline a, .lesson-timeline strong { font-size: 12px; }
-  .teaching-grid, .restaurant-analogy, .worksheet-fields { grid-template-columns: 1fr; }
-  .class-activity, .lesson-worksheet { padding: 18px; }
-  .worksheet-header { align-items: flex-start; flex-direction: column; }
-  .worksheet-actions { align-items: flex-start; flex-direction: column; }
+  .teaching-grid, .restaurant-analogy { grid-template-columns: 1fr; }
+  .class-activity, .lesson-questions { padding: 18px; }
   .concept-map { gap: 6px; padding: 12px; }
   .concept-map > * { padding: 9px; font-size: 10px; }
   .input-output-map { grid-template-columns: 1fr; gap: 9px; }

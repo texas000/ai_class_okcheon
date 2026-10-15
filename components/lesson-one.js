@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Activity, LessonSection, Review } from "./lesson-blocks.js";
-import LessonWorksheet from "./lesson-worksheet.js";
+import LessonQuestions from "./lesson-questions.js";
 import { COURSE_SESSIONS } from "../lib/practice-guide.js";
 import { SYLLABUS_DETAILS } from "../lib/lesson-one.js";
 
@@ -49,17 +49,17 @@ export default function LessonOne() {
       </tbody></table></div>
       <aside className="lesson-example"><strong>막연한 바람을 확인 가능한 요구사항으로 바꾸기</strong><p>“좋은 식당을 빨리 찾아줘” → “옥천의 영업 중 식당에서 사용자가 말한 지역과 음식 종류에 맞는 후보를 최대 3곳 보여주고, 이름·주소·추천 이유를 함께 표시한다.”</p><p>처음에는 대화 화면과 조건 검색, 짧은 결과 비교부터 만들어요. 면적·인허가일자 순위는 자료가 있는지 확인한 뒤 추가합니다. 위 요구사항은 설계 예시이므로 지금 체험하는 앱이 모두 지원하는 것은 아니에요.</p></aside>
       <Activity title="내 페르소나와 요구사항 만들기" steps={["타겟을 대표하는 가상의 한 사람을 정하고 생활·관심사·행동을 적어요.", "그 사람이 앱을 사용할 상황과 불편함, 원하는 결과를 적어요.", "한 문장 양식으로 앱을 소개해요.", "요구사항 공식에 맞춰 꼭 필요한 기능 3개와 각각의 확인 기준을 써요.", "짝이 사용자 역할로 예시 질문을 해보고, 어떤 결과가 나와야 하는지 확인해요."]} />
-      <LessonWorksheet id="lesson-1-app-idea" title="1회차 · 나의 앱 아이디어 보내기" fields={[
-        { key: "app_name", label: "만들고 싶은 앱 이름", example: "아직 정하지 못했다면 임시 이름도 괜찮아요." },
-        { key: "ideation", label: "생각한 해결 아이디어 3개와 선택한 이유", example: "예: 식당 챗봇 / 조건 비교 앱 / 미방문 식당 탐색 앱. 식당 자료가 있고 질문 한 번으로 후보를 볼 수 있는 챗봇을 골랐어요." },
-        { key: "user", label: "누가 사용하나요?", example: "예: 옥천을 처음 방문한 사람, 우리 가게 손님, 농작업을 기록하는 나" },
-        { key: "persona", label: "페르소나 · 타겟을 대표하는 한 사람", example: "예: 옥천 거주 35세 남자. 외식을 자주 하고 새로운 식당을 좋아하며, 휴대폰으로 식사할 곳을 빨리 정하고 싶어요." },
-        { key: "situation", label: "언제 앱을 쓰고, 어떤 결과를 원하나요?", example: "예: 퇴근 후 저녁 식사 전, 여러 검색 결과를 비교하지 않고 조건에 맞는 식당 후보를 보고 빨리 결정하고 싶어요." },
-        { key: "problem", label: "어떤 불편함이나 문제를 해결하나요?", example: "사용자가 언제 무엇 때문에 불편한지 적어보세요." },
-        { key: "help", label: "앱은 어떤 도움을 주나요?", example: "가장 중요한 도움 한 가지만 적어보세요." },
-        { key: "one_sentence", label: "내 앱을 한 문장으로 소개해요", example: "이 앱은 ___한 사람이 ___할 수 있도록 ___을 도와줘요." },
-        { key: "requirements", label: "꼭 필요한 요구사항 3개", example: "예: ① 챗봇 형태의 웹페이지 ② 시설총규모 기준으로 가장 큰 식당 검색 ③ 인허가일자 기준으로 가장 오래된 식당 검색" },
-        { key: "acceptance", label: "잘 작동하는지 어떻게 확인하나요?", example: "각 요구사항마다 질문과 기대 결과를 적어요. 예: ‘가장 큰 식당은?’ → 유효한 면적 중 최댓값인 식당 이름·주소·면적·출처를 보여줘요." },
+      <LessonQuestions id="lesson-1-app-idea" title="1회차 · 나의 앱 아이디어 질문" questions={[
+        { key: "app_name", question: "만들고 싶은 앱의 이름은 무엇인가요?", hint: "아직 정하지 못했다면 임시 이름도 괜찮아요." },
+        { key: "ideation", question: "어떤 해결 아이디어 세 가지를 생각했고, 왜 하나를 골랐나요?", hint: "예: 식당 챗봇 / 조건 비교 앱 / 미방문 식당 탐색 앱. 식당 자료가 있고 질문 한 번으로 후보를 볼 수 있는 챗봇을 골랐어요." },
+        { key: "user", question: "누가 사용하나요?", hint: "예: 옥천을 처음 방문한 사람, 우리 가게 손님, 농작업을 기록하는 나" },
+        { key: "persona", question: "타겟을 대표하는 한 사람은 어떤 모습인가요?", hint: "예: 옥천 거주 35세 남자. 외식을 자주 하고 새로운 식당을 좋아하며, 휴대폰으로 식사할 곳을 빨리 정하고 싶어요." },
+        { key: "situation", question: "언제 앱을 쓰고, 어떤 결과를 원하나요?", hint: "예: 퇴근 후 저녁 식사 전, 여러 검색 결과를 비교하지 않고 조건에 맞는 식당 후보를 보고 빨리 결정하고 싶어요." },
+        { key: "problem", question: "어떤 불편함이나 문제를 해결하나요?", hint: "사용자가 언제 무엇 때문에 불편한지 적어보세요." },
+        { key: "help", question: "앱은 어떤 도움을 주나요?", hint: "가장 중요한 도움 한 가지만 적어보세요." },
+        { key: "one_sentence", question: "내 앱을 한 문장으로 소개한다면 어떻게 말할까요?", hint: "이 앱은 ___한 사람이 ___할 수 있도록 ___을 도와줘요." },
+        { key: "requirements", question: "꼭 필요한 요구사항 세 가지는 무엇인가요?", hint: "예: ① 챗봇 형태의 웹페이지 ② 시설총규모 기준으로 가장 큰 식당 검색 ③ 인허가일자 기준으로 가장 오래된 식당 검색" },
+        { key: "acceptance", question: "잘 작동하는지 어떻게 확인하나요?", hint: "각 요구사항마다 질문과 기대 결과를 적어요. 예: ‘가장 큰 식당은?’ → 유효한 면적 중 최댓값인 식당 이름·주소·면적·출처를 보여줘요." },
       ]} />
       <Review items={[
         { question: "기능을 많이 넣어야 좋은 앱인가요?", answer: "아니요. 처음에는 한 가지 문제를 끝까지 해결하는 앱이 이해하고 만들기 쉬워요." },

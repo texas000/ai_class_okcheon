@@ -40,13 +40,13 @@ export default function PracticeGuide({ sessionNumber, restaurantSummary, isLoad
         {session.number === 1 && <LessonOne />}
         {session.number === 2 && <LessonTwo isLoading={isLoading} onPrompt={onPrompt} />}
         {session.number === 3 && <LessonThree />}
-        {session.number === 4 && <LessonFour codePractice={codePractice} />}
+        {session.number === 4 && <LessonFour />}
         {session.number === 5 && <LessonFive />}
         {session.number === 6 && <LessonSix />}
         {session.number === 7 && <LessonSeven />}
 
         {session.placeholders.length > 0 && <section className="lesson-materials" aria-label="수업 자료 자리">
-          <h3>수업 자료와 활동지</h3>
+          <h3>수업 자료와 질문</h3>
           <p className="materials-intro">아래 안내를 확인해 주세요.</p>
           {session.placeholders.map((placeholder) => (
             <article className="lesson-placeholder" key={placeholder.title}>
