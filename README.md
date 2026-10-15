@@ -254,20 +254,21 @@ AI는 로컬 파일을 스스로 열지 않습니다. 서버가 관련 내용을
 **2회차 · AI와 Application 구조 (120분, 휴식 포함)**
 
 - 10분: 생활 속 AI 사례 공유
-- 10분: AI·머신러닝·LLM, 작업별 모델 선택, system prompt와 context 이해
-- 15분: LLM 제작 과정과 학습·추론, 챗봇 구조
+- 10분: AI·머신러닝·LLM의 뜻과 규칙·학습 구분
+- 15분: 글쓰기 학교로 LLM 학습 과정 이해
+- 10분: LLM 설명을 마친 뒤 작업별 모델 선택
 - 5분: 생활 도구 비유와 계산기·지도·기록 앱 예시로 Application 개념 이해
 - 10분: 입력·처리·결과와 AI 모델의 역할
 - 10분: 휴식
 - 15분: 화면·서버·API, DB(정리 장부)와 파일 서버(사진·문서 보관함), GitHub(코드 파일 저장 공간)의 역할
-- 15분: 챗봇의 5단계 요청 흐름과 역할극
-- 15분: 질문 비교
-- 10분: 답변의 근거 확인
+- 15분: 풍미당 질문의 5단계 이동 → 바로 아래에서 system prompt·context 설명 → 역할극
+- 10분: 질문 비교
+- 5분: 답변의 근거 확인
 - 5분: 정리와 다음 시간 준비
 
-LLM 설명 바로 아래에는 복잡한 PPT·자료 분석을 위한 OpenAI·Claude 유료 API 모델 선택 표와 간단한 일정 정리용 NVIDIA 무료 체험 모델 `nvidia/nemotron-3.5-lightning-30b-a3b` 예시를 둡니다. 모델 표는 수업용 추천이며 실제 품질·속도·비용을 비교해 선택합니다. NVIDIA 체험 한도와 운영용 이용 조건도 함께 안내합니다.
+LLM 개념과 글쓰기 학교 설명을 마친 다음 별도 모델 선택 절에서 복잡한 PPT·자료 분석을 위한 OpenAI·Claude 유료 API 모델 선택 표와 간단한 일정 정리용 NVIDIA 무료 체험 모델 `nvidia/nemotron-3.5-lightning-30b-a3b` 예시를 둡니다. 모델 표는 수업용 추천이며 실제 품질·속도·비용을 비교해 선택합니다. NVIDIA 체험 한도와 운영용 이용 조건도 함께 안내합니다.
 
-System prompt는 직원에게 주는 역할 설명서, context는 이번 일에 참고할 일정표·메모에 비유합니다. 역할·규칙 + 참고 자료 + 사용자 질문을 함께 전달하는 예시로 일정 겹침 확인을 설명합니다. 자료를 전달하는 것은 추가 학습과 다르며, 일정의 저장·알림과 PPT 파일 생성은 앱 기능으로 연결해야 합니다. 본문은 `components/lesson-llm-usage.js`, 모델 표와 공식 자료 링크는 `lib/lesson-two.js`에서 관리합니다.
+Application과 화면·서버·데이터를 배운 뒤, ‘“풍미당 주소 알려줘”를 보내면?’ 그림 바로 아래에서 system prompt와 context를 설명합니다. 식당 안내 직원의 역할 설명서와 이름·주소 메모에 비유하고, 같은 풍미당 질문에 역할·규칙 + 식당 참고 자료 + 사용자 질문을 함께 보내는 예시로 연결합니다. 중복되던 질문 이동 체험은 하나로 통합했습니다. 자료를 전달하는 것은 추가 학습과 다르며, 일정의 저장·알림과 PPT 파일 생성은 앱 기능으로 연결해야 합니다. 본문은 `components/lesson-llm-usage.js`, 모델 표와 공식 자료 링크는 `lib/lesson-two.js`에서 관리합니다.
 
 **3회차 · 앱 설계와 바이브코딩 준비 (120분, 휴식 포함)**
 
@@ -328,7 +329,7 @@ ChatGPT, Claude, Gemini, Copilot 등 어떤 AI 서비스를 사용해도 됩니�
 
 7회차에는 새로운 기능을 추가하지 않습니다. 6회차까지 만든 앱의 최종 주소를 확정하고 대표 질문과 예비 질문을 준비한 뒤, 앱의 목적·데이터·시연·바이브코딩 개선·배운 점을 3분 안에 설명하도록 연습합니다. 7회차 본문은 `components/lesson-seven.js`에서 수정합니다.
 
-시간표는 `lib/lesson-plans.js`에서 수정합니다. 분 단위 시간과 전체 합계를 자동 계산하고 본문으로 이동하는 링크를 제공합니다. 수업 본문은 `components/lesson-two.js`, `components/lesson-three.js`, 공통 시간표·활동·확인 질문은 `components/lesson-blocks.js`에 있습니다. 2회차 기초 개념과 참고 링크는 `lib/lesson-two.js`, 2회차 앱 구조의 단계별 설명은 `lib/lesson-plans.js`의 `APPLICATION_FLOW`, 동작 체험은 `components/application-flow.js`에서 바꿉니다.
+시간표는 `lib/lesson-plans.js`에서 수정합니다. 분 단위 시간과 전체 합계를 자동 계산하고 본문으로 이동하는 링크를 제공합니다. 수업 본문은 `components/lesson-two.js`, `components/lesson-three.js`, 공통 시간표·활동·확인 질문은 `components/lesson-blocks.js`에 있습니다. 2회차 기초 개념과 참고 링크는 `lib/lesson-two.js`, 풍미당 질문의 단계별 동작 체험은 `components/chatbot-structure.js`, 모델 선택과 역할·참고 자료 설명은 `components/lesson-llm-usage.js`에서 바꿉니다.
 
 1~4회차와 보충 배포 자료에는 함께 생각하고 이야기할 **질문 블록**이 있습니다. 질문과 예시를 보며 짝과 대화하거나 개인 메모 도구에 정리합니다. 입력 폼·이메일 제출·다운로드·임시 저장 기능은 사용하지 않습니다. 공통 화면은 `components/lesson-questions.js`에서 관리합니다.
 

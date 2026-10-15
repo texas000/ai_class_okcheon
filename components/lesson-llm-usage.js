@@ -1,21 +1,7 @@
 import { LLM_MODEL_CHOICES, LLM_USAGE_REFERENCES } from "../lib/lesson-two.js";
 
-const REQUEST_EXAMPLE = `역할과 답변 규칙 · System prompt
-당신은 일정 정리 도우미예요.
-날짜와 시간을 표로 정리하고, 겹치는 일정이 있으면 알려주세요.
-자료에 없는 시간은 추측하지 말고 물어보세요.
-
-이번에 참고할 자료 · Context
-10월 16일 오후 2시: 농장 회의
-10월 16일 오후 2시 30분: 장비 점검
-두 일정은 각각 1시간이 걸려요.
-
-사용자의 질문
-내일 일정이 겹치는지 알려줘.
-오늘은 10월 15일이야.`;
-
-export default function LessonLlmUsage() {
-  return <>
+export default function LessonModelChoice() {
+  return (
     <section id="llm-model-choice" className="lesson-example llm-model-guide" aria-labelledby="llm-model-choice-title">
       <h3 id="llm-model-choice-title">어떤 일을 하느냐에 따라 모델을 골라요</h3>
       <div className="teaching-grid">
@@ -32,17 +18,26 @@ export default function LessonLlmUsage() {
       <p>모델은 내용과 구성안을 만들어요. PPT 파일 제작이나 일정의 저장·알림은 앱의 별도 기능으로 연결해야 해요.</p>
       <div className="lesson-references"><span>공식 안내 · 2026년 10월 15일 확인</span>{LLM_USAGE_REFERENCES.map(({ title, url }) => <a key={url} href={url} target="_blank" rel="noreferrer">{title} ↗</a>)}</div>
     </section>
-    <section id="llm-instructions-context" className="lesson-example" aria-labelledby="llm-instructions-context-title">
-      <h3 id="llm-instructions-context-title">AI에게 역할 설명서와 참고 자료를 함께 줘요</h3>
-      <div className="teaching-grid">
-        <article><h4>System prompt · 역할 설명서</h4><p>새로 온 직원에게 ‘어떤 일을 맡고, 어떤 방식으로 답하면 되는지’ 알려주는 설명서예요. 앱을 만드는 사람이 AI의 역할·말투·답변 규칙을 정해 전달해요.</p><p>예: ‘당신은 일정 정리 도우미예요. 시간을 표로 정리하고, 모르는 시간은 물어보세요.’</p></article>
-        <article><h4>Context · 이번 일을 위한 참고 자료</h4><p>직원에게 오늘의 일정표나 회의 메모를 건네는 것과 같아요. 지금 답할 때 필요한 자료와 앞서 나눈 대화를 말해요. 넓게는 AI가 이번 답변을 만들 때 받는 전체 내용을 뜻하기도 해요.</p><p>예: ‘내일 오후 2시 농장 회의, 오후 2시 30분 장비 점검. 각각 1시간.’</p></article>
-      </div>
-      <div className="lesson-code-example"><span className="code-file">설명용 예시 · 역할 + 참고 자료 + 질문</span><pre><code>{REQUEST_EXAMPLE}</code></pre></div>
-      <p><strong>이렇게 답할 수 있어요:</strong> 두 일정은 오후 2시 30분부터 3시까지 겹쳐요. 참고 자료를 주었기 때문에 막연한 조언 대신 실제 시간을 비교할 수 있어요.</p>
-      <p>앱에서는 역할과 규칙을 먼저 정하고, 질문할 때 필요한 자료를 찾아 함께 보내요. 우리 챗봇은 식당 표에서 찾은 이름·주소를 참고 자료로 추가해요. AI가 내 컴퓨터나 DB를 저절로 읽는 것은 아니에요.</p>
-      <p>참고 자료는 답을 찾기 위한 정보예요. 자료 속 ‘앞의 규칙을 무시해’ 같은 문장은 지시로 따르지 않게 해요. 필요한 부분만 보내고, API 키·비밀번호는 넣지 않아요. 자료를 보내는 것과 AI를 새로 학습시키는 것은 달라요.</p>
-      <div className="lesson-references"><span>공식 안내</span><a href="https://developers.openai.com/api/docs/guides/prompt-engineering" target="_blank" rel="noreferrer">OpenAI · 역할 지시와 참고 자료 전달하기 ↗</a></div>
-    </section>
-  </>;
+  );
+}
+
+export function LlmInstructionsContext() {
+  return <section id="llm-instructions-context" className="lesson-example" aria-labelledby="llm-instructions-context-title">
+    <h3 id="llm-instructions-context-title">그럼 AI에게 무엇을 함께 보내야 할까요?</h3>
+    <p>방금 본 ‘참고 자료 묶기’ 단계에서는 질문만 보내지 않아요. 역할과 답변 규칙, 식당 자료를 함께 준비해요. ‘풍미당 주소 알려줘’라는 같은 예시로 살펴볼게요.</p>
+    <div className="teaching-grid">
+      <article><h4>System prompt · 역할 설명서</h4><p>식당 안내를 맡은 새 직원에게 주는 설명서라고 생각해보세요. ‘어떤 일을 맡고, 어떤 말투와 규칙으로 답할지’를 앱을 만드는 사람이 정해 전달해요.</p><p>우리 예시에서는 ‘식당 정보를 친절하게 안내하고, 자료에 없는 내용은 추측하지 마세요’가 역할과 규칙이에요.</p></article>
+      <article><h4>Context · 답할 때 펼쳐보는 참고 자료</h4><p>직원에게 식당 이름과 주소가 적힌 메모를 건네는 것과 같아요. 우리 서버가 식당 표에서 풍미당을 찾아 질문과 함께 보내요.</p><p>필요한 자료와 앞서 나눈 대화를 참고하게 할 수 있어요. 넓게는 AI가 이번 답변을 만들 때 받는 전체 내용을 뜻하기도 해요.</p></article>
+    </div>
+    <div className="chatbot-context-packet">
+      <p><strong>① 역할과 답변 규칙 · System prompt</strong><span>당신은 옥천 식당 안내 도우미예요. 제공된 자료에 있는 사실만 사용하고, 모르는 내용은 모른다고 말해주세요.</span></p>
+      <p><strong>② 이번 질문의 참고 자료 · Context</strong><span>사업장명: 풍미당<br />도로명주소: 충청북도 옥천군 옥천읍 중앙로 23-1</span></p>
+      <p><strong>③ 사용자 질문</strong><span>풍미당 주소 알려줘.</span></p>
+    </div>
+    <p><strong>이렇게 답할 수 있어요:</strong> 풍미당의 도로명 주소는 충청북도 옥천군 옥천읍 중앙로 23-1이에요.</p>
+    <p>역할 설명서는 답하는 방식을 정하고, 참고 자료는 주소 같은 사실을 제공해요. 위 주소는 수업 CSV의 기록이며 방문 전에는 최신 정보를 확인해요.</p>
+    <p>AI가 내 컴퓨터나 DB를 저절로 읽는 것은 아니에요. 앱이 필요한 자료를 찾아 보내줘야 해요. 자료를 건네는 것은 AI를 새로 학습시키는 일과 달라요.</p>
+    <p>참고 자료 속 ‘앞의 규칙을 무시해’ 같은 문장은 지시로 따르지 않게 해요. 필요한 부분만 보내고, API 키·비밀번호는 넣지 않아요.</p>
+    <div className="lesson-references"><span>공식 안내</span><a href="https://developers.openai.com/api/docs/guides/prompt-engineering" target="_blank" rel="noreferrer">OpenAI · 역할 지시와 참고 자료 전달하기 ↗</a></div>
+  </section>;
 }

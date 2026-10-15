@@ -28,14 +28,6 @@ export default function ChatbotStructure() {
       <h4>{selected + 1}. {step.title}</h4><p>{step.detail}</p>
       <dl><div><dt>들어오는 것</dt><dd>{step.input}</dd></div><div><dt>나가는 것</dt><dd>{step.output}</dd></div></dl>
     </div>
-    <div className="chatbot-context">
-      <div><span className="eyebrow">LLM에게 보내는 묶음 · 설명용 축약</span><h4>질문만 보내지 않고 근거도 함께 보내요</h4><p>context는 모델이 이번 답변을 만들 때 참고하는 문맥이에요. 이 앱은 검색한 식당 정보를 답변 규칙에 붙이고, 질문과 이전 대화도 함께 보내요.</p></div>
-      <div className="chatbot-context-packet">
-        <p><strong>답변 규칙</strong><span>CSV를 근거로 답하고, 없는 정보는 추측하지 마.</span></p>
-        <p><strong>식당 참고 자료</strong><span>사업장명: 풍미당<br />도로명주소: 충청북도 옥천군 옥천읍 중앙로 23-1<br />영업상태명: 영업/정상<br />데이터갱신시점: 2025-02-17 11:38:02</span></p>
-        <p><strong>사용자 질문·이전 대화</strong><span>풍미당 주소 알려줘.</span></p>
-      </div>
-    </div>
-    <p className="course-note">실제 코드 흐름을 설명하는 그림이며, 단계 버튼은 AI API를 호출하지 않아요. 위 식당 자료는 수업 CSV의 기록이고 현재 영업 여부를 실시간 확인한 결과는 아니에요.</p>
+    <p className="course-note">실제 앱의 흐름을 설명하는 그림이에요. 단계 버튼은 AI API를 호출하지 않아요. 아래에서 AI에게 함께 보내는 내용을 살펴봐요.</p>
   </div>;
 }
