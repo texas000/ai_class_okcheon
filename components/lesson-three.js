@@ -1,57 +1,130 @@
 import { Activity, LessonSchedule, LessonSection, Review } from "./lesson-blocks.js";
 import LessonQuestions from "./lesson-questions.js";
 
+const FIRST_PUSH = `git init -b main
+git status
+git add .
+git commit -m "타이머 앱 첫 버전"
+git remote add origin https://github.com/내아이디/저장소이름.git
+git push -u origin main`;
+
+const NEXT_PUSH = `git status
+git add .
+git commit -m "타이머 앱 수정"
+git push origin main`;
+
+const TARGET_APP_PROMPT = `나는 [사용자]를 위한 [앱 이름] 웹 앱을 만들고 싶어.
+
+해결할 문제
+- [사용자가 겪는 불편함]
+
+첫 버전의 핵심 기능
+1. [가장 중요한 기능]
+2. [두 번째 기능]
+3. [필요한 경우에만 세 번째 기능]
+
+사용 흐름
+- 입력: [사용자가 입력하거나 누르는 것]
+- 처리: [앱이 해야 하는 일]
+- 결과: [사용자에게 보여줄 것]
+
+화면
+- [필요한 화면과 버튼]
+
+사용할 데이터
+- [필요한 자료와 출처]
+
+완료 기준
+- [직접 테스트할 수 있는 조건]
+
+먼저 작은 첫 버전을 만들어줘.
+한 번에 한 단계씩 진행하고 실행 방법과 확인 방법을 비개발자도 이해하게 설명해줘.
+비밀번호와 API 키는 코드나 GitHub에 넣지 말고 환경변수로 안내해줘.`;
+
 export default function LessonThree() {
   return <div className="lesson-content">
     <LessonSchedule number={3} />
-    <LessonSection id="build-scope" eyebrow="00:00–00:10 · 목표 정하기" title="4회차에 만들 첫 버전을 정해요" intro="2회차에 배운 AI와 앱의 구조를 떠올리고, 1회차의 앱 아이디어를 꺼내요.">
-      <Activity title="핵심 기능 하나 고르기" steps={["누가 어떤 상황에서 쓸 앱인지 한 문장으로 말해요.", "첫 버전에서 꼭 동작해야 할 기능 하나와 나중에 만들 기능을 나눠요.", "입력 → 처리 → 결과를 설명하고 AI가 필요한 부분을 표시해요."]} />
-    </LessonSection>
-    <LessonSection id="app-design" eyebrow="00:10–00:40 · 설계" title="나의 앱 첫 설계도를 만들어요" intro="오늘은 코드를 입력하기 전에 사용자의 행동과 화면을 설계해요. 기능을 많이 넣기보다 핵심 기능 하나가 끝까지 동작하도록 계획해요.">
-      <aside className="lesson-example"><strong>예시 · 옥천을 처음 방문하는 사람의 식당 도우미</strong><p>문제: 등록된 식당의 이름과 주소를 찾기 어려워요. 핵심 기능: 지역을 입력하면 업소와 주소를 보여줘요. 성공 기준: 입력한 지역의 업소 3곳을 근거와 함께 확인할 수 있어요. 범위: 메뉴·가격·예약은 이번 버전에서 제공하지 않아요.</p></aside>
-      <LessonQuestions id="lesson-3-app-design" title="3회차 · 나의 앱 설계 질문" questions={[
-        { key: "user", question: "누가 어떤 상황에서 어떤 문제를 겪나요?", hint: "누가 / 어떤 상황에서 / 어떤 불편함을 겪나요?" },
-        { key: "purpose", question: "앱 이름은 무엇이고, 한 문장으로 어떻게 소개할까요?", hint: "이 앱은 ___가 ___할 수 있도록 ___을 도와줘요." },
-        { key: "feature", question: "핵심 기능 하나는 무엇이고, 성공 여부는 어떻게 확인할까요?", hint: "지역을 입력하면 업소명·주소 3곳을 참고 자료와 함께 볼 수 있어요." },
-        { key: "flow", question: "내 앱의 입력 → 처리 → 결과는 무엇인가요?", hint: "지역 질문 → 서버가 CSV를 검색하고 AI에 전달 → 표와 근거 표시" },
-        { key: "data", question: "어떤 자료가 필요하고, 어떤 정보는 제공하지 않을까요?", hint: "자료와 출처 / 포함된 항목 / 없는 항목 / AI가 필요한 이유" },
-        { key: "states", question: "대기·완료·빈 결과·오류 상황에는 어떤 안내가 필요할까요?", hint: "생성 중… / 참고 자료 펼치기 / 검색 조건 바꾸기 / 다시 시도하기" },
+
+    <LessonSection id="deploy-ready" eyebrow="00:00–00:10 · 준비 확인" title="타이머 앱과 계정을 먼저 확인해요" intro="오늘은 컴퓨터 안의 타이머 앱을 인터넷 주소로 공개해요. GitHub와 Vercel 가입이 필요해요.">
+      <Activity title="시작 전 네 가지 확인" steps={[
+        "타이머 앱을 실행하고 시작·일시정지·초기화가 동작하는지 확인해요.",
+        "GitHub에 로그인해요. 계정이 없다면 회원가입하고 이메일 인증까지 완료해요.",
+        "Vercel에 GitHub 계정으로 로그인해요.",
+        "프로젝트 폴더에 .gitignore 파일이 있는지 확인해요.",
       ]} />
-      <Activity title="종이 화면을 그리고 짝과 시험해요" steps={["화면에 제목, 첫 인사, 입력창, 전송 버튼, 결과 영역, 참고 자료 영역을 그려요. 화면을 꾸미기 전에 사용할 순서를 정해요.", "짝에게 ‘이 지역의 식당 3곳을 찾아보세요’라는 과제를 줘요. 설명 없이 어디를 누르는지 관찰해요.", "짝이 생성 중·검색 결과 없음·연결 실패 상황이라면 무엇을 기대하는지 물어봐요.", "헷갈린 문구나 빠진 안내 하나를 고쳐요. 발표 때 ‘이 관찰 때문에 이렇게 바꿨어요’라고 설명해요."]} />
-    </LessonSection>
-    <LessonSection id="build-request" eyebrow="00:40–00:50 · 요청 준비" title="AI에게 보낼 첫 개발 요청을 준비해요" intro="설계 질문과 수강생별 시작 프롬프트를 함께 보며 내가 원하는 결과를 분명하게 적어요.">
-      <Activity title="개발 요청과 확인 기준 정리하기" steps={["수강생별 시작 프롬프트에서 내 앱을 찾아 사용자·핵심 기능·필요한 자료가 설계와 맞는지 확인해요.", "첫 화면에서 무엇을 입력하고 어떤 결과를 볼지 구체적인 예시를 적어요.", "API 키 없이 확인할 수 있는 샘플 데이터나 데모 모드로 먼저 만들어 달라고 요청해요.", "실행 방법과 정상·빈 결과·오류 상황을 확인할 방법도 요청에 포함해요."]} />
-      <p><a href="/materials/lesson-one-local-build-prompts.md" target="_blank" rel="noreferrer">수강생별 개발 시작 프롬프트 ↗</a></p>
-    </LessonSection>
-    <LessonSection id="app-review" eyebrow="01:00–01:15 · 공유" title="내 앱을 1분 안에 설명해봐요" intro="‘누구의 어떤 문제 → 핵심 기능 → 입력·처리·결과 → 확인할 근거’ 순서로 짝에게 설명하고 피드백을 받아요.">
-      <Review items={[
-        { question: "입력창과 CSV 검색은 각각 어디의 역할인가요?", answer: "입력창은 브라우저 화면의 프런트엔드, 이 앱의 CSV 검색은 서버의 백엔드 역할이에요. CSV 파일은 검색할 데이터예요." },
-        { question: "AI 모델만 있으면 챗봇 앱이 완성되나요?", answer: "모델 외에도 입력 화면, 요청 처리, 자료 연결, 결과 표시, 기다림·오류 안내가 필요해요. 앱은 이 부분을 연결해 사용자가 실제로 이용하게 해요." },
-        { question: "우리 앱에서 NVIDIA API 키는 어디에 두나요?", answer: "서버 환경변수에 보관해요. 사용자가 받는 브라우저 코드에 넣거나 GitHub에 키 파일을 올리지 않아요." },
-      ]} />
-      <aside className="lesson-takeaway"><h3>오늘의 결과물과 다음 수업</h3><p>앱 설계 질문을 바탕으로 정리한 내용과 첫 개발 요청을 보관하세요. 이어지는 마지막 시간에는 내 컴퓨터에 개발 환경을 준비해요. 4회차에는 AI에게 요청을 보내 앱을 만들고, 로컬 주소에서 실행·수정·확인해요.</p></aside>
-      <div className="lesson-references"><span>구조 참고 자료</span><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/First_steps/Client-Server_overview" target="_blank" rel="noreferrer">MDN · 브라우저와 서버의 요청·응답 ↗</a><a href="https://react.dev/" target="_blank" rel="noreferrer">React 공식 안내 ↗</a><a href="https://nextjs.org/docs" target="_blank" rel="noreferrer">Next.js 공식 문서 ↗</a></div>
-    </LessonSection>
-    <LessonSection id="vibe-windows" eyebrow="01:15–02:00 · 환경 준비" title="내 컴퓨터에서 바이브코딩 준비하기" intro="4회차에 바로 앱을 만들 수 있도록 Node.js, AI 코딩 도구, 프로젝트 폴더를 준비해요. VS Code와 Git은 이번 로컬 실습의 필수 준비물이 아니에요.">
-      <div className="course-table-wrap"><table className="course-table"><caption>Windows 로컬 실습 필수 준비물</caption>
-        <thead><tr><th>필수 준비물</th><th>하는 일</th><th>준비 방법</th></tr></thead>
-        <tbody>
-          <tr><td>Node.js LTS</td><td>앱 서버 실행과 라이브러리 설치</td><td><a href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">공식 다운로드</a>에서 Windows용 LTS 설치 파일을 받아요. 수업은 24.x LTS로 맞춰요. npm도 함께 설치돼요.</td></tr>
-          <tr><td>Codex 또는 Claude Code</td><td>프롬프트로 앱 생성·수정·디버깅</td><td>둘 중 하나를 설치하고 사용할 계정으로 로그인해요. <a href="https://learn.chatgpt.com/docs/codex/cli" target="_blank" rel="noreferrer">Codex 설치 안내</a> · <a href="https://code.claude.com/docs/en/setup" target="_blank" rel="noreferrer">Claude Code 설치 안내</a></td></tr>
-          <tr><td>Edge 또는 Chrome</td><td>앱 화면과 동작 확인</td><td>Windows에 있는 Edge를 사용해도 돼요.</td></tr>
-          <tr><td>빈 프로젝트 폴더</td><td>코드와 로컬 데이터 저장</td><td>학생마다 새 폴더를 만들어요. package.json이나 코드 파일은 AI가 만들므로 미리 준비하지 않아도 돼요.</td></tr>
-        </tbody>
-      </table></div>
-      <aside className="lesson-takeaway"><h3>추가 설치가 필요 없는 것</h3><p>PowerShell은 Windows에 기본으로 있어요. SQLite 드라이버와 필요한 라이브러리, 업로드·임시 폴더는 AI가 프로젝트를 만들면서 준비해요. 파일 서버도 앱 서버 안에서 구현하므로 별도 서버 프로그램을 설치하지 않아요.</p><p>VS Code는 직접 파일을 살펴보고 싶을 때, Git은 변경 이력을 관리하거나 선택한 도구·기능이 요구할 때 추가해요. 뒤의 GitHub·Vercel 배포 실습은 로컬 실행을 확인한 다음 진행해요.</p></aside>
-      <div className="lesson-code-example"><span className="code-file">Node.js 설치 후 새 PowerShell 창에서 확인</span><pre><code>{`node --version
-npm.cmd --version`}</code></pre></div>
-      <p>두 명령 모두 버전 번호가 나오면 준비됐어요. 명령을 찾지 못하면 터미널이나 AI 도구를 종료하고 다시 열어요. PowerShell에서는 npm 스크립트 실행 정책 문제를 피하기 위해 npm.cmd를 사용해요.</p>
-      <p>macOS에서는 운영체제에 맞는 설치 파일과 터미널을 사용하고, npm.cmd 대신 npm으로 버전을 확인해요.</p>
-      <Activity title="설치·로그인·프로젝트 폴더 확인하기" steps={["Node.js를 설치하고 새 터미널에서 node와 npm 버전을 확인해요.", "Codex 또는 Claude Code 중 하나를 설치하고 로그인한 뒤 짧은 인사를 보내 응답을 확인해요.", "동기화 폴더 밖에 영문 이름의 빈 프로젝트 폴더를 만들고 AI 코딩 도구에서 열어요.", "아래 수강생별 자료에서 내 프롬프트를 찾아 저장해요. 앱 생성 요청은 4회차 시작 때 보내요.", "준비가 안 된 항목과 오류 문구를 강사와 확인하고 다음 수업 전에 해결해요."]} />
-      <p><a href="/materials/lesson-one-local-build-prompts.md" target="_blank" rel="noreferrer">수강생별 로컬 앱 개발 시작 프롬프트 열기 ↗</a></p>
-      <aside className="lesson-takeaway"><h3>4회차 시작 전 완료 기준</h3><p>① Node.js·npm 버전 확인 ② AI 코딩 도구 로그인과 응답 확인 ③ 빈 프로젝트 폴더 열기 ④ 내 앱 설계와 시작 프롬프트 저장. 다음 시간에는 이 폴더에서 바로 첫 앱을 만들어요.</p></aside>
-      <aside className="lesson-example"><strong>AI 도구 로그인과 앱의 AI API 키는 별개예요</strong><p>슬라이드·웹소설 앱도 처음에는 API 키 없이 데모 모드로 확인해요. 실제 AI 생성 기능을 연결할 때만 앱의 .env.local에 API 설정을 넣어요. SQLite 설치 중 컴파일 오류가 생기면 오류를 AI에게 전달하고, 추가 도구는 필요할 때 설치해요.</p></aside>
+      <aside className="lesson-takeaway"><h3>절대 올리면 안 되는 것</h3><p>비밀번호, API 키, <code>.env</code>, <code>.env.local</code> 파일은 GitHub에 올리지 않아요. <code>node_modules</code>와 <code>.next</code>도 올리지 않도록 <code>.gitignore</code>에서 확인해요.</p></aside>
     </LessonSection>
 
+    <LessonSection id="github-basics" eyebrow="00:10–00:25 · 쉬운 개념" title="내 컴퓨터, GitHub, Vercel은 역할이 달라요" intro="세 곳이 어떻게 이어지는지만 이해하면 배포 과정이 훨씬 쉬워져요.">
+      <div className="input-output-map">
+        <div><span>LOCAL</span><h3>내 컴퓨터</h3><p>AI와 코드를 만들고<br />직접 실행해요.</p></div>
+        <span aria-hidden="true">→</span>
+        <div><span>GITHUB</span><h3>코드 보관함</h3><p>코드와 변경 기록을<br />온라인에 저장해요.</p></div>
+        <span aria-hidden="true">→</span>
+        <div><span>VERCEL</span><h3>공개된 앱</h3><p>코드를 실행해<br />접속 주소를 만들어요.</p></div>
+      </div>
+      <div className="teaching-grid">
+        <article><h3>Git</h3><p>내 컴퓨터에서 코드의 변경 내용을 기록하고 묶는 도구예요.</p></article>
+        <article><h3>GitHub</h3><p>Git으로 기록한 코드를 온라인 저장소에 보관하고 공유하는 서비스예요.</p></article>
+        <article><h3>Vercel</h3><p>GitHub 저장소의 코드를 빌드하고, 다른 사람이 열 수 있는 웹 주소로 배포해요.</p></article>
+      </div>
+    </LessonSection>
+
+    <LessonSection id="github-push" eyebrow="00:25–00:50 · GitHub" title="타이머 코드를 GitHub에 올려요" intro="GitHub에서 빈 저장소를 만든 뒤, 프로젝트 폴더의 터미널에서 코드를 저장하고 밀어 올려요.">
+      <Activity title="GitHub 저장소 만들기" steps={[
+        "GitHub 오른쪽 위의 +를 누르고 New repository를 선택해요.",
+        "저장소 이름을 영문으로 적고 Public 또는 Private을 선택해요.",
+        "기존 프로젝트를 올릴 것이므로 README, .gitignore, License 추가는 선택하지 않고 빈 저장소를 만들어요.",
+        "생성된 저장소의 HTTPS 주소를 복사해요.",
+      ]} />
+      <div className="lesson-code-example"><span className="code-file">처음 한 번만 실행해요 · 주소는 내 저장소 주소로 바꿔요</span><pre><code>{FIRST_PUSH}</code></pre></div>
+      <p className="course-note"><code>git status</code>에서 <code>.env</code>, <code>.env.local</code>, <code>node_modules</code>, <code>.next</code>가 보이면 멈추고 강사에게 알려주세요. 로그인 창이 열리면 본인 계정으로 로그인하고, 비밀번호나 인증값을 다른 사람에게 보내지 않아요.</p>
+      <div className="lesson-code-example"><span className="code-file">다음 수정부터 반복해요</span><pre><code>{NEXT_PUSH}</code></pre></div>
+      <aside className="lesson-example"><strong>AI에게 명령을 부탁한다면</strong><p>“현재 저장소 주소와 <code>git status</code>를 먼저 보여줘. 비밀 파일이 포함되지 않았는지 확인한 뒤 커밋과 푸시를 진행해줘.”라고 요청해요. 어느 저장소의 어느 브랜치에 올리는지 확인하고 승인해요.</p></aside>
+    </LessonSection>
+
+    <LessonSection id="vercel-deploy" eyebrow="01:00–01:20 · Vercel" title="GitHub 저장소를 Vercel에 배포해요" intro="Vercel이 GitHub의 코드를 가져와 실행하고, 공유할 수 있는 주소를 만들어줘요.">
+      <Activity title="New Project에서 배포하기" steps={[
+        "Vercel 대시보드에서 Add New 또는 New Project를 선택해요.",
+        "GitHub 저장소 목록에서 방금 올린 타이머 저장소를 찾아 Import를 눌러요.",
+        "프로젝트 이름, Framework Preset, Root Directory를 확인해요. 특별한 이유가 없다면 자동으로 찾은 기본값을 사용해요.",
+        "API 키가 필요한 앱이라면 코드가 아니라 Environment Variables에 이름과 값을 입력해요. 타이머 앱은 보통 필요하지 않아요.",
+        "Deploy를 누르고 Ready가 표시될 때까지 기다린 뒤 Visit으로 앱을 열어요.",
+      ]} />
+      <aside className="lesson-takeaway"><h3>앞으로는 더 간단해요</h3><p>GitHub에 연결된 프로젝트는 새 코드를 <code>push</code>할 때 Vercel이 자동으로 다시 배포해요. 즉, 컴퓨터에서 수정 → 테스트 → GitHub에 push → Vercel 자동 배포 순서예요.</p></aside>
+    </LessonSection>
+
+    <LessonSection id="deploy-check" eyebrow="01:20–01:30 · 공개 확인" title="내 컴퓨터 밖에서도 열리는지 확인해요" intro="주소가 생겼다고 끝난 것은 아니에요. 실제 사용자처럼 공개 주소에서 다시 테스트해요.">
+      <Activity title="배포 완료 체크" steps={[
+        "Vercel 주소를 새 브라우저 창에서 열고 새로고침해요.",
+        "시작·일시정지·다시 시작·초기화를 다시 확인해요.",
+        "휴대전화에서도 주소를 열어 글자와 버튼이 잘 보이는지 확인해요.",
+        "문제가 나면 Vercel의 Deployments에서 실패한 배포와 오류 문구를 확인해요.",
+      ]} />
+    </LessonSection>
+
+    <LessonSection id="target-app-prompt" eyebrow="01:30–02:00 · 목표 앱" title="이제 내가 만들고 싶은 앱을 프롬프트로 설명해요" intro="타이머에서 배운 방법을 내 앱에 적용해요. 누구의 어떤 문제를 해결할지, 첫 버전에서 무엇이 동작해야 할지 적어요.">
+      <LessonQuestions id="lesson-3-target-app" title="목표 앱 프롬프트 질문" questions={[
+        { key: "user", question: "누가 어떤 상황에서 이 앱을 사용하나요?", hint: "예: 옥천을 방문한 사람이 식당을 찾을 때 사용해요." },
+        { key: "problem", question: "그 사람이 겪는 가장 큰 불편은 무엇인가요?", hint: "여러 곳에 흩어진 정보를 찾기 어려워요." },
+        { key: "features", question: "첫 버전에 꼭 필요한 기능 세 가지 이하는 무엇인가요?", hint: "검색하기 / 결과 보기 / 다시 검색하기" },
+        { key: "flow", question: "입력 → 처리 → 결과는 무엇인가요?", hint: "지역 입력 → 자료 검색 → 이름과 주소 목록 표시" },
+        { key: "data", question: "어떤 자료가 필요하고 어디서 가져오나요?", hint: "CSV, 직접 입력한 목록, 공개 데이터 등 출처도 적어요." },
+        { key: "success", question: "어떻게 테스트하면 완성을 확인할 수 있나요?", hint: "실제 예시를 입력했을 때 기대한 결과가 보여요." },
+      ]} />
+      <div className="lesson-code-example"><span className="code-file">내 답으로 빈칸을 채워요</span><pre><code>{TARGET_APP_PROMPT}</code></pre></div>
+      <Activity title="짝에게 설명하고 첫 요청을 완성해요" steps={[
+        "질문의 답을 프롬프트 틀에 옮겨 적어요.",
+        "짝에게 프롬프트만 보여주고 어떤 앱인지 설명해보게 해요.",
+        "다르게 이해한 부분이 있다면 사용자·기능·완료 기준을 더 구체적으로 고쳐요.",
+        "다음 시간에 바로 사용할 수 있도록 완성된 프롬프트를 저장해요.",
+      ]} />
+      <Review items={[
+        { question: "GitHub와 Vercel은 같은 곳인가요?", answer: "아니요. GitHub는 코드를 보관하고, Vercel은 그 코드를 실행해 웹 주소로 배포해요." },
+        { question: "API 키도 GitHub에 올리나요?", answer: "아니요. 비밀키는 코드와 GitHub에 넣지 않고 로컬의 환경변수와 Vercel의 Environment Variables에 따로 저장해요." },
+        { question: "좋은 앱 프롬프트에는 무엇이 필요한가요?", answer: "사용자와 문제, 핵심 기능, 입력·처리·결과, 필요한 데이터, 직접 확인할 완료 기준이 필요해요." },
+      ]} />
+      <div className="lesson-references"><span>공식 참고 자료</span><a href="https://docs.github.com/en/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github" target="_blank" rel="noreferrer">GitHub · 내 컴퓨터의 코드 올리기 ↗</a><a href="https://vercel.com/docs/git" target="_blank" rel="noreferrer">Vercel · Git 저장소 배포하기 ↗</a></div>
+    </LessonSection>
   </div>;
 }
