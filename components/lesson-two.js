@@ -4,6 +4,7 @@ import LessonQuestions from "./lesson-questions.js";
 import LlmJourney from "./llm-journey.js";
 import ApplicationFlow from "./application-flow.js";
 import ChatbotStructure from "./chatbot-structure.js";
+import LessonLlmUsage from "./lesson-llm-usage.js";
 
 const PROMPTS = [
   { label: "A · 짧은 질문", text: "풍미당에 대해 알려줘." },
@@ -19,6 +20,7 @@ export default function LessonTwo({ isLoading, onPrompt }) {
     </LessonSection>
     <LessonSection id="ai-basics" eyebrow="00:10–00:20 · 개념" title="AI는 무엇인가요?" intro="AI는 넓은 분야이고, LLM은 그 안에서 언어를 다루는 모델의 한 종류예요.">
       <div className="ai-concept-grid">{AI_CONCEPTS.map((concept) => <article key={concept.title}><h3>{concept.title}</h3><p>{concept.text}</p></article>)}</div>
+      <LessonLlmUsage />
       <div className="concept-map" aria-label="AI 안에 머신러닝, 그 안에 딥러닝이 포함되며 오늘 다룰 LLM은 딥러닝 기반입니다"><span>AI</span><span>머신러닝</span><span>딥러닝</span><strong>오늘의 LLM</strong></div>
       <p className="course-note">위 그림은 오늘 다루는 딥러닝 기반 LLM의 위치를 단순화한 거예요. AI에는 사람이 규칙을 정하는 방식도 있어요. 챗봇은 대화하는 앱이고, 모든 챗봇이 LLM을 쓰는 것은 아니에요.</p>
       <div className="teaching-grid">

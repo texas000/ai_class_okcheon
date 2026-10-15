@@ -1404,6 +1404,7 @@ a svg {
 .prompt-comparison article { display: flex; flex-direction: column; padding: 19px; border: 1px solid var(--line); border-radius: 12px; background: #fffdf8; }
 .prompt-comparison h3 { font-size: 13px; margin: 0 0 11px; color: #a26b45; }
 .prompt-comparison p { font-size: 12px; line-height: 1.95; margin: 0 0 16px; color: var(--muted); flex: 1; }
+.llm-model-guide code { overflow-wrap: anywhere; white-space: normal; }
 .prompt-comparison button, .lesson-action { font-size: 11px; padding: 9px 12px; border: 1px solid #d2b89e; border-radius: 7px; background: #f5e9d9; color: #95603c; }
 .lesson-action { margin-top: 15px; }
 .prompt-comparison button:disabled, .lesson-action:disabled { opacity: 0.5; }
