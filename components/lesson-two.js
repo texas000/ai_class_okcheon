@@ -40,14 +40,20 @@ export default function LessonTwo({ isLoading, onPrompt }) {
       <div id="chatbot-structure"><ChatbotStructure /></div>
       <aside className="lesson-example"><strong>검색과 답변 만들기는 역할이 달라요</strong><p>검색 코드는 근거가 될 식당 자료를 고르고, LLM은 그 자료를 참고해 문장을 만들어요. 식당 질문에서 검색 결과가 없으면 찾지 못했다고 안내하도록 규칙을 보내요. 영업시간·메뉴 가격처럼 CSV에 없는 정보는 확인이 필요해요. 일반 AI 질문에는 식당 context를 붙이지 않아요.</p></aside>
     </LessonSection>
-    <LessonSection id="app-warmup" eyebrow="00:35–00:40 · 관찰" title="오늘 어떤 앱을 사용했나요?" intro="Application(애플리케이션)은 사용자가 어떤 일을 하도록 돕는 소프트웨어예요. 줄여서 ‘앱’이라고 부릅니다.">
-      <Activity title="내가 쓰는 앱 하나 소개하기" steps={["지도, 메신저, 배달, 일정 앱 중 자주 사용하는 하나를 골라요. 브라우저로 쓰는 서비스도 괜찮아요.", "‘누가, 어떤 상황에서, 무엇을 하려고 쓰는가’를 한 문장으로 말해요.", "내가 입력한 것과 앱이 보여준 결과를 짝에게 설명해요. 앱의 이름보다 해결하는 문제에 집중해요."]} />
+    <LessonSection id="app-warmup" eyebrow="00:35–00:40 · 개념" title="Application은 무엇인가요?" intro="Application(애플리케이션)은 컴퓨터나 휴대전화에서 우리가 원하는 일을 할 수 있게 도와주는 프로그램이에요. 줄여서 ‘앱’이라고 불러요.">
+      <aside className="lesson-example"><strong>생활 도구처럼 생각해보세요</strong><p>가위는 종이를 자르고, 달력은 일정을 기억하도록 도와줘요. 앱도 비슷해요. 화면에서 버튼을 누르거나 내용을 입력하면, 계산·기록·길 찾기처럼 필요한 일을 도와주는 디지털 도구예요.</p></aside>
+      <div className="teaching-grid">
+        <article><h3>계산기 앱 · 계산을 도와줘요</h3><p>물건 가격과 개수를 넣으면 합계를 계산해줘요. 계산기를 직접 두드리는 일을 화면 속 도구로 하는 거예요.</p></article>
+        <article><h3>지도 앱 · 길 찾기를 도와줘요</h3><p>가고 싶은 곳을 입력하면 가는 길을 보여줘요. 낯선 곳에서도 어디로 가야 할지 알 수 있어요.</p></article>
+        <article><h3>기록 앱 · 기억을 도와줘요</h3><p>오늘 한 일이나 농작업 내용을 적어두면, 나중에 다시 찾아볼 수 있어요. 종이 수첩이 하던 일을 도와주는 셈이에요.</p></article>
+      </div>
+      <aside className="lesson-takeaway"><h3>우리가 앱을 만든다는 것은?</h3><p>‘누가 어떤 일을 더 쉽게 하게 도울까?’를 정하고, 그 일을 할 수 있는 화면과 기능을 만드는 거예요. 예를 들어 식당 이름을 입력하면 주소를 찾아주는 앱부터 만들 수 있어요.</p></aside>
     </LessonSection>
     <LessonSection id="app-basics" eyebrow="00:40–00:50 · 개념" title="앱을 입력 → 처리 → 결과로 나눠봐요" intro="화면에 보이는 버튼뿐 아니라, 입력을 받아 필요한 일을 수행하는 과정까지 앱의 일부예요.">
       <div className="input-output-map"><div><span>INPUT</span><h3>입력</h3><p>사용자가 주는 정보<br />목적지, 검색어, 질문</p></div><span aria-hidden="true">→</span><div><span>PROCESS</span><h3>처리</h3><p>계산하거나 자료를 찾는 일<br />경로 계산, 검색, 답변 생성</p></div><span aria-hidden="true">→</span><div><span>OUTPUT</span><h3>결과</h3><p>사용자에게 보여주는 것<br />지도, 목록, 대화 메시지</p></div></div>
       <div className="course-table-wrap"><table className="course-table"><caption>익숙한 앱을 세 부분으로 분석해요</caption><thead><tr><th>앱</th><th>입력</th><th>처리</th><th>결과</th></tr></thead><tbody><tr><th scope="row">계산기</th><td>숫자와 연산</td><td>계산 규칙 실행</td><td>계산된 숫자</td></tr><tr><th scope="row">지도</th><td>출발지와 목적지</td><td>지도 자료로 경로 계산</td><td>경로와 예상 시간</td></tr><tr><th scope="row">옥천 챗봇</th><td>지역·업소 질문</td><td>CSV 검색 + AI 답변 생성</td><td>답변과 참고 자료</td></tr></tbody></table></div>
       <div className="teaching-grid"><article><h3>웹 앱과 설치형 앱</h3><p>웹 앱은 브라우저에서 주소로 접속해 사용해요. 설치형 앱은 기기에 설치해 사용해요. 둘 다 사용자의 일을 돕고, 인터넷을 쓰는지는 기능에 따라 달라요. 우리는 주소로 공유할 수 있는 웹 앱을 만들어요.</p></article><article><h3>앱과 AI 모델의 관계</h3><p>모델은 앱 안의 한 기능을 맡을 수 있어요. 우리 챗봇에서 AI는 답변 문장을 만들고, 앱은 입력·자료 검색·전송·오류 안내·결과 표시를 관리해요. 계산기처럼 AI 없이 동작하는 앱도 많아요.</p></article></div>
-      <Activity title="앱의 세 칸을 채워보기" steps={["처음에 고른 앱의 입력 / 처리 / 결과를 각각 적어요. 내부 처리는 추측이라면 ‘예상’이라고 표시해요.", "‘검색어는 입력, 검색 버튼은 입력을 보내는 화면 요소’처럼 정보와 화면 요소를 구분해요.", "짝이 그 설명만 듣고 앱을 사용할 수 있는지 확인해요."]} />
+      <Activity title="앱의 세 칸을 채워보기" steps={["계산기·지도·기록 앱 중 하나를 골라 입력 / 처리 / 결과를 각각 적어요. 내부 처리는 추측이라면 ‘예상’이라고 표시해요.", "‘검색어는 입력, 검색 버튼은 입력을 보내는 화면 요소’처럼 정보와 화면 요소를 구분해요.", "짝이 그 설명만 듣고 앱을 사용할 수 있는지 확인해요."]} />
     </LessonSection>
     <LessonSection id="app-structure" eyebrow="01:00–01:15 · 구조" title="식당의 홀과 주방처럼 함께 일해요" intro="온라인 앱의 구조를 식당에 비유해요. 실제 앱에서는 화면과 서버가 요청·응답으로 정보를 주고받아요.">
       <div className="restaurant-analogy"><article><span>01 · 홀과 메뉴판</span><h3>프런트엔드 · 화면</h3><p>손님이 메뉴를 보고 주문하듯 사용자가 보고 조작하는 부분이에요. 입력창, 버튼, 답변 표시를 담당해요.</p><small>우리 앱: 브라우저의 대화 화면</small></article><article><span>02 · 주방</span><h3>백엔드 · 서버 처리</h3><p>주문을 받아 조리하듯 요청을 검사하고 자료 검색과 AI 호출을 수행해요. 여기서 ‘서버’는 요청을 처리하는 프로그램과 실행 환경을 뜻해요.</p><small>우리 앱: /api/chat 서버 기능</small></article><article><span>03 · 재료 목록</span><h3>데이터 · 참고할 정보</h3><p>주방이 재료 목록을 보듯 코드가 필요한 자료를 읽어요. 데이터는 파일이나 데이터베이스에 둘 수 있어요.</p><small>우리 앱: 식당 이름·주소가 담긴 CSV</small></article><article><span>04 · 정해진 주문 방식</span><h3>API · 요청과 응답의 약속</h3><p>주문서에 메뉴와 수량을 적는 규칙처럼, 다른 프로그램에 어떤 형식으로 부탁하고 결과를 받을지 정한 인터페이스예요.</p><small>우리 앱: /api/chat, NVIDIA API</small></article></div>
