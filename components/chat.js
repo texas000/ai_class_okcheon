@@ -19,12 +19,54 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
   const [error, setError] = useState("");
   const [view, setView] = useState(initialSession ? "guide" : "chat");
   const [copiedId, setCopiedId] = useState(null);
+  const [isLessonFullscreen, setIsLessonFullscreen] = useState(false);
 
   // useRef는 HTML 요소 또는 요청 상태를 기억합니다. 바뀌어도 화면을 다시 그리지 않습니다.
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
   const requestRef = useRef(null);
   const copyTimerRef = useRef(null);
+  const mainRef = useRef(null);
+
+  function exitLessonFullscreen() {
+    setIsLessonFullscreen(false);
+    if (document.fullscreenElement === mainRef.current) {
+      document.exitFullscreen().catch(() => setIsLessonFullscreen(true));
+    }
+  }
+
+  async function toggleLessonFullscreen() {
+    if (isLessonFullscreen) {
+      exitLessonFullscreen();
+      return;
+    }
+    setIsLessonFullscreen(true);
+    try {
+      await mainRef.current?.requestFullscreen?.();
+    } catch {
+      // Keep the sidebar-free layout when native fullscreen is unavailable.
+    }
+  }
+
+  function showChat() {
+    exitLessonFullscreen();
+    setView("chat");
+  }
+
+  useEffect(() => {
+    function syncFullscreen() {
+      setIsLessonFullscreen(document.fullscreenElement === mainRef.current);
+    }
+    function handleEscape(event) {
+      if (event.key === "Escape" && isLessonFullscreen) exitLessonFullscreen();
+    }
+    document.addEventListener("fullscreenchange", syncFullscreen);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("fullscreenchange", syncFullscreen);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isLessonFullscreen]);
 
   // 새 답변이 생기면 마지막 메시지로 스크롤합니다.
   useEffect(() => {
@@ -74,7 +116,7 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
     setInput("");
     setError("");
     setIsLoading(true);
-    setView("chat");
+    showChat();
 
     try {
       const response = await fetch("/api/chat", {
@@ -172,7 +214,7 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
     setMessages([]);
     setInput("");
     setError("");
-    setView("chat");
+    showChat();
     inputRef.current?.focus();
   }
 
@@ -188,7 +230,7 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
   }
 
   return (
-    <div className={`app-shell${view === "guide" ? " guide-mode" : ""}`}>
+    <div className={`app-shell${view === "guide" ? " guide-mode" : ""}${isLessonFullscreen ? " lesson-fullscreen" : ""}`}>
       <a className="skip-link" href="#main-content">
         본문으로 이동
       </a>
@@ -210,7 +252,7 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
         <nav className="main-nav">
           <button
             className={view === "chat" ? "nav-item active" : "nav-item"}
-            onClick={() => setView("chat")}
+            onClick={showChat}
             aria-current={view === "chat" ? "page" : undefined}
           >
             <Icon name="chat" />
@@ -247,7 +289,7 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
         {messages.length > 0 && (
           <div className="session">
             <div className="nav-label">진행 중인 대화</div>
-            <button onClick={() => setView("chat")}>
+            <button onClick={showChat}>
               <Icon name="chat" size={15} />
               <span>{messages[0].content}</span>
             </button>
@@ -285,16 +327,23 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
         </div>
       </aside>
 
-      <main className="main-panel" id="main-content">
+      <main ref={mainRef} className="main-panel" id="main-content">
         <header className="topbar">
           <div className="breadcrumb">
             AI Class<span>/</span>
             <strong>{view === "chat" ? "AI와 대화하기" : "실습 가이드"}</strong>
           </div>
-          <div className="provider-badge">
+          {view === "guide" ? <button
+            className="lesson-fullscreen-button"
+            type="button"
+            onClick={toggleLessonFullscreen}
+            aria-pressed={isLessonFullscreen}
+            aria-controls="main-content"
+            title={isLessonFullscreen ? "전체화면 나가기 (Esc)" : "수업 전체화면으로 보기"}
+          ><Icon name={isLessonFullscreen ? "minimize" : "maximize"} size={17} />{isLessonFullscreen ? "전체화면 나가기" : "전체화면"}</button> : <div className="provider-badge">
             <span />
             Powered by NVIDIA
-          </div>
+          </div>}
         </header>
         {view === "guide" ? (
           <PracticeGuide
@@ -302,7 +351,7 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
             restaurantSummary={restaurantSummary}
             isLoading={isLoading}
             onPrompt={sendMessage}
-            onChat={() => setView("chat")}
+            onChat={showChat}
           />
         ) : (
           <>

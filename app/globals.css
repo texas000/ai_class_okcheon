@@ -1648,3 +1648,14 @@ a svg {
   .lesson-example code { overflow-wrap: anywhere; }
   .lesson-code-example pre, .local-dev-instructions pre { font-size: 10px; }
 }
+
+/* 수업 전체화면: 브라우저 지원 여부와 관계없이 메뉴를 숨기고 본문을 넓힙니다. */
+.app-shell.lesson-fullscreen > .sidebar { display: none; }
+.main-panel:fullscreen { width: 100%; height: 100dvh; background: var(--canvas); }
+.app-shell.lesson-fullscreen .guide-content { max-width: 1100px; }
+.lesson-fullscreen-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; flex-shrink: 0; padding: 8px 12px; border: 1px solid #d5c8b7; border-radius: 7px; background: #fffdf8; color: #795d45; font-size: 12px; }
+.lesson-fullscreen-button:hover { background: #f3eddf; }
+.lesson-fullscreen-button[aria-pressed="true"] { background: #f5e7d7; border-color: #cca27f; }
+@media (max-width: 640px) {
+  .lesson-fullscreen-button { gap: 5px; padding: 6px 9px; font-size: 11px; }
+}
