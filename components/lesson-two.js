@@ -28,25 +28,7 @@ export default function LessonTwo() {
       <aside className="lesson-takeaway"><h3>2회차 결과물</h3><p>시작·일시정지·다시 시작·초기화가 동작하는 타이머 앱을 만들고, 직접 테스트한 뒤 원하는 부분 하나를 수정했어요.</p></aside>
     </LessonSection>
 
-    <LessonSection id="dev-setup" eyebrow="00:10–00:20 · 가입 후 준비" title="GitHub에 가입하고 개발 도구를 준비해요" intro="GitHub 가입(Sign up)과 이메일 인증을 마친 뒤, 코드를 어디에서 편집하고 어떻게 저장하는지 알아봐요.">
-      <a className="lesson-primary-action" href="https://github.com/signup" target="_blank" rel="noreferrer">GitHub 가입 화면 열기 ↗</a>
-      <div className="teaching-grid">
-        <article><h3>GitHub · 온라인 코드 보관함</h3><p>프로젝트 코드와 변경 이력을 인터넷에 보관하고 함께 작업하는 서비스예요. 프로젝트를 담는 공간을 저장소(repository)라고 해요. Git은 변경 이력을 관리하는 도구이고, GitHub는 그 이력을 온라인에서 공유하는 곳이에요.</p></article>
-        <article><h3>VS Code · 코드를 편집하는 앱</h3><p>내 컴퓨터의 프로젝트 폴더와 코드 파일을 열고 수정하는 프로그램이에요. 수업 전에 운영체제에 맞는 Visual Studio Code를 설치해야 해요. 설치 후 실행하고 ‘폴더 열기(Open Folder)’로 타이머 프로젝트 폴더를 열어요.</p><a href="https://code.visualstudio.com/download" target="_blank" rel="noreferrer">VS Code 공식 다운로드 ↗</a></article>
-        <article><h3>.env · 앱의 설정을 담는 파일</h3><p>API 키나 서버 주소처럼 실행에 필요한 값을 ‘이름=값’ 형태로 적어요. 예를 들어 API_KEY=발급받은키처럼 사용해요. 비밀 키가 들어 있는 .env나 .env.local은 GitHub에 올리지 않아요.</p></article>
-        <article><h3>commit · 내 컴퓨터에 변경 이력 기록</h3><p>변경한 파일 중 기록할 내용을 골라 설명과 함께 한 시점의 상태로 남기는 일이에요. 예를 들어 ‘타이머 시작 버튼 추가’라고 기록해요. 파일 저장과는 별도이며, commit만 하면 아직 GitHub에는 올라가지 않아요.</p></article>
-        <article><h3>push · 기록을 GitHub로 보내기</h3><p>내 컴퓨터에 쌓인 commit을 GitHub 저장소로 보내는 일이에요. 파일을 수정한 뒤 저장 → commit → push 순서로 진행해요. push 후 GitHub에서 파일과 변경 이력이 보이는지 확인해요.</p></article>
-      </div>
-      <aside className="lesson-takeaway"><h3>.gitignore로 비밀 파일 제외하기</h3><p>.gitignore는 Git이 새로 추적하지 않을 파일을 적는 목록이에요. commit 전에 .env와 .env.local 같은 비밀 파일이 제외됐는지 확인해요. 이미 기록한 비밀은 .gitignore에 추가해도 지워지지 않으므로, 키를 노출했다면 폐기하고 새로 발급받아요. API 키가 필요 없는 기본 타이머는 .env 없이 만들 수 있어요.</p></aside>
-      <Activity title="가입 이후 준비 확인" steps={[
-        "GitHub에 가입하고 이메일 인증을 마친 뒤 내 계정으로 로그인해요.",
-        "공식 다운로드 페이지에서 VS Code를 설치하고 실행해요.",
-        "VS Code에서 타이머 프로젝트 폴더를 열어요. 아직 없다면 새 폴더를 만들어요.",
-        "저장 → commit → push의 차이를 말해봐요. 실제 GitHub 업로드는 3회차에 함께 진행해요.",
-      ]} />
-    </LessonSection>
-
-    <LessonSection id="vibe-method" eyebrow="00:20–00:25 · 방법" title="바이브 코딩은 대화와 확인을 반복하는 일이에요" intro="코드를 모두 외우지 않아도 돼요. 대신 무엇을 만들지 분명히 말하고, AI가 만든 결과를 직접 확인해야 해요.">
+    <LessonSection id="vibe-method" eyebrow="00:10–00:25 · 방법" title="바이브 코딩은 대화와 확인을 반복하는 일이에요" intro="코드를 모두 외우지 않아도 돼요. 대신 무엇을 만들지 분명히 말하고, AI가 만든 결과를 직접 확인해야 해요.">
       <div className="prompt-recipe">
         <div><span>01</span><strong>작게 요청</strong><p>첫 버전의 핵심 기능만 말해요.</p></div>
         <div><span>02</span><strong>실행</strong><p>브라우저에서 앱을 열어요.</p></div>
