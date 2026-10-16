@@ -10,8 +10,8 @@
 1. 학생마다 **새 프로젝트 폴더**를 만듭니다. 수업 홈페이지 저장소 안에서 실행하면 기존 홈페이지를 수정할 수 있으므로 별도 폴더를 사용합니다.
 2. 터미널에서 그 폴더를 열고 `codex` 또는 `claude`를 실행합니다. 앱에서 Codex를 사용하는 경우 그 폴더를 프로젝트로 엽니다. ChatGPT·Codex는 **Sol 모델의 medium 이상**, Claude는 **Fable 또는 Opus의 medium 이상** 설정을 사용합니다. 실행 환경이 요구하는 Node.js와 패키지 관리자가 설치되어 있어야 합니다.
 3. 아래에서 **본인 이름의 코드 블록 전체를 한 번에** 붙여 넣습니다. 각 블록은 공통 개발 조건을 포함하므로 다른 블록을 함께 복사하지 않아도 됩니다.
-4. 도구가 알려주는 설치·실행 결과를 확인하고 `http://127.0.0.1:3000` 또는 실제 안내된 포트를 브라우저에서 엽니다. 실행에 실패하면 마지막 절의 후속 프롬프트를 사용합니다.
-5. AI API 키는 채팅에 붙이지 말고 로컬 `.env.local`에 넣습니다. AI 앱은 키 없이 데모로 먼저 확인하고, 실제 생성이 필요할 때 OpenAI(ChatGPT API) 또는 Anthropic(Claude API) 중 하나를 선택해 공급자·모델·키를 설정합니다. ChatGPT·Claude 유료 구독과 개발자용 API 키·요금은 별개입니다.
+4. 도구가 알려주는 설치·실행 결과를 확인하고 웹 앱은 `http://127.0.0.1:3000` 또는 실제 안내된 포트를 브라우저에서 엽니다. 전필우님의 앱은 Electron 데스크톱 창에서 실행합니다. 실행에 실패하면 마지막 절의 후속 프롬프트를 사용합니다.
+5. AI API 키는 채팅에 붙이지 말고 웹 앱은 로컬 `.env.local`에 넣습니다. 전필우님의 Electron 앱은 설정 화면에서 Claude API 키를 입력하고 암호화해 저장합니다. AI 앱은 키 없이 데모로 먼저 확인하고, 실제 생성이 필요할 때 OpenAI(ChatGPT API) 또는 Anthropic(Claude API) 중 하나를 선택해 공급자·모델·키를 설정합니다. ChatGPT·Claude 유료 구독과 개발자용 API 키·요금은 별개입니다.
 
 ### 첫 버전에서 달라지는 점
 
@@ -22,7 +22,7 @@
 | 심현정 / 칼퇴도우미 | 일정 | 불필요 | AI 없음, 개인용 |
 | 이봄길민들레 / 사료 측정앱 | 불필요 | 불필요 | AI 없음, 열량→무게 환산 |
 | 이새벽 / 던맵 (가제) | 목표·하위 할 일·성취 기록 | 불필요 | 첫 버전 AI 없음, 개인용 |
-| 전필우 / 파워포인트 끝판왕 | 덱 JSON·버전 정보(필요 시) | PPTX·PDF·썸네일·이미지 | 데모/OpenAI/Claude, 개인용 |
+| 전필우 / 파워포인트 끝판왕 | 로컬 JSON 또는 SQLite | PPTX·테마 템플릿·이미지 | Electron 데스크톱, Claude API, 개인용 |
 | 홍용훈 / 헬퍼라이터 | 작품·인물·초안 버전 | 불필요 | 데모/OpenAI/Claude, 개인용 |
 
 여기서 파일 서버는 별도 클라우드 상품이나 별도 프로세스가 아니라 **Next.js 서버가 업로드 폴더의 파일을 API로 제공하는 기능**입니다. `.local-data/tmp`는 임시 작업 폴더이고 `.local-data/uploads`는 실습 중 보관할 원본 폴더입니다. 업로드 원본을 운영체제 임시 폴더에만 보관하면 정리 과정에서 사라질 수 있으므로 둘을 나눕니다. 로컬 DB와 업로드 폴더는 자동 백업되지 않으며 이 구성을 그대로 Vercel의 영구 저장용으로 쓰지 않습니다.
@@ -233,69 +233,78 @@ achievement_logs: id, goal_id(FK), body, recorded_on, created_at, updated_at.
 
 ## 6. 전필우 · 파워포인트 끝판왕
 
-아래 전체를 복사해서 입력합니다.
+아래 전체를 복사해서 입력합니다. 이 앱은 브라우저 웹 앱이 아닌 **Electron 데스크톱 앱**으로 만듭니다.
 
 ```text
-내가 만들 앱은 "파워포인트 끝판왕"이야. 아래 구현 계획에 따라 LLM 기반 PPTX 생성기를 구현해줘.
+내가 만들 앱은 "파워포인트 끝판왕"이야. 아래 구현 계획에 따라 Electron 기반 PPTX 생성 데스크톱 앱을 구현해줘.
 
-공통 개발 조건:
-- Next.js App Router + TypeScript로 한국어·모바일 대응 로컬 앱을 만들어줘. PPTX 렌더링은 Python의 python-pptx를 사용해줘.
-- 저장이 필요하면 SQLite와 프로젝트 안의 .local-data/ 폴더를 사용해줘.
-- 로컬 실습용(127.0.0.1)으로 만들고, 배포는 진행하지 마. 실제 AI 호출은 사용자가 설정한 API로만 진행해줘.
-- 비밀키는 서버 환경변수로 관리하고 .env.local과 .local-data/는 Git에서 제외해줘.
-- README에 실행 방법, Python·LibreOffice 준비와 API 설정을 간단히 안내해줘.
+기술 선택:
+- 앱: Electron + React (Vite)
+- PPTX 생성: pptx-automizer (PowerPoint 템플릿 기반)
+- 검증: zod
+- LLM: Claude API (structured output)
+- 저장: 로컬 JSON 파일 또는 SQLite
+- 패키징: electron-builder
 
-목표와 파이프라인:
-사용자 요청을 받아 테마가 적용된 실제 .pptx 파일을 생성하고 다운로드하게 해줘. LLM은 콘텐츠 JSON만 출력하고, 렌더러가 템플릿과 JSON으로 파일을 만들어야 해.
-요청 → LLM(structured JSON) → 검증 → 오류 시 1회 재시도 → 렌더러(템플릿 + JSON) → .pptx → 다운로드.
+구조:
+- Renderer(UI): 요청 입력, 테마 선택, 미리보기, 수정 요청.
+- Main process: LLM 호출, 검증, PPTX 생성, 파일 저장.
+- preload + contextBridge로 필요한 IPC만 노출해줘. UI는 Node API를 직접 쓰지 않고 LLM 호출과 파일 쓰기는 Main에서만 처리해줘.
 
-화면과 입력:
-request(사용자 요청), source(참고 자료), deck_spec(청중, 목적, 슬라이드 수, 언어), assets(사용 가능한 이미지 등의 자료)를 입력하고 테마를 선택하게 해줘.
-생성 결과에는 PPTX 다운로드, 슬라이드별 QA 미리보기, 테마 변경, 대상 슬라이드 수정 기능을 제공해줘. 기존 JSON과 파일을 보존하고 실패 시 다시 시도할 수 있게 해줘.
+파이프라인:
+요청 → Main: LLM(structured JSON) → 검증 → 오류 시 1회 재시도 → pptx-automizer 렌더러 → .pptx 저장.
+같은 JSON을 UI로 전달해 HTML 미리보기를 그려줘.
 
-1. 슬라이드 JSON 스키마:
-layout은 title, body, two_column, chart, image 같은 enum으로 정의하고 슬라이드별 id와 title, body, left/right, chart, notes 필드를 설계해줘. 이미지가 필요한 레이아웃은 assets의 ID를 참조하게 해줘.
-레이아웃에 따라 필요한 필드와 필수 슬롯을 명확하게 정하고, 차트의 카테고리·시리즈 구조도 정의해줘. LLM 출력에는 hex, 폰트, 크기를 넣지 마.
+테마 구조:
+themes/
+  corporate_blue/
+    template.pptx
+    theme.json
 
-2. 테마 설정과 템플릿:
-테마별 설정 파일과 실제 .pptx 템플릿을 만들어줘. 템플릿은 PowerPoint 마스터와 레이아웃으로 디자인하고, 레이아웃 id → 템플릿 레이아웃 이름 매핑을 설정에 둬.
-색 역할(primary, accent, muted, danger) → hex, 폰트, 레이아웃 카탈로그, 톤, 슬롯별 글자 수 제한을 테마 설정에 둬. 카탈로그·톤·제한은 LLM prompt에도 사용해줘.
-먼저 테마 1개로 끝까지 구현한 뒤 테마를 추가해줘. 수동으로 PowerPoint에서 디자인해야 하는 부분이 있으면 필요한 작업을 명확히 안내해줘.
+template.pptx는 레이아웃당 슬라이드 1장으로 구성하고 바꿀 도형에 이름을 지정해줘.
+theme.json 예시:
+{
+  "template": "template.pptx",
+  "tone": "formal, concise",
+  "layouts": {
+    "title": { "slide": 1, "shapes": { "title": "Title", "subtitle": "Subtitle" } },
+    "bullets": { "slide": 2, "shapes": { "title": "Title", "body": "Body" }, "limits": { "title": 60, "bullets": 5 } },
+    "two_column": { "slide": 3, "shapes": { "title": "Title", "left": "Left", "right": "Right" } },
+    "chart": { "slide": 4, "shapes": { "title": "Title", "chart": "Chart1" } }
+  },
+  "colors": { "primary": "1F4E79", "accent": "F28C28" }
+}
 
-3. LLM prompt와 호출:
-역할, JSON 스키마, 테마 섹션(레이아웃, 제한, 톤), 출력 규칙을 포함해줘. 컨텍스트는 request, source, deck_spec, assets로 구분해 전달해줘.
-prompt 캐싱을 위해 공통 규칙과 스키마는 앞에, 테마 섹션은 그 뒤에, 요청별 컨텍스트는 마지막에 배치해줘.
-LLM은 JSON만 출력하게 하고 source는 참고 자료로 취급해줘. 같은 JSON을 LLM 재호출 없이 다른 테마로 렌더링할 수 있게 콘텐츠와 스타일을 분리해줘. 테마 전환 시에도 슬롯 제한은 다시 검사해줘.
-OpenAI 또는 Anthropic API를 서버에서 호출하고 공급자·모델·키는 환경변수로 설정해줘. 키가 없을 때는 예제 JSON을 사용하는 데모 모드로 렌더러를 확인하고 데모임을 표시해줘. live 호출 실패를 몰래 데모로 바꾸지 마.
+구현 단계:
+1. 슬라이드 JSON 스키마를 zod로 정의해줘. layout은 enum으로 두고 레이아웃별 필수 슬롯, 차트 데이터, 이미지 asset 참조와 노트를 정의해줘.
+2. PowerPoint에서 템플릿을 만들어줘. 레이아웃 하나당 슬라이드 하나를 두고 바꿀 도형에 Title, Body, Left, Right 같은 이름을 붙여줘. 불릿은 텍스트 박스 하나에 문단 여러 개로 받아줘. PowerPoint에서 직접 해야 하는 디자인 작업은 안내해줘.
+3. theme.json에 슬라이드 번호, 도형 이름 매핑, 글자 수 제한, 톤을 작성해줘. 예시를 기반으로 모든 레이아웃의 필수 슬롯과 제한을 완성해줘.
+4. 앱 시작 시 템플릿을 검사해줘. 설정의 슬라이드 번호나 도형 이름이 실제 파일과 어긋나면 바로 오류를 보여줘.
+5. LLM prompt에 역할, 스키마, theme.json에서 자동 생성한 테마 섹션과 규칙을 넣어줘. 컨텍스트는 request, source, deck_spec(청중, 목적, 슬라이드 수, 언어), assets로 구분해줘. 공통 규칙과 스키마를 앞에, 테마 섹션과 요청별 컨텍스트를 뒤에 배치해줘.
+6. 스키마, 글자 수, 필수 슬롯을 검증해줘. 실패하면 오류를 LLM에 돌려 한 번만 재생성하고 다시 실패하면 사용자에게 오류를 보여줘.
+7. Main process에 pptx-automizer 렌더러를 만들어줘. removeExistingSlides: true로 결과물에서 원래 템플릿 슬라이드는 제거하고 레이아웃별 함수로 텍스트, 불릿, 차트, 이미지, 노트를 처리해줘. 실제 함수 이름과 사용법은 설치한 버전의 공식 README로 확인해줘.
+8. 같은 JSON으로 HTML 미리보기를 그려줘. LibreOffice는 쓰지 마. 미리보기는 PPTX의 실제 렌더링과 다를 수 있음을 표시해줘.
+9. generate, preview, save-as, edit-slide IPC를 연결해줘. preload에서 허용한 채널만 노출하고 Main에서 IPC 입력을 검증해줘. 파일 저장 위치는 Main의 저장 대화상자로 선택하게 해줘.
+10. 대상 슬라이드만 JSON patch하고 검증 후 다시 렌더링해줘. 다른 슬라이드의 내용과 순서는 유지하고 이전 버전을 보존해줘.
+11. 설정 화면에서 Claude API 키를 입력받고 Main의 safeStorage로 암호화해 저장해줘. UI나 로그에 저장된 키를 다시 노출하지 마. 암호화가 불가능한 환경에서는 평문으로 저장하지 말고 안내해줘. Claude 모델도 설정할 수 있게 해줘.
+12. electron-builder로 패키징해줘. 템플릿과 theme.json은 extraResources에 넣고 패키징 후에는 process.resourcesPath 기준으로 읽어줘. 개발 모드와 패키징 모드의 경로를 구분하고 사용자 데이터는 쓰기 가능한 앱 데이터 폴더에 저장해줘.
 
-4. 검증과 재시도:
-스키마, layout enum, 슬라이드 수, 필수 슬롯, 글자 수 제한과 asset 참조를 검사해줘. 한글에는 더 엄격한 글자 수 제한을 적용해줘.
-JSON 또는 콘텐츠 검증 오류가 나면 오류 내용을 LLM에 전달해 한 번만 수정 요청하고 다시 검증해줘. 두 번째에도 실패하면 오류를 보여주고 렌더링하지 마. 렌더러나 QA 오류로 무한 LLM 호출을 하지 마.
-
-5. python-pptx 렌더러:
-템플릿을 열어 설정의 레이아웃 이름으로 슬라이드를 추가하고 placeholder를 채워줘. placeholder는 인덱스가 아니라 type으로 찾고, 동일 type이 여러 개면 위치 등 명시적인 슬롯 규칙으로 구분해줘.
-차트는 CategoryChartData, 이미지는 add_picture, 발표자 노트는 notes_slide로 넣어줘.
-theme1.xml에서 테마 색과 폰트를 설정하고 한글은 ea 폰트도 설정해줘. 스타일은 테마 설정과 렌더러에서만 결정해줘.
-
-6. 생성 API와 다운로드:
-POST /generate 엔드포인트를 만들어 검증된 JSON을 렌더러에 전달하고 완성된 .pptx를 다운로드 응답으로 내려줘. Next.js에서 Python 렌더러를 실행하는 구조로 연결해줘.
-PPTX 응답의 Content-Type과 다운로드 파일명을 설정하고, 요청별 임시 폴더를 사용해 파일이 섞이지 않게 해줘. 미리보기와 수정을 위해 deck ID로 JSON·테마·결과 파일을 다시 조회할 수 있게 해줘.
-
-7. QA와 미리보기:
-LibreOffice로 PPTX를 PDF로 변환하고 슬라이드별 썸네일을 생성해줘. 텍스트 넘침과 잘림을 검사하고 해당 슬라이드에 경고를 보여줘. 기하학적 검사와 실제 렌더링 확인의 한계를 구분해줘.
-LibreOffice가 없으면 설치 안내와 QA 미검증 상태를 표시하고 미리보기가 검증됐다고 표현하지 마.
-
-8. 수정 흐름:
-사용자가 대상 슬라이드와 수정 요청을 지정하면 해당 슬라이드 JSON만 patch하고 검증 후 다시 렌더링해줘. 나머지 슬라이드 내용과 순서는 유지하고 이전 버전을 보존해줘.
-테마만 바꿀 때는 저장된 JSON을 그대로 사용하고 LLM을 다시 호출하지 마.
+규칙:
+- LLM 출력에 hex, 폰트, 크기를 넣지 마. 스타일은 템플릿과 테마 설정에서 결정해줘.
+- 호환되는 레이아웃 카탈로그의 다른 테마에는 같은 JSON을 LLM 재호출 없이 렌더링해줘. 레이아웃 카탈로그가 다르면 재생성하고, 테마 전환 시 슬롯과 글자 수 제한을 다시 검증해줘.
+- LLM 호출과 파일 쓰기는 Main에서만 해줘.
+- 글자 넘침은 자동으로 잡을 수 있다고 가정하지 마. 템플릿 도형 크기에 맞춰 글자 수를 제한해줘.
+- 한글 폰트가 제대로 나오는지는 실제 PPTX를 PowerPoint에서 열어 확인해줘.
+- API 키가 없을 때는 예제 JSON으로 렌더러와 미리보기를 확인할 수 있게 하고 실제 Claude 호출 여부를 명확히 구분해줘.
 
 작업 순서:
-스키마 → 테마 1개 + 템플릿 → 렌더러 → 검증 + 재시도 → API → QA 미리보기 → 테마 추가 → 수정 흐름.
+스키마 → 템플릿 1개 + theme.json → 렌더러(Node 스크립트로 먼저 테스트) → 템플릿 검사기 → 검증 + 재시도 → Electron 껍데기 + IPC → HTML 미리보기 → 설정/API 키 → 테마 추가 → 수정 흐름 → 패키징.
 
 완료 확인:
-예제 JSON → 실제 PPTX 생성·다운로드 → PDF·썸네일 확인까지 실행해줘. 차트·이미지·한글·노트가 반영되는지 확인해줘.
-잘못된 JSON과 슬롯 누락이 거부되는지, 검증 재시도가 최대 1회인지, 같은 JSON의 테마 전환에 LLM 호출이 없는지, 대상 슬라이드 수정 시 다른 내용이 보존되는지 확인해줘.
-실제 API 키, PowerPoint 또는 LibreOffice가 없어 확인하지 못한 부분은 구분해 알려줘.
+예제 JSON으로 PPTX 생성·로컬 저장과 HTML 미리보기를 확인해줘. 잘못된 슬라이드 번호·도형 이름, 스키마 오류·글자 수 초과·필수 슬롯 누락과 최대 1회 재시도를 확인해줘.
+같은 JSON의 호환 테마 전환에는 LLM 호출이 없는지, 대상 슬라이드 수정 후 나머지 슬라이드가 유지되는지 확인해줘.
+API 키 암호화 저장과 앱 재시작 후 설정 유지, 패키징된 앱에서 템플릿 로딩과 파일 저장을 확인해줘. 실행·패키징 방법은 README에 간단히 적어줘.
+실제 API 키나 PowerPoint가 없어 확인하지 못한 항목과 패키징을 확인한 운영체제를 구분해 알려줘.
 ```
 
 ## 7. 홍용훈 · 헬퍼라이터
