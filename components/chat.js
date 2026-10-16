@@ -10,6 +10,7 @@ import PracticeGuide from "./practice-guide.js";
 import { COURSE_SESSIONS } from "../lib/practice-guide.js";
 import Icon from "./icon.js";
 import RestaurantSources from "./restaurant-sources.js";
+import AccountMenu from "./account-menu.js";
 
 export default function Chat({ restaurantSummary, initialSession = null }) {
   // 1. useState는 화면이 기억할 값입니다. 값이 바뀌면 React가 화면을 갱신합니다.
@@ -267,6 +268,9 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
             <Icon name="book" />
             실습 가이드<span className="tiny-badge">8회차</span>
           </Link>
+          <Link href="/manage" className="nav-item" prefetch={false}>
+            <Icon name="book" />관리 페이지
+          </Link>
         </nav>
         <div className="sidebar-course">
           <div className="course-nav-label">회차별 수업</div>
@@ -316,14 +320,7 @@ export default function Chat({ restaurantSummary, initialSession = null }) {
             NVIDIA 모델 둘러보기
             <Icon name="external" size={14} />
           </a>
-          <div className="profile">
-            <span className="profile-avatar">나</span>
-            <div>
-              <strong>오늘의 메이커</strong>
-              <small>AI Class · 실습 공간</small>
-            </div>
-            <span className="profile-dot" />
-          </div>
+          <AccountMenu />
         </div>
       </aside>
 

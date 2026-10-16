@@ -488,3 +488,28 @@ npm run build
 - [Next.js 서버 파일 포함 설정](https://nextjs.org/docs/app/api-reference/config/next-config-js/output)
 - [Vercel Deploy Button](https://vercel.com/docs/deploy-button)
 - [배포 버튼에서 필수 환경변수 입력받기](https://vercel.com/docs/deploy-button/environment-variables)
+
+## Clerk 로그인과 관리 페이지
+
+- `/sign-in`: 한국어 로그인, `/sign-up`: 회원가입.
+- `/manage`: 로그인한 사용자 전용 관리 화면. 내 계정, 전체 수업 바로가기, 식당 데이터 현황을 확인합니다.
+- 사이드바의 **관리 페이지** 또는 로그인 후 프로필 옆 **관리**로 이동합니다. 프로필 메뉴에서 계정 수정과 로그아웃을 할 수 있습니다.
+- 관리 화면은 모든 로그인 사용자에게 열립니다. 별도의 관리자 역할이나 다른 사용자의 계정 관리 기능은 포함하지 않습니다.
+
+### 연결 방법
+
+1. [Clerk Dashboard](https://dashboard.clerk.com/)에서 애플리케이션을 만들고 로그인 방식을 선택합니다.
+2. **API Keys**의 키를 기존 `.env.local`에 추가합니다. 기존 NVIDIA 설정은 유지하세요.
+
+   ```dotenv
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_발급받은_공개키
+   CLERK_SECRET_KEY=sk_test_발급받은_비밀키
+   ```
+
+3. `npm run dev`를 다시 실행하고 `/sign-up`에서 테스트 계정을 만듭니다.
+4. 로그인 후 `/manage`가 열리고, 로그아웃 후 직접 접근하면 `/sign-in`으로 이동하는지 확인합니다.
+5. 배포 시 Vercel의 **Settings → Environment Variables**에 두 키를 추가한 뒤 다시 배포합니다. 운영 환경에서는 Clerk의 운영 인스턴스와 도메인을 설정하고 해당 운영 키를 사용합니다.
+
+키가 설정되지 않았을 때는 공개 수업과 채팅을 계속 이용할 수 있고, 로그인 화면에 준비 중 안내가 나옵니다. 관리 화면의 데이터는 제공하지 않습니다. `CLERK_SECRET_KEY`는 브라우저나 저장소에 공개하지 마세요.
+
+Next.js 16의 `proxy.js`에서 Clerk 세션을 연결하고, 관리 페이지에서 데이터를 읽기 전에 `auth()`로 서버 인증을 확인합니다. 관리 기능을 추가할 때도 데이터를 조회·수정하는 서버 코드에서 인증을 확인하세요.

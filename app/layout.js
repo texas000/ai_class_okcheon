@@ -1,4 +1,6 @@
 import "./globals.css";
+import AuthProvider from "../components/auth-provider.js";
+import { isClerkConfigured } from "../lib/auth-config.js";
 
 // [수정 5] 브라우저 탭 제목과 검색 결과의 소개입니다.
 export const metadata = {
@@ -10,7 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body><AuthProvider enabled={isClerkConfigured()}>{children}</AuthProvider></body>
     </html>
   );
 }

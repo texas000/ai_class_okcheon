@@ -1674,3 +1674,56 @@ a svg {
 @media (max-width: 640px) {
   .lesson-fullscreen-button { gap: 5px; padding: 6px 9px; font-size: 11px; }
 }
+
+/* Clerk 계정 화면과 로그인 전용 관리 공간 */
+.auth-button { display: inline-flex; justify-content: center; align-items: center; padding: 10px 18px; border-radius: 8px; background: var(--accent); color: white; text-decoration: none; font-weight: 600; }
+.auth-button:hover { background: var(--accent-hover); }
+.account-links { gap: 18px; }
+.account-links > a:last-child { font-size: 12px; text-underline-offset: 4px; }
+.account-profile > div { min-width: 0; }
+.account-profile strong { display: block; overflow-wrap: anywhere; }
+.account-manage { margin-left: auto; font-size: 11px; flex-shrink: 0; }
+.auth-screen { min-height: 100dvh; padding: 40px 20px 64px; display: flex; flex-direction: column; align-items: center; }
+.auth-home { color: var(--muted); text-decoration: none; font-size: 13px; }
+.auth-home:hover { color: var(--accent); }
+.auth-heading { text-align: center; margin: 64px 0 28px; }
+.auth-heading h1 { font-size: clamp(24px, 5vw, 32px); letter-spacing: -1px; margin: 16px 0 12px; }
+.auth-heading p, .auth-setup p { color: var(--muted); line-height: 1.9; }
+.auth-setup { max-width: 420px; padding: 26px; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
+.auth-setup h2 { font-size: 18px; margin-top: 0; }
+.auth-setup a { color: var(--accent); text-underline-offset: 4px; }
+.manage-page { max-width: 1040px; margin: 0 auto; padding: 28px 32px 64px; }
+.manage-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.manage-account { display: flex; align-items: center; gap: 12px; font-size: 12px; }
+.manage-intro { margin: 46px 0 28px; }
+.manage-intro h1 { font-size: clamp(26px, 5vw, 36px); letter-spacing: -1px; margin: 14px 0; }
+.manage-intro p { color: var(--muted); line-height: 1.8; }
+.manage-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 24px; }
+.manage-stats article, .manage-card { padding: 26px; border: 1px solid var(--line); border-radius: 14px; background: #fffefa; }
+.manage-stats article > span { color: var(--muted); font-size: 12px; }
+.manage-stats strong { display: block; font-size: 32px; margin-top: 16px; font-variant-numeric: tabular-nums; }
+.manage-stats small { font-size: 13px; font-weight: 400; color: var(--muted); margin-left: 6px; }
+.manage-stats .manage-date { font-size: 23px; padding-top: 7px; }
+.manage-card { margin-top: 20px; }
+.manage-card h2 { font-size: 17px; margin: 0 0 20px; }
+.manage-details { margin: 0; }
+.manage-details > div { display: flex; gap: 20px; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line); line-height: 1.7; }
+.manage-details dt { color: var(--muted); flex-shrink: 0; }
+.manage-details dd { margin: 0; text-align: right; overflow-wrap: anywhere; min-width: 0; }
+.manage-hint { color: var(--muted); font-size: 12px; line-height: 1.8; margin: 18px 0 0; }
+.manage-courses { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.manage-courses a { display: flex; align-items: center; gap: 12px; text-decoration: none; border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+.manage-courses a:hover { background: var(--accent-soft); border-color: #d6b498; }
+.manage-courses a > span { font-size: 11px; color: var(--accent); flex-shrink: 0; }
+.manage-courses a > span:last-child { margin-left: auto; }
+.manage-courses strong { font-size: 13px; line-height: 1.7; }
+@media (max-width: 640px) {
+  .manage-page { padding: 20px 18px 40px; }
+  .manage-stats, .manage-courses { grid-template-columns: 1fr; }
+  .manage-stats { gap: 10px; }
+  .manage-stats article { display: flex; justify-content: space-between; align-items: center; padding: 20px; }
+  .manage-stats strong, .manage-stats .manage-date { margin-top: 0; padding-top: 0; font-size: 24px; }
+  .manage-card { padding: 20px; }
+  .auth-heading { margin-top: 42px; }
+  .auth-screen .cl-rootBox, .auth-screen .cl-cardBox { max-width: 100%; }
+}
