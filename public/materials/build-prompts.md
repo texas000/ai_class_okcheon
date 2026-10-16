@@ -23,7 +23,7 @@
 | 이봄길민들레 / 사료 측정앱 | 불필요 | 불필요 | AI 없음, 열량→무게 환산 |
 | 이새벽 / 던맵 (가제) | 목표·하위 할 일·성취 기록 | 불필요 | 첫 버전 AI 없음, 개인용 |
 | 전필우 / 파워포인트 끝판왕 | 로컬 JSON 또는 SQLite | PPTX·테마 템플릿·이미지 | Electron 데스크톱, Claude API, 개인용 |
-| 홍용훈 / 헬퍼라이터 | 작품·인물·초안 버전 | 불필요 | 데모/OpenAI/Claude, 개인용 |
+| 홍용훈 / 헬퍼라이터 | 프로젝트·챕터·프롬프트 버전·요약·상태·복선 | 불필요 | Claude 역할별 모델, 개인용 로컬 웹 앱 |
 
 여기서 파일 서버는 별도 클라우드 상품이나 별도 프로세스가 아니라 **Next.js 서버가 업로드 폴더의 파일을 API로 제공하는 기능**입니다. `.local-data/tmp`는 임시 작업 폴더이고 `.local-data/uploads`는 실습 중 보관할 원본 폴더입니다. 업로드 원본을 운영체제 임시 폴더에만 보관하면 정리 과정에서 사라질 수 있으므로 둘을 나눕니다. 로컬 DB와 업로드 폴더는 자동 백업되지 않으며 이 구성을 그대로 Vercel의 영구 저장용으로 쓰지 않습니다.
 
@@ -309,47 +309,106 @@ API 키 암호화 저장과 앱 재시작 후 설정 유지, 패키징된 앱에
 
 ## 7. 홍용훈 · 헬퍼라이터
 
-아래 전체를 복사해서 입력합니다.
+아래 전체를 복사해서 입력합니다. 장편소설 AI 생성 앱 구현 계획 v1.0을 바탕으로, 챕터 단위 집필과 계층적 context 압축을 구현합니다.
 
 ```text
-내가 만들 앱은 "헬퍼라이터"이야. 아래 조건에 맞춰 첫 버전을 실제로 구현해줘.
+내가 만들 앱은 "헬퍼라이터"야. 아래 구현 계획에 따라 Claude 기반 장편소설 생성 웹 앱을 구현해줘.
+
+목표와 범위:
+장편소설을 챕터 단위로 이어 쓰고, 앞부분을 계층적으로 압축해 다음 챕터의 context로 전달해줘. 사용자가 system prompt를 수정해 톤과 전개를 바꾸고, 수십 개 챕터에서도 인물 설정과 복선을 추적하게 해줘.
+첫 버전은 개인용 로컬 앱, 기본 언어는 한국어, 챕터 분량은 약 3,000~6,000자로 해줘. 프로젝트별로 소설 하나를 관리하고 여러 프로젝트를 만들 수 있게 해줘. 인증·멀티 유저·결제·협업·이미지/표지 생성·모바일 앱은 제외해줘.
 
 공통 개발 조건:
-- Next.js App Router + TypeScript로 한국어·모바일 대응 로컬 앱을 만들어줘.
-- DB가 필요하면 SQLite(.local-data/app.sqlite), 파일은 로컬 폴더(.local-data/uploads, .local-data/tmp)를 사용하고 재시작해도 저장 데이터를 유지해줘.
-- 로컬 실습용(127.0.0.1)으로 구현하고 배포와 외부 서비스 연결은 진행하지 마.
-- 비밀키는 서버 환경변수로 관리하고 .env.local과 .local-data/는 Git에서 제외해줘.
-- 실행 방법과 필요한 설정을 README에 간단히 안내해줘.
+- Next.js 15 App Router + React 19 + TypeScript, Tailwind CSS를 사용해줘. 설치된 버전의 공식 가이드를 기준으로 구현해줘.
+- SQLite(better-sqlite3) + Drizzle ORM, Zod, TanStack Query, @anthropic-ai/sdk를 사용해줘. 첫 에디터는 textarea로 만들어줘.
+- 로컬(127.0.0.1)에서 실행하고 SQLite는 .local-data/app.sqlite에 저장해줘. 배포는 진행하지 마. 이 파일 DB를 Vercel 서버리스의 영구 저장소로 사용하지 마.
+- 모든 Route Handler에 export const runtime = 'nodejs'를 명시해줘. ANTHROPIC_API_KEY는 서버의 .env.local에서만 읽고 비밀값과 로컬 데이터는 Git에서 제외해줘.
+- README에 실행·DB 초기화·모델 설정과 백업 방법을 간단히 적어줘.
 
-앱 목적과 범위:
-웹소설 작가가 작품·인물·장면을 입력하고 대화문 초안을 만드는 로컬 앱을 만들어줘. 첫 버전은 작품과 인물 관리, 장면별 대화문 생성, 편집, 버전 보존, 텍스트 다운로드야. 긴 원고 업로드, 회차 자동 분석, 임베딩/벡터 DB, 자율 집필, 외부 로그인은 제외해줘.
+1. 역할별 모델 설정:
+lib/llm/models.ts에서 환경변수로 모델을 교체하게 해줘. 구현 계획의 기본 모델 ID는 다음과 같아. 실제 사용 가능 여부는 구현 시 공식 문서와 사용자 API 계정에서 확인하고, 사용할 수 없으면 설정을 안내해줘.
+- MODEL_WRITE: claude-sonnet-5-5 (기본 챕터 생성)
+- MODEL_WRITE_PREMIUM: claude-opus-5-5 (사용자가 선택한 핵심 챕터)
+- MODEL_SUMMARIZE: claude-haiku-5-5 (챕터 요약·상태 추출)
+- MODEL_ARC: claude-sonnet-5-5 (Arc 재요약)
+- MODEL_CONSISTENCY: claude-sonnet-5-5 (일관성 검사)
+요약은 초안 생성마다 하지 않고 챕터 확정 시에만 실행해줘. system prompt의 안정적인 부분과 Story Bible에 cache_control을 적용해줘. 자주 바뀌는 Direction은 뒤에 배치해 캐시 재사용을 방해하지 않게 해줘.
 
-화면과 흐름:
-1. / 에 작품 목록과 새 작품 버튼을 만들어줘. 작품에는 제목, 장르, 세계관 핵심 규칙을 입력해줘.
-2. /projects/[id] 에 인물 등록·수정·삭제 영역을 만들어줘. 인물에는 이름, 성격, 말투, 다른 인물과의 관계를 입력해줘.
-3. 장면 생성 폼에서 해당 작품의 인물 2~4명, 장소·상황, 장면 목표, 분위기, 길이(짧게/보통/길게), 피하고 싶은 표현을 선택·입력해줘.
-4. 결과에 읽기 화면과 편집 textarea를 제공하고 'AI 초안' 또는 '데모 초안'을 표시해줘. 편집 후 새 버전 저장, 다른 버전 생성, 두 버전 나란히 보기, txt/Markdown 다운로드를 제공해줘.
-5. 버전별 생성 시간과 생성 조건을 확인할 수 있게 해줘. 이전 버전을 읽기 전용으로 열고 필요하면 복사해 새 버전을 만들어줘. 미저장 편집이 있을 때 작품 전환과 재생성 전에 확인해줘.
+2. 계층적 context 압축:
+다음 7개 블록을 조합해줘.
+① System prompt: 톤·문체·규칙, 사용자 편집 가능.
+② Story Bible: 인물·세계관·고정 설정.
+③ Arc 요약: 오래된 챕터 묶음의 큰 줄기.
+④ 최근 Chapter 요약: 기본 최근 6개 상세 요약.
+⑤ 직전 챕터 원문 끝부분: 1,500~2,000자, 기본 1,800자.
+⑥ 상태/복선: 인물 현재 상태와 미해결 복선.
+⑦ 이번 챕터 지시문.
+현재 챕터보다 앞선 확정 내용만 사용하고 미래 챕터나 다른 프로젝트 자료를 섞지 마. Arc로 묶이지 않은 이전 챕터가 최근 6개 범위 밖으로 빠져도 내용이 누락되지 않게 context 포함 규칙을 정해줘.
+확정 시 챕터 요약과 상태 JSON을 생성해줘. 활성 챕터 요약이 10개 쌓이면 가장 오래된 10개를 Arc 요약 하나로 합치고 원본 요약은 DB에 보존하되 context에서는 중복 포함하지 마. 반복 확정으로 같은 Arc가 중복 생성되지 않게 해줘.
+원문은 삭제하지 마. 요약은 재생성 가능한 파생 데이터로 취급하고 사용자가 고친 요약은 edited_by_user로 보호해줘.
 
-SQLite 구조:
-projects: id, title, genre, world_rules, created_at, updated_at.
-characters: id, project_id(FK), name, traits, speech_style, relationships, created_at, updated_at.
-scenes: id, project_id(FK), title, situation, goal, mood, created_at, updated_at.
-generations: id, scene_id(FK), version_number, selected_character_ids_json, input_snapshot_json, output_text, source(demo/ai/manual), created_at.
-버전은 insert로 쌓고 이전 본문을 update로 덮어쓰지 마. 장면별 version_number 중복을 막고 새 버전 번호와 저장을 트랜잭션으로 처리해줘. 인물 설정이 바뀌어도 당시 입력을 input_snapshot_json에서 확인할 수 있게 해줘.
-API는 장면/인물이 요청 작품에 속하는지 확인하고 다른 작품의 인물 ID가 섞인 요청은 거부해줘. 작품 삭제는 인물·장면·버전 전체 삭제를 명확히 안내한 뒤 확인해줘. 한 컴퓨터의 한 사용자용 앱이며 로그인과 다중 사용자 보안을 제공한다고 표현하지 마.
+토큰 예산:
+입력 약 30k를 기준으로 System + Bible 3k, Arc 5k, 최근 요약 6k, 직전 원문 2k, 상태/복선 2k, 지시문 0.5k와 나머지 여유로 시작해줘. 문자 수를 토큰 수로 간주하지 말고 실제 한국어 토큰을 측정해 조정해줘.
+초과 시 System > Bible > 상태 > 직전 원문 > 최근 요약 > Arc 순으로 보호하고 오래된 요약부터 줄여줘. 이번 챕터 지시문도 누락하지 마. 필수 블록만으로 초과하면 몰래 자르지 말고 사용자에게 알려줘.
 
-AI 구현:
-AI_MODE=demo|live와 AI_PROVIDER=openai|anthropic을 서버에서만 읽어줘. OpenAI는 OPENAI_API_KEY와 OPENAI_MODEL, Claude는 ANTHROPIC_API_KEY와 ANTHROPIC_MODEL을 사용해줘. 키는 .env.local에만 두고 .env.example에는 변수 이름과 비밀이 아닌 예시만 적어줘. 키가 없으면 기본 demo 모드로 실행하고, 명시적 live 모드에서 선택한 공급자의 키나 모델이 부족하면 오류로 처리해줘. 몰래 데모 결과나 다른 공급자로 바꾸지 마.
-공식 openai와 @anthropic-ai/sdk 패키지를 사용하고 공급자별 호출 코드를 서버 모듈로 분리한 뒤 공통 텍스트 결과로 변환해줘. 브라우저에서 공급자 API를 직접 호출하거나 키를 내려보내지 마. 특정 모델명을 임의로 기본값으로 고정하지 말고 README에서 사용자가 자신의 API 계정에서 이용 가능한 모델을 설정하게 안내해줘. ChatGPT Plus/Pro 구독은 OPENAI_API_KEY를 대신하지 않고 Claude Pro 구독도 ANTHROPIC_API_KEY를 대신하지 않으며, 각 개발자 콘솔에서 API 사용 설정과 별도 과금 여부를 확인해야 한다고 적어줘.
-시스템 역할은 '작가가 검토할 웹소설 대화문 초안을 제안하는 보조 작가'야. 선택 작품의 세계관 규칙, 선택한 인물 정보, 관계, 현재 장면과 요청 길이만 전달해줘. 다른 작품이나 전체 DB를 보내지 마. 저장한 모든 내용을 AI가 자동으로 기억한다고 표현하지 마.
-사용자 자료는 참고 내용으로 전달하고 그 안의 지시가 시스템 지시를 바꾸지 않게 해줘. 인물 말투를 구별하고 대사와 필요한 짧은 지문을 함께 생성하도록 요청해줘. 입력에 없는 새 설정은 확정 사실처럼 만들지 말고 '검토할 설정 제안'으로 따로 표시하도록 해줘.
-작품명 200자, 세계관 10000자, 인물 각 정보 2000자, 장면 10000자 등 길이 제한을 서버에도 적용하고 출력 최대 길이와 60초 시간 제한을 설정해줘. 실패하면 장면 입력과 기존 편집본을 유지하고 수동 재시도를 제공해줘.
-demo는 선택 인물 이름과 상황을 반영한 짧은 예제 대화를 만들고 '데모: 외부 AI 미사용'을 명확하게 표시해줘. live 생성 전에 전송되는 항목을 화면에 안내해줘. 키, 원고 전문과 인물 설정을 로그에 남기지 마. 파일 서버는 텍스트 다운로드에 필요 없어.
+3. System prompt 관리:
+Base(역할·출력 형식·금지 사항), Style(문체·시점·톤·문장 길이·대사 비율), Direction(이번 챕터 분위기·흐름)의 3개 레이어로 나눠줘.
+'건조한 하드보일드', '서정적 1인칭' 같은 Style 프리셋 저장/불러오기, 저장할 때마다 새 버전, 챕터별 Style/Direction 오버라이드, 버전 히스토리와 diff를 제공해줘.
+챕터 생성에 사용한 Base·Style·Direction 버전과 조립된 입력을 기록해 재현할 수 있게 해줘. 생성 전에 최종 프롬프트와 토큰 수를 미리 보고 다른 프롬프트로 재생성한 본문을 나란히 비교하게 해줘.
 
-샘플과 확인:
-저작권 문제가 없는 직접 만든 샘플 작품 2개와 작품마다 인물 2명, 장면 1개를 seed로 넣어줘. 서로 다른 장르와 말투로 작품 구분을 확인할 수 있게 해줘.
-작품 선택→인물 수정→생성→편집→새 버전 저장→비교→다운로드, 재시작 후 버전 보존을 확인해줘. 다른 작품 인물의 선택/API 주입이 거부되는지, 생성 실패 시 기존 원고가 유지되는지 검증해줘. OpenAI와 Anthropic 어댑터 각각의 정상 응답, 인증 실패, 시간 초과를 가짜 응답으로 검증해줘. 실제 API 키가 없으면 해당 공급자의 live 호출 미검증임을 구분해 알려줘.
+4. 데이터 모델:
+Drizzle 스키마와 마이그레이션으로 다음 SQLite 테이블을 구현해줘.
+- projects: id, title, genre, language(기본 ko), created_at.
+- story_bible: project_id(PK/FK), characters_json, world_notes, rules_notes, updated_at.
+- prompt_profiles: id, project_id, layer(base/style/direction), name, content, version, is_preset, created_at.
+- chapters: id, project_id, number, title, instruction, content, status(draft/final), model, style_profile_id, direction_profile_id, created_at. (project_id, number)는 UNIQUE.
+- summaries: id, project_id, kind(chapter/arc), from_chapter, to_chapter, content, model, edited_by_user, superseded_by, created_at.
+- character_states: id, project_id, as_of_chapter, name, location, emotion, goal, notes.
+- plot_threads: id, project_id, description, opened_in, resolved_in.
+재생성 비교와 prompt snapshot, Base 버전 기록, 확정 처리 진행/오류/재시도 상태에 필요한 버전·작업 기록을 추가해줘. 이전 본문을 덮어쓰지 말고 새 버전으로 보존해줘.
+과거 챕터를 수정·재확정하면 후속 요약·상태·Arc가 오래된 내용에 기반함을 표시하고 재계산하게 해줘. 사용자가 수정한 요약은 자동으로 덮어쓰지 마.
+
+5. 프로젝트 구조와 API:
+app/page.tsx: 프로젝트 목록.
+app/projects/[id]/page.tsx: 챕터 목록과 진행 상황.
+app/projects/[id]/write/[chapter]/page.tsx: 집필 화면.
+app/projects/[id]/bible/page.tsx: Story Bible 편집.
+app/projects/[id]/prompts/page.tsx: system prompt 편집.
+app/api/projects/route.ts, projects/[id]/chapters/route.ts: 프로젝트·챕터 CRUD.
+app/api/chapters/[id]/generate/route.ts: 스트리밍 생성.
+app/api/chapters/[id]/finalize/route.ts: 확정·요약·상태 추출.
+app/api/prompts/route.ts: 프롬프트 관리.
+app/api/context/preview/route.ts: 조립 context와 토큰 미리보기.
+lib/db/schema.ts, client.ts: DB.
+lib/llm/client.ts, models.ts, context-builder.ts, summarizer.ts, prompts/: SDK·모델·context·요약 내부 프롬프트.
+lib/schemas/: Zod 스키마.
+
+6. 생성과 확정 파이프라인:
+client.messages.stream()으로 생성하고 ReadableStream으로 UI에 전달해 에디터에 즉시 표시해줘. AbortController로 취소하고 서버의 API 요청도 중단해줘. 취소·오류 시 기존 원고를 보존하고 미완성 결과를 확정본으로 저장하지 마.
+확정 흐름은 final 변경 → 챕터 요약 → 상태/복선 JSON 추출·Zod 검증·DB 갱신 → 필요 시 Arc 요약 순서로 해줘.
+요약/상태 추출에 실패해도 원고는 확정된 채 유지하고 실패 단계만 재시도하게 해줘. 재시도해도 상태·복선·요약이 중복되지 않게 해줘.
+챕터 요약에는 시간순 핵심 사건, 인물 관계·감정 변화, 새 설정, 새 복선과 해결된 복선을 포함하고 묘사·분위기는 제외해줘. 분량은 원문의 약 10%, 최대 500자로 해줘.
+상태 추출은 JSON으로 받고 Zod 검증 실패 시 1회만 재시도해줘. 다시 실패하면 오류와 수동 입력 fallback을 제공해줘.
+
+7. UI:
+집필 화면 중앙에는 편집 가능한 본문 에디터, 우측에는 지시문 / 요약 / 상태·복선 / Context 미리보기 탭을 배치해줘.
+상단에는 생성·재생성·확정 버튼, Sonnet/Opus 모델 선택과 토큰 사용량, 하단에는 적용 중인 Style 프리셋을 표시해줘.
+프롬프트 화면에는 Base/Style/Direction 탭, 프리셋, 버전 히스토리·diff, 최종 조립 미리보기를 제공해줘.
+Story Bible과 요약·인물 상태·복선을 직접 편집하게 해줘. 지시문에는 구체적 사건과 갈등을 적도록 가이드해줘.
+
+8. 구현 순서와 완료 기준:
+M1 기본 골격: 프로젝트·챕터 CRUD → 스트리밍 생성 → 저장. 챕터 3개를 이어 생성할 수 있게 해줘.
+M2 요약/context: 확정 시 요약, System + 최근 요약 + 직전 원문 조립, Context 미리보기. 챕터 10개 연결을 확인해줘.
+M3 프롬프트 관리: 3레이어 편집·프리셋·버전·오버라이드. 변경된 톤이 다음 챕터에 반영되는지 확인해줘.
+M4 Bible/상태: 설정 주입·상태/복선 추출·수정·요약 편집. 챕터 20개에서 설정과 복선을 평가해줘.
+M5 계층 압축/비용: Arc 요약·토큰 예산·prompt caching. 챕터 30개 이상에서 입력 토큰이 예산 안에 유지되는지 확인해줘.
+M6 선택 확장: 재생성 비교 고도화, 일관성 검사, Markdown/docx/epub 내보내기, Tiptap 전환.
+위 순서로 구현하고 단계별 결과를 확인해줘. 장편에서도 일관성이 완벽히 보장된다고 표현하지 마.
+
+9. 검증:
+Context Builder 토큰 예산·포함 범위, Zod 스키마, 요약 10개 임계값을 단위 테스트해줘. finalize는 mock LLM으로 정상·부분 실패·재시도·중복 방지를 통합 테스트해줘.
+챕터 20개 연속 생성 후 이름·성격·관계, 미해결 복선, 문체 유지 여부를 수동 평가해줘. 실제 API 키가 없으면 예제/mock으로 흐름을 확인하고 실제 생성이나 장편 품질을 검증했다고 말하지 마.
+API 키·원고 전문을 로그에 남기지 말고 실제 생성 전에 전송될 context를 확인하게 해줘. 서버 재시작 후 원문·버전·요약·복선이 유지되는지 확인해줘.
 ```
 
 ## 실행이 안 되거나 확인이 필요할 때
