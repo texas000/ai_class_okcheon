@@ -5,7 +5,7 @@ const FINAL_CHECKS = [
   "에이전트 이름·첫인사·예시 질문이 내 설계와 같아요.",
   "대표 질문의 답변이 원본 데이터와 일치해요.",
   "데이터에 없는 질문에는 추측하지 않고 안내해요.",
-  "6회차에 개선한 기능이 배포 주소에서 동작해요.",
+  "6회차에 연결한 Clerk 로그인과 Neon 데이터 저장이 배포 주소에서 동작해요.",
   "API 키나 개인정보가 화면과 GitHub에 보이지 않아요.",
 ];
 
@@ -23,7 +23,7 @@ export default function LessonSeven() {
 
     <LessonSection id="presentation-story" eyebrow="01:00–01:25 · 발표 구성" title="앱을 만든 이야기를 다섯 장면으로 정리해요" intro="기술 용어를 많이 말하기보다 문제, 데이터, 에이전트, 개선, 결과 순서로 설명합니다.">
       <div className="release-pipeline" aria-label="문제, 데이터, 에이전트, 개선, 결과 중 핵심 네 단계"><article><span>01</span><h3>문제</h3><p>누구의 무엇을 돕나요?</p></article><article><span>02</span><h3>데이터</h3><p>어떤 사실을 사용하나요?</p></article><article><span>03</span><h3>시연</h3><p>질문과 답변을 보여줘요</p></article><article><span>04</span><h3>배운 점</h3><p>개선과 다음 계획을 말해요</p></article></div>
-      <Activity title="발표 메모 만들기" steps={["앱 이름과 사용자를 한 문장으로 소개해요.", "사용한 데이터와 그 데이터로 알 수 없는 정보를 말해요.", "대표 질문으로 실제 앱을 시연해요.", "6회차 바이브코딩으로 바꾼 한 가지와 확인 방법을 설명해요.", "가장 어려웠던 점과 다음에 개선하고 싶은 것을 한 문장으로 정리해요."]} />
+      <Activity title="발표 메모 만들기" steps={["앱 이름과 사용자를 한 문장으로 소개해요.", "사용한 데이터와 그 데이터로 알 수 없는 정보를 말해요.", "대표 질문으로 실제 앱을 시연해요.", "Clerk 로그인 뒤 내 데이터를 확인하고 다른 계정의 접근을 막는 방법을 설명해요.", "가장 어려웠던 점과 다음에 개선하고 싶은 것을 한 문장으로 정리해요."]} />
     </LessonSection>
 
     <LessonSection id="presentation-rehearsal" eyebrow="01:25–01:50 · 짝 발표 연습" title="3분 안에 시연하고 피드백을 받아요" intro="한 사람은 발표하고 한 사람은 처음 사용하는 관객이 되어 화면과 설명을 확인합니다.">

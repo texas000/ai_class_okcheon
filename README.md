@@ -231,13 +231,13 @@ AI는 로컬 파일을 스스로 열지 않습니다. 서버가 관련 내용을
 | 1 | 자기소개와 첫 앱 아이디어 (120분) | 직업·취미·앱 아이디어 아이스브레이킹, AI Chat 결과물 체험 |
 | 2 | 바이브 코딩 첫 실습 (120분) | 바이브 코딩 방법, 타이머 앱 생성·실행·테스트와 한 가지 개선 |
 | 3 | GitHub 저장·Vercel 배포 (120분) | GitHub 가입·push, Vercel 배포·공개 확인, 목표 앱 프롬프트 작성 |
-| 4 | 바이브코딩으로 목표 앱 만들기 (120분) | 앱별 build-prompts.md 복사, 목표 앱 생성·실행·수정 |
-| 5 | API·DB·파일 저장소 연결 (120분) | NVIDIA·OpenAI·Claude API, Marketplace Postgres, Vercel Blob 연결 |
-| 6 | 내 AI 서비스로 바이브코딩 (120분) | 작은 기능 하나를 AI와 개선하고 재배포 |
+| 4 | 바이브코딩으로 목표 앱 만들기 (120분) | VS Code 설치·기본 사용, 앱별 프롬프트 복사, 목표 앱 생성·실행·수정 |
+| 5 | Neon DB 연결 (120분) | Neon 설정, 데이터 저장·조회·수정·삭제와 데이터 보존 |
+| 6 | Clerk 로그인 연결 (120분) | 회원가입·로그인, 사용자별 Neon 데이터와 권한 확인 |
 | 7 | 최종 배포 점검과 발표 준비 (120분) | 최종 주소·대표 질문 확인, 3분 시연 리허설 |
 | 8 | 내가 만든 애플리케이션 발표 | 앱 소개, 기능 시연, 배운 점과 피드백 |
 
-8회차 페이지에는 앞으로 수업 자료를 채울 **placeholder(내용을 넣을 자리)**가 있습니다. 5회차에는 AI API·DB·파일 저장소 연결, 6회차에는 바이브코딩, 7회차에는 최종 배포 점검과 발표 준비 본문이 포함되어 있습니다.
+8회차 페이지에는 앞으로 수업 자료를 채울 **placeholder(내용을 넣을 자리)**가 있습니다. 5회차에는 Neon DB 연결, 6회차에는 Clerk 로그인과 사용자별 데이터 연결, 7회차에는 최종 배포 점검과 발표 준비 본문이 포함되어 있습니다.
 
 `lib/practice-guide.js`의 **`COURSE_SESSIONS`**에서 `title`, `description`, `goals`, `activities`, `placeholders`를 수정하세요. `placeholders`의 `title`과 `text`를 실제 자료 안내로 바꾸면 해당 회차에 표시됩니다. `stepNumbers`로 기존 코드 실습을 배치하고, 화면 구성은 `components/practice-guide.js`에서 바꿉니다.
 
@@ -280,41 +280,43 @@ GitHub 계정이 없다면 수업 시작 전에 회원가입과 이메일 인증
 
 **4회차 · 바이브코딩으로 목표 앱 만들기 (120분, 휴식 포함)**
 
-- 10분: 프로젝트 폴더와 권장 모델 설정 확인 — ChatGPT·Codex는 Sol medium 이상, Claude는 Fable 또는 Opus medium 이상
+- 10분: VS Code 설치·기본 사용, 프로젝트 폴더와 권장 모델 설정 확인 — ChatGPT·Codex는 Sol medium 이상, Claude는 Fable 또는 Opus medium 이상
 - 15분: build-prompts.md에서 내 앱을 펼치고 전체 프롬프트 복사·붙여넣기
 - 25분: AI와 앱 생성, 설치와 로컬 실행
 - 10분: 휴식
 - 25분: 대표 동작·빈 결과·오류를 시험하고 수정
 - 20분: 작은 변화 하나 요청·수정·확인
-- 15분: 제작 기록과 실행 방법 저장, 다음 API·저장소 연결 준비
+- 15분: 제작 기록과 실행 방법 저장, 다음 Neon DB 연결 준비
 
-[수강생별 시작 프롬프트](public/materials/build-prompts.md)를 사용합니다. 4회차 화면에서도 앱별로 접힌 목록을 열고 **프롬프트 전체 복사** 버튼을 누를 수 있습니다. 먼저 샘플 데이터·데모 모드로 핵심 기능을 확인합니다.
+4회차에는 [VS Code 공식 다운로드](https://code.visualstudio.com/download)와 폴더 열기·파일 편집·저장·터미널 실행·브라우저 확인 안내를 제공합니다. [수강생별 시작 프롬프트](public/materials/build-prompts.md)를 사용합니다. 4회차 화면에서도 앱별로 접힌 목록을 열고 **프롬프트 전체 복사** 버튼을 누를 수 있습니다. 먼저 샘플 데이터·데모 모드로 핵심 기능을 확인합니다.
 
 기존 GitHub 가입·NVIDIA API 키 발급·Vercel 배포 안내는 4회차 하단의 **선택 보충 자료**로 유지합니다. 이 버튼은 수업용 챗봇 예제를 배포하며, 학생이 직접 만든 앱의 배포는 저장 방식·서버·DB에 맞는 방법을 따로 정합니다. 첫 앱 제작 본문은 `components/lesson-four.js`, 보충 배포 안내는 `components/lesson-deployment.js`, 배포 단계는 `lib/lesson-four.js`에서 수정합니다.
 
-**5회차 · AI API와 Vercel 저장소 연결하기 (120분, 휴식 포함)**
+**5회차 · Neon DB에 내 앱 데이터 저장하기 (120분, 휴식 포함)**
 
-- 10분: AI API·DB·파일 저장소의 역할 구분
-- 20분: NVIDIA·OpenAI·Claude의 키·모델·공식 SDK와 환경변수 확인
-- 25분: 공급자 선택 서버 모듈과 AI API 연결, 정상·오류 확인
+- 10분: 브라우저·서버·Neon DB의 역할과 영구 저장 이해
+- 20분: Neon 프로젝트 생성, 연결 문자열과 `DATABASE_URL` 설정
+- 25분: Neon 연결 Instruction 적용, 원본 백업과 테이블·마이그레이션 확인
 - 10분: 휴식
-- 20분: Vercel Marketplace에서 Postgres 연결, 저장·조회 확인
-- 20분: Vercel Blob 연결, 파일 업로드·열기·삭제 확인
-- 10분: 로컬·배포 주소의 전체 흐름 테스트와 재배포
-- 5분: 무엇을 어디에 저장하는지 정리
+- 25분: 앱과 DB에서 저장·조회·수정·삭제 확인
+- 20분: 빈 결과·연결 오류·기존 데이터 이전과 보존 확인
+- 10분: 결과 기록과 Clerk 로그인 준비
 
-수업에서 말하는 “ChatGPT API”는 OpenAI 개발자 API이며 ChatGPT 구독과 별개입니다. API 키는 브라우저나 GitHub가 아니라 서버 환경변수에 저장합니다. 현재 신규 “Vercel Postgres” 상품을 만드는 방식이 아니라 Vercel Marketplace에서 Neon·Supabase 같은 Postgres 공급자를 프로젝트에 연결합니다. 업로드 파일은 배포 서버 폴더가 아닌 Vercel Blob에 저장합니다. 5회차 본문과 복사용 연결 프롬프트는 `components/lesson-five.js`에서 수정합니다.
+DB는 **Neon Postgres**를 사용합니다. 연결 문자열은 서버의 `.env.local`에 저장하고 Git과 브라우저에 노출하지 않습니다. 5회차는 로컬에서 샘플 데이터로 검증하며, 인증 없는 쓰기 기능이나 개인 데이터를 공개 배포하지 않습니다. 파일 내용은 별도 영구 저장소가 필요합니다. 본문은 `components/lesson-five.js`에서 수정합니다.
 
-**6회차 · 내 AI 서비스와 함께 바이브코딩하기 (120분, 휴식 포함)**
+**6회차 · Clerk으로 로그인과 내 데이터 연결하기 (120분, 휴식 포함)**
 
-- 20분: 5회차 에이전트의 현재 상태와 대표 질문 확인
-- 20분: 각자 사용하는 AI 서비스로 바이브코딩 요청 작성
+- 10분: Clerk·서버·Neon 역할과 인증·권한 구분
+- 20분: Clerk 앱, 로그인 방식, 환경변수 준비
+- 25분: Clerk Instruction 적용, 회원가입·로그인·프로필·로그아웃 확인
 - 10분: 휴식
-- 35분: 작은 변화 한 가지를 적용하고 단계별 확인
-- 20분: 기존 기능과 새 기능을 함께 시험
-- 15분: GitHub 저장, Vercel 재배포와 결과 기록
+- 25분: 서버에서 검증한 `userId`로 Neon 개인 데이터 소유권 연결
+- 20분: Vercel 배포, 비로그인·두 계정으로 화면과 API 접근 확인
+- 10분: 검증 결과 기록과 발표 준비
 
-ChatGPT, Claude, Gemini, Copilot 등 어떤 AI 서비스를 사용해도 됩니다. 현재 앱, 바꾸고 싶은 한 가지, 사용자가 보게 될 결과를 설명하고 비개발자가 따라 할 수 있도록 한 단계씩 안내해 달라고 요청합니다. API 키와 개인정보는 AI 대화나 코드에 넣지 않으며, 큰 변경은 피하고 각 단계를 적용할 때마다 화면을 확인합니다. 6회차 본문은 `components/lesson-six.js`에서 수정합니다.
+로그인은 **Clerk**을 사용하고 앱 데이터는 Neon에 보관합니다. `CLERK_SECRET_KEY`는 서버 전용이며, 개인 데이터 조회·수정·삭제는 서버에서 소유권을 확인합니다. 로그인과 관리자 권한은 별개입니다. 기존 데이터는 확인된 계정에만 이관하고, 공개 배포 전 운영 인스턴스·도메인·환경변수를 확인합니다. 본문은 `components/lesson-six.js`에서 수정합니다.
+
+복사용 지시문은 `lib/connection-instructions.js`에서 관리하고, 다운로드 자료인 [5·6회차 연결 Instruction](public/materials/connection-instructions.md)에도 같은 내용을 반영합니다. 4회차의 [앱별 시작 프롬프트](public/materials/build-prompts.md)는 로컬 첫 버전이며, 이후 위 연결 Instruction을 적용합니다. Electron 앱은 인증된 서버 API를 사용하는 별도 설계가 필요합니다.
 
 **7회차 · 최종 배포 점검과 발표 준비 (120분, 휴식 포함)**
 
