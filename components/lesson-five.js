@@ -1,4 +1,5 @@
 import { Activity, LessonSchedule, LessonSection, Review } from "./lesson-blocks.js";
+import LessonFiveSamples from "./lesson-five-samples.js";
 import { NEON_INSTRUCTION } from "../lib/connection-instructions.js";
 
 function DatabaseDiagram({ title, description, steps, caption }) {
@@ -38,15 +39,11 @@ export default function LessonFive() {
         { place: "온라인 앱 서버", name: "공통 접수 창구 · API", detail: "요청을 검사하고 DB를 읽고 써요. 로그인 연결 후에는 사용자 권한도 확인해요." },
         { place: "온라인 저장 공간", name: "공유하는 DB", detail: "웹 앱과 설치형 앱이 같은 서버를 이용하면 같은 기록을 조회할 수 있어요." },
       ]} caption="보통 배포하는 데스크톱 앱에 공용 DB 비밀번호를 넣지 않고 서버에서 관리해요. 이 온라인 기능은 인터넷이 필요해요. 오프라인 저장 후 동기화하려면 별도의 기능을 만들어야 해요." />
-      <Activity title="웹 앱에서 ‘옥천 행사’ 한 건이 저장되고 다시 보이는 과정" steps={[
-        "앱 화면에 ‘옥천 행사’를 입력하고 저장 버튼을 눌러요.",
-        "앱의 처리 코드가 제목·날짜 등 필요한 값이 있는지 확인해요. 온라인 앱은 서버의 요청 창구(API)로 이 내용을 보내요.",
-        "서버가 DB 연결 정보를 사용해 ‘새 기록을 추가해 줘’라는 명령을 보내요. DB는 기록을 저장하고 결과를 돌려줘요.",
-        "앱은 성공 응답을 받은 뒤 저장 완료를 안내하고, 목록에 결과를 반영해요. 실패하면 오류를 알려줘야 해요.",
-        "나중에 앱을 다시 열면 처리 코드가 DB에 목록을 요청해요. 보관된 ‘옥천 행사’를 받아 화면에 다시 그려요.",
-      ]} />
       <aside className="lesson-takeaway"><h3>DB를 연결하면 무엇이 달라질까요?</h3><p>화면에서만 잠깐 보이던 정보를 DB에 보관할 수 있어요. 다만 연결 정보만 넣으면 끝나는 것은 아니에요. 앱에 저장·조회·수정·삭제를 요청하는 코드가 있어야 실제로 작동해요.</p><p>다른 기기에 새 기록을 보여주려면 같은 서버·DB에서 다시 조회해야 해요. 모든 화면이 즉시 바뀌는 실시간 갱신과 로그인·사용자별 권한은 별도로 구현해야 해요. 로컬 DB든 온라인 DB든 데이터를 삭제하면 복구에 백업이 필요할 수 있어요.</p></aside>
       <aside className="lesson-takeaway"><h3>로그인은 다음 시간에 연결해요</h3><p>5회차는 샘플 데이터로 로컬 연결을 확인해요. 6회차에 Clerk으로 사용자와 권한을 연결한 뒤 공개 배포를 점검합니다. 사진·영상의 파일 내용은 DB와 별도 파일 저장소가 필요해요.</p></aside>
+    </LessonSection>
+    <LessonSection id="db-live-samples" eyebrow="실제 DB 연결 데모" title="Neon DB에서 가져온 데이터를 확인해요" intro="서버의 DATABASE_URL로 연결한 DB에 샘플 테이블을 만들었어요. 가상의 할 일 데이터와 테이블 구조를 직접 조회해 봅니다.">
+      <LessonFiveSamples />
     </LessonSection>
     <LessonSection id="neon-setup" eyebrow="00:10–00:30 · Neon 준비" title="Neon 프로젝트를 만들고 연결 정보를 확인해요" intro="Neon은 클라우드에서 Postgres DB를 제공해요. 데이터베이스마다 접속 주소와 비밀번호가 포함된 연결 문자열이 있습니다.">
       <p><a className="lesson-action" href="https://console.neon.tech/" target="_blank" rel="noreferrer">Neon 가입·콘솔 열기 ↗</a></p>

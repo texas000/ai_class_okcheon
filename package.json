@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "node --test tests/*.test.js",
+    "db:seed:lesson-five": "node scripts/seed-lesson-five.js",
     "deploy:button": "node scripts/deploy-button.js"
   },
   "engines": {
@@ -17,6 +18,7 @@
   "dependencies": {
     "@clerk/localizations": "^4.23.0",
     "@clerk/nextjs": "^7.9.16",
+    "@neondatabase/serverless": "^1.2.0",
     "csv-parse": "7.0.3",
     "next": "16.3.7",
     "react": "19.3.0",
