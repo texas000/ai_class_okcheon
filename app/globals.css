@@ -980,6 +980,21 @@ a svg {
 .lesson-takeaway p + p { margin-top: 9px; }
 .lesson-references { display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 10px; margin-top: 16px; color: var(--muted); }
 .lesson-references a { text-underline-offset: 3px; }
+.db-diagram { margin: 22px 0; padding: 22px; border: 1px solid var(--line); border-radius: 12px; background: #fffdf8; }
+.db-diagram h3 { margin: 0 0 10px; font-size: 16px; line-height: 1.6; }
+.db-diagram > p, .db-diagram figcaption { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.db-diagram-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; list-style: none; padding: 0; margin: 20px 0; }
+.db-diagram-flow > li { position: relative; min-width: 0; }
+.db-diagram-node { height: 100%; padding: 16px; border: 1px solid #d9dfd2; border-radius: 10px; background: #eef1e9; }
+.db-diagram-node > span { display: block; margin-bottom: 8px; font-size: 10px; color: var(--muted); }
+.db-diagram-node strong { display: block; font-size: 13px; line-height: 1.7; }
+.db-diagram-node p { margin: 8px 0 0; font-size: 12px; line-height: 1.9; color: var(--muted); }
+.db-diagram-arrow { position: absolute; top: 50%; right: -26px; transform: translateY(-50%); font-size: 23px; color: #8b765c; }
+@media (max-width: 700px) {
+  .db-diagram { padding: 18px; }
+  .db-diagram-flow { grid-template-columns: 1fr; gap: 32px; }
+  .db-diagram-arrow { top: auto; right: 50%; bottom: -31px; transform: translateX(50%) rotate(90deg); }
+}
 @media (max-width: 760px) {
   .lesson-overview { grid-template-columns: 1fr; }
   .lesson-header h1 { font-size: 23px; }
