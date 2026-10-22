@@ -1,5 +1,6 @@
 import { Activity, LessonSchedule, LessonSection, Review } from "./lesson-blocks.js";
 import LessonFiveSamples from "./lesson-five-samples.js";
+import LessonFiveDataGuide from "./lesson-five-data-guide.js";
 import { NEON_INSTRUCTION } from "../lib/connection-instructions.js";
 
 function DatabaseDiagram({ title, description, steps, caption }) {
@@ -44,6 +45,7 @@ export default function LessonFive() {
     </LessonSection>
     <LessonSection id="db-live-samples" eyebrow="실제 DB 연결 데모" title="Neon DB에서 가져온 데이터를 확인해요" intro="서버의 DATABASE_URL로 연결한 DB에 샘플 테이블을 만들었어요. 가상의 할 일 데이터와 테이블 구조를 직접 조회해 봅니다.">
       <LessonFiveSamples />
+      <p className="course-note">더 알아보기: <a href="#db-normalization">정규화·비정규화</a> · <a href="#db-large-data-prompts">많은 데이터를 위한 프롬프트</a></p>
     </LessonSection>
     <LessonSection id="neon-setup" eyebrow="00:10–00:30 · Neon 준비" title="Neon 프로젝트를 만들고 연결 정보를 확인해요" intro="Neon은 클라우드에서 Postgres DB를 제공해요. 데이터베이스마다 접속 주소와 비밀번호가 포함된 연결 문자열이 있습니다.">
       <p><a className="lesson-action" href="https://console.neon.tech/" target="_blank" rel="noreferrer">Neon 가입·콘솔 열기 ↗</a></p>
@@ -59,6 +61,7 @@ export default function LessonFive() {
     <LessonSection id="db-crud" eyebrow="01:05–01:30 · 저장과 조회" title="내 앱에서 데이터 한 건을 끝까지 다뤄요" intro="CRUD는 만들기(Create), 읽기(Read), 수정(Update), 삭제(Delete)예요. 내 앱에서 필요한 동작을 실제 화면과 Neon에서 함께 확인해요.">
       <Activity title="데이터 흐름 확인하기" steps={["가상 일정이나 행사 한 건을 앱에서 저장해요.", "새로고침하고 서버를 껐다 켠 뒤 같은 기록이 보이는지 확인해요.", "Neon의 테이블 화면에서 저장한 행이 있는지 확인해요.", "앱에서 내용을 수정하고 목록·상세·DB에 같은 값이 보이는지 확인해요.", "실습용 기록을 삭제한 뒤 목록과 DB에서도 없어졌는지 확인해요."]} />
     </LessonSection>
+    <LessonFiveDataGuide />
     <LessonSection id="db-test" eyebrow="01:30–01:50 · 오류와 이전 데이터" title="빈 데이터와 연결 오류도 확인해요" intro="정상 저장뿐 아니라 잘못된 입력, DB 연결 실패, 기존 데이터 이전 결과도 점검해요.">
       <Activity title="성공과 실패 비교하기" steps={["필수 입력이 비었을 때 저장되지 않고 안내가 나오는지 확인해요.", "검색 결과가 없을 때 빈 결과 화면이 보이는지 확인해요.", "실습 환경에서 연결 설정을 잠시 비워 오류 안내를 확인하고 원래 값으로 복구해 서버를 재시작해요.", "기존 데이터를 옮겼다면 원본과 건수·날짜·내용을 비교해요. seed 재실행으로 사용자 기록이 덮어써지지 않는지도 확인해요."]} />
     </LessonSection>

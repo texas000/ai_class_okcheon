@@ -994,7 +994,14 @@ a svg {
 .db-samples .lesson-action:disabled { opacity: 0.65; cursor: wait; }
 .db-sample-columns { margin-top: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 10px; }
 .db-sample-columns summary { cursor: pointer; font-weight: 550; }
+.db-normalized-tables { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.db-concept-explanation { margin-top: 24px; }
+.db-concept-explanation h3, .db-prompt-heading { font-size: 15px; line-height: 1.7; margin: 24px 0 10px; }
+.db-concept-explanation p { font-size: 12px; line-height: 1.9; color: var(--muted); }
+#db-large-data-prompts pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (max-width: 700px) {
+  #db-normalization .course-table { min-width: 0; }
+  .db-normalized-tables { grid-template-columns: 1fr; }
   .db-diagram { padding: 18px; }
   .db-diagram-flow { grid-template-columns: 1fr; gap: 32px; }
   .db-diagram-arrow { top: auto; right: 50%; bottom: -31px; transform: translateX(50%) rotate(90deg); }
