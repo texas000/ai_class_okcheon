@@ -1,4 +1,5 @@
 import { Activity, LessonSchedule, LessonSection, Review } from "./lesson-blocks.js";
+import BuildPromptLibrary from "./build-prompt-library.js";
 import { CLERK_INSTRUCTION } from "../lib/connection-instructions.js";
 
 export default function LessonSix() {
@@ -33,6 +34,11 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up`}</code></pre></div>
     </LessonSection>
     <LessonSection id="auth-test" eyebrow="01:30–01:50 · 배포와 검증" title="배포 주소에서도 로그인과 데이터 권한을 확인해요" intro="로컬에서 통과한 흐름을 Vercel 새 배포에서도 다시 실행해요. 파일 업로드 앱은 영구 파일 저장소 준비도 먼저 확인합니다.">
       <Activity title="배포 후 세 가지 상태로 시험하기" steps={["Vercel Environment Variables에 DATABASE_URL과 Clerk 키·로그인 경로를 알맞은 환경에 설정해요.", "운영 배포라면 Clerk 운영 인스턴스, 도메인과 로그인 방식을 설정하고 운영 키를 사용해요.", "새 배포 후 회원가입 → 로그인 → 내 데이터 저장·조회 → 로그아웃을 확인해요.", "비로그인, 계정 A, 계정 B에서 화면과 API의 접근 결과를 비교해요.", "기존 핵심 기능과 데이터가 유지되는지 확인하고, 비공개 파일도 다른 계정에서 열리지 않는지 확인해요."]} />
+    </LessonSection>
+    <LessonSection id="feature-expansion" eyebrow="선택 실습 · 앱 확장" title="내 앱에 어떤 기능을 더하면 좋을까요?" intro="4회차에 만든 7개 앱을 바탕으로 추천했어요. 로그인과 내 데이터 확인을 마쳤다면 내 앱을 펼치고 프롬프트를 복사해 기능 하나를 더해 보세요.">
+      <aside className="lesson-takeaway"><h3>추천 1개부터 시작해요</h3><p>각 프롬프트에는 먼저 만들 기능, 다음 확장 후보, 완료 확인 방법이 있어요. 기본은 1단계만 구현하고 다음 단계는 결과를 확인한 뒤 요청해요. 외부 연동은 별도 계정·권한 설정이 필요할 수 있어요.</p><p>Google로 앱에 로그인하는 것과 Google Calendar 접근을 허용하는 것은 별개예요. 일정 앱은 간단한 파일 내보내기부터 시작하거나, 준비가 되면 별도 OAuth 동의를 거쳐 API로 연결해요. <a href="https://developers.google.com/workspace/calendar/api/guides/create-events" target="_blank" rel="noreferrer">Google Calendar 공식 연결 안내 ↗</a></p></aside>
+      <BuildPromptLibrary promptsUrl="/materials/feature-expansion-prompts.md" sourceLabel="앱 확장 프롬프트 원본 전체 보기 ↗" />
+      <Activity title="기능 하나를 끝까지 확장하기" steps={["내 앱을 펼쳐 추천 기능과 다음 확장 후보를 읽어요.", "프롬프트 전체를 내 앱 프로젝트의 AI 코딩 도구에 붙여 넣어요. 수업 홈페이지 프로젝트와 구분해요.", "기본 1단계 또는 내가 선택한 기능 하나를 구현하고 안내된 완료 기준으로 확인해요.", "기존 기능과 두 계정의 데이터 권한도 다시 확인한 뒤 다음 기능을 요청해요."]} />
     </LessonSection>
     <LessonSection id="auth-review" eyebrow="01:50–02:00 · 정리" title="DB와 로그인이 연결된 앱을 발표 준비해요" intro="7회차에는 완성한 앱의 최종 배포를 점검하고 로그인부터 내 데이터 확인까지 시연을 준비합니다.">
       <Activity title="결과 기록하기" steps={["공개 화면·로그인 필수 화면·관리자 화면을 구분해 기록해요.", "다른 두 계정과 비로그인 상태의 권한 확인 결과를 남겨요.", "비밀값 없이 코드와 README를 GitHub에 저장해요.", "발표에 사용할 테스트 계정과 가상 데이터를 준비해요."]} />
