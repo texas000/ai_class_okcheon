@@ -20,7 +20,7 @@ function parseBuildPrompts(markdown) {
   return prompts;
 }
 
-export default function BuildPromptLibrary({ promptsUrl = PROMPTS_URL, sourceLabel = "build-prompts.md 원본 전체 보기 ↗" }) {
+export default function BuildPromptLibrary() {
   const [prompts, setPrompts] = useState([]);
   const [copiedNumber, setCopiedNumber] = useState(null);
   const [error, setError] = useState("");
@@ -30,7 +30,7 @@ export default function BuildPromptLibrary({ promptsUrl = PROMPTS_URL, sourceLab
 
     async function loadPrompts() {
       try {
-        const response = await fetch(promptsUrl);
+        const response = await fetch(PROMPTS_URL);
         if (!response.ok) throw new Error("프롬프트 파일을 불러오지 못했습니다.");
         const items = parseBuildPrompts(await response.text());
         if (items.length === 0) throw new Error("앱별 프롬프트를 찾지 못했습니다.");
@@ -42,7 +42,7 @@ export default function BuildPromptLibrary({ promptsUrl = PROMPTS_URL, sourceLab
 
     loadPrompts();
     return () => { cancelled = true; };
-  }, [promptsUrl]);
+  }, []);
 
   async function copyPrompt(item) {
     try {
@@ -68,6 +68,6 @@ export default function BuildPromptLibrary({ promptsUrl = PROMPTS_URL, sourceLab
         </div>
       </details>
     ))}
-    <p><a href={promptsUrl} target="_blank" rel="noreferrer">{sourceLabel}</a></p>
+    <p><a href={PROMPTS_URL} target="_blank" rel="noreferrer">build-prompts.md 원본 전체 보기 ↗</a></p>
   </div>;
 }
