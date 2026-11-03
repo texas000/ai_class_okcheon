@@ -8,6 +8,7 @@ import LessonFour from "./lesson-four.js";
 import LessonFive from "./lesson-five.js";
 import LessonSix from "./lesson-six.js";
 import LessonSeven from "./lesson-seven.js";
+import LessonEight from "./lesson-eight.js";
 import GuideCodeSteps from "./guide-code-steps.js";
 
 // 회차의 내용은 lib/practice-guide.js에서 바꾸고, 화면 배치는 이곳에서 바꿉니다.
@@ -44,6 +45,7 @@ export default function PracticeGuide({ sessionNumber, restaurantSummary, isLoad
         {session.number === 5 && <LessonFive />}
         {session.number === 6 && <LessonSix />}
         {session.number === 7 && <LessonSeven />}
+        {session.number === 8 && <LessonEight />}
 
         {session.placeholders.length > 0 && <section className="lesson-materials" aria-label="수업 자료 자리">
           <h3>수업 자료와 질문</h3>
