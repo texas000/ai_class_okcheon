@@ -1753,3 +1753,60 @@ a svg {
   .auth-heading { margin-top: 42px; }
   .auth-screen .cl-rootBox, .auth-screen .cl-cardBox { max-width: 100%; }
 }
+
+/* 7회차: 기존 앱에서 시작하는 배포 수업 */
+.publish-lesson { --publish-ink: #344a3e; --publish-green: #466550; }
+.publish-start { padding: 36px; border: 1px solid #d4decc; border-radius: 18px; background: #eef2e8; }
+.publish-start .eyebrow { color: #526a47; }
+.publish-start h2 { font-size: clamp(24px, 3vw, 34px); letter-spacing: -1.2px; line-height: 1.4; color: var(--publish-ink); margin: 15px 0; }
+.publish-start > p { font-size: 15px; line-height: 1.9; color: #5d6c59; }
+.publish-route { display: flex; align-items: center; gap: 16px; margin: 28px 0; }
+.publish-route > span { flex: 1; padding: 17px 12px; background: #fffdf8; border: 1px solid #d8dfd0; border-radius: 10px; text-align: center; font-size: 17px; font-weight: 700; color: var(--publish-ink); }
+.publish-route small { display: block; margin-top: 7px; font-size: 12px; font-weight: 400; color: #6f7a67; }
+.publish-route b { color: #829075; }
+.publish-script-link { display: inline-block; font-size: 13px; line-height: 1.8; color: var(--publish-ink); text-underline-offset: 4px; }
+.publish-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 14px; }
+.publish-nav a { display: flex; align-items: center; gap: 7px; padding: 10px 13px; background: #fffdf8; border: 1px solid #dcd5c9; border-radius: 8px; text-decoration: none; color: #635d50; font-size: 12px; }
+.publish-nav a:hover { background: #eef2e8; border-color: #809274; }
+.publish-nav a span { color: var(--publish-green); font-weight: 700; }
+.publish-preparation { margin: 0 0 36px; color: #706b60; font-size: 12px; line-height: 1.9; }
+.publish-step { padding: 30px; margin-bottom: 24px; border: 1px solid #ded7cb; border-radius: 16px; background: #fffdf9; scroll-margin-top: 25px; }
+.publish-step > header { display: flex; align-items: flex-start; gap: 17px; }
+.publish-step-number { display: grid; place-items: center; width: 48px; height: 48px; flex-shrink: 0; background: #eaf0e4; color: var(--publish-green); border-radius: 14px; font-size: 19px; font-weight: 600; }
+.publish-step .eyebrow { color: #746a58; font-size: 11px; }
+.publish-step h2 { margin: 8px 0 0; font-size: 23px; line-height: 1.5; letter-spacing: -0.7px; }
+.publish-description { margin: 20px 0; color: #696354; line-height: 1.9; font-size: 15px; }
+.publish-step .class-activity { border: 0; background: transparent; padding: 0; margin: 22px 0; }
+.publish-step .activity-tag, .publish-step .class-activity h3 { display: none; }
+.publish-step .class-activity ol { padding-left: 24px; }
+.publish-step .class-activity li { padding-left: 6px; font-size: 15px; line-height: 2; color: #514d43; margin-bottom: 17px; }
+.publish-step .class-activity li::marker { color: var(--publish-green); font-weight: 700; }
+.publish-check { border-left: 3px solid #69815b; background: #eff3e9; padding: 15px 18px; margin-top: 24px; border-radius: 0 8px 8px 0; }
+.publish-check strong { font-size: 12px; color: #4e6741; }
+.publish-check p { font-size: 14px; line-height: 1.8; color: #4c6044; margin: 7px 0 0; }
+.publish-help, .publish-teacher { border-top: 1px solid #e5dfd5; margin-top: 20px; padding-top: 16px; }
+.publish-help summary, .publish-teacher summary, .publish-schedule > summary { cursor: pointer; font-size: 13px; color: #6b624f; line-height: 1.8; }
+.publish-help p, .publish-teacher p { font-size: 13px; line-height: 1.95; color: #6c6457; }
+.publish-teacher blockquote { margin: 18px 0; padding: 16px 20px; background: #f4efe6; border-radius: 8px; font-size: 15px; line-height: 2; color: #514a3d; }
+.publish-break { border-top: 1px dashed #d2c7b5; padding-top: 20px; margin: 24px 0 0; color: #81745f; font-size: 12px; line-height: 1.8; }
+.publish-env-example { padding: 20px; background: #f4f0e8; border: 1px solid #e2dacb; border-radius: 10px; }
+.publish-env-example > span { font-size: 11px; color: #7a6c55; }
+.publish-env-example > code { display: block; margin: 14px 0; font-size: 14px; overflow-wrap: anywhere; }
+.publish-env-example > div { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.publish-env-example p { margin: 0; padding: 13px; background: #fffdf9; border: 1px solid #ddd3c2; border-radius: 6px; min-width: 0; }
+.publish-env-example small { display: block; font-size: 11px; color: #7f735f; margin-bottom: 9px; }
+.publish-env-example strong { font-size: 13px; overflow-wrap: anywhere; }
+.publish-faq { margin: 36px 0; }
+.publish-faq > h2 { font-size: 21px; }
+.publish-schedule { padding: 18px 0; }
+.publish-nav a:focus-visible, .publish-lesson summary:focus-visible { outline: 2px solid var(--publish-green); outline-offset: 4px; }
+@media (max-width: 640px) {
+  .publish-start, .publish-step { padding: 22px 18px; }
+  .publish-route { gap: 7px; }
+  .publish-route > span { font-size: 14px; padding: 14px 5px; }
+  .publish-route small { font-size: 10px; }
+  .publish-step > header { gap: 12px; }
+  .publish-step-number { width: 37px; height: 37px; font-size: 15px; border-radius: 10px; }
+  .publish-step h2 { font-size: 20px; }
+  .publish-env-example > div { grid-template-columns: 1fr; }
+}

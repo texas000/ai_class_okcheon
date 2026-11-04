@@ -45,7 +45,7 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up`}</code></pre></div>
       <aside className="lesson-takeaway"><h3>아이디어를 골랐다면 이 내용을 정해요</h3><p>언제 실행할지, 어떤 데이터를 읽을지, 어디로 보낼지, 누가 사용할지부터 정해요. 예를 들어 “매일 한국 시간 오전 9시 / 내 미완료 업무 / 내 이메일 / 알림을 켠 사용자만”처럼 적으면 개발 프롬프트의 재료가 됩니다.</p><p>예약 작업은 계속 실행 가능한 서버나 스케줄러가 필요해요. 알림 수신 동의·해지, 실패 시 재시도와 중복 발송 방지도 함께 생각해요. Vercel Cron의 시간대는 UTC이므로 한국 시간으로 변환하고 사용 요금제의 실행 주기·정확도를 확인해요.</p></aside>
       <p className="course-note">공식 참고: <a href="https://vercel.com/docs/cron-jobs" target="_blank" rel="noreferrer">Cron Job</a> · <a href="https://developers.google.com/workspace/calendar/api/guides/create-events" target="_blank" rel="noreferrer">Google Calendar API</a> · <a href="https://developers.notion.com/guides/get-started/authorization" target="_blank" rel="noreferrer">Notion API 권한 연결</a></p>
     </LessonSection>
-    <LessonSection id="auth-review" eyebrow="01:50–02:00 · 정리" title="DB와 로그인이 연결된 앱을 발표 준비해요" intro="7회차에는 폴더 만들기부터 앱 제작을 복습하고, GitHub에 코드를 올려 Vercel 배포와 환경 변수 등록까지 진행합니다.">
+    <LessonSection id="auth-review" eyebrow="01:50–02:00 · 정리" title="DB와 로그인이 연결된 앱을 발표 준비해요" intro="7회차에는 지금 만든 앱을 GitHub에 올리고, Vercel에 연결해 환경 변수 등록과 배포까지 진행합니다.">
       <Activity title="결과 기록하기" steps={["공개 화면·로그인 필수 화면·관리자 화면을 구분해 기록해요.", "다른 두 계정과 비로그인 상태의 권한 확인 결과를 남겨요.", "비밀값 없이 코드와 README를 GitHub에 저장해요.", "발표에 사용할 테스트 계정과 가상 데이터를 준비해요."]} />
       <Review items={[{ question: "로그인했는데 다른 사람 데이터도 보여요", answer: "서버 조회·수정·삭제 조건에 검증된 userId가 포함됐는지 확인해요. 해결되기 전 개인 데이터를 공개하지 않아요." }, { question: "로컬에서는 되는데 배포에서 로그인이 안 돼요", answer: "배포 환경의 Clerk 키, 운영 인스턴스와 도메인, 로그인 경로를 확인하고 환경변수 변경 후 새 배포를 만들어요. 키 원문은 공유하지 않아요." }]} />
     </LessonSection>

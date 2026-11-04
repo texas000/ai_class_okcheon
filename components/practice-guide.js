@@ -27,7 +27,7 @@ export default function PracticeGuide({ sessionNumber, restaurantSummary, isLoad
           <p>{session.description}</p>
         </section>
 
-        <div className="lesson-overview">
+        {session.number !== 7 && <div className="lesson-overview">
           <section className="lesson-card">
             <h3><Icon name="bulb" size={18} />오늘의 목표</h3>
             <ul>{session.goals.map((goal) => <li key={goal}>{goal}</li>)}</ul>
@@ -36,7 +36,7 @@ export default function PracticeGuide({ sessionNumber, restaurantSummary, isLoad
             <h3><Icon name="pen" size={18} />함께 할 활동</h3>
             <ol>{session.activities.map((activity) => <li key={activity}>{activity}</li>)}</ol>
           </section>
-        </div>
+        </div>}
 
         {session.number === 1 && <LessonOne />}
         {session.number === 2 && <LessonTwo isLoading={isLoading} onPrompt={onPrompt} />}
