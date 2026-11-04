@@ -1,5 +1,6 @@
 import { Activity, LessonSchedule, Review } from "./lesson-blocks.js";
-import { LESSON_SEVEN_STEPS } from "../lib/lesson-seven.js";
+import LessonPublishPrompt from "./lesson-publish-prompt.js";
+import { GITHUB_UPLOAD_PROMPT, GITHUB_UPDATE_PROMPT, LESSON_SEVEN_STEPS } from "../lib/lesson-seven.js";
 
 export default function LessonSeven() {
   return <div className="lesson-content publish-lesson">
@@ -10,15 +11,16 @@ export default function LessonSeven() {
       <div className="publish-route"><span>내 컴퓨터<small>작업한 앱</small></span><b aria-hidden="true">→</b><span>GitHub<small>코드 보관함</small></span><b aria-hidden="true">→</b><span>Vercel<small>공유할 웹 주소</small></span></div>
     </section>
     <nav className="publish-nav" aria-label="배포 5단계 바로가기">{LESSON_SEVEN_STEPS.map((step, index) => <a key={step.id} href={`#${step.id}`}><span>{index + 1}</span>{step.label}</a>)}</nav>
-    <p className="publish-preparation">준비물 · 기존 앱 폴더 / VS Code·Git 설치 / GitHub·Vercel 로그인</p>
+    <p className="publish-preparation">준비물 · 기존 앱 폴더 / AI 코딩 도구 / Git 설치 / GitHub·Vercel 로그인</p>
     {LESSON_SEVEN_STEPS.map((step, index) => <section className="publish-step" id={step.id} key={step.id} aria-labelledby={`${step.id}-title`}>
       <header><span className="publish-step-number">{String(index + 1).padStart(2, "0")}</span><div><span className="eyebrow">{step.screen} · {step.time}</span><h2 id={`${step.id}-title`}>{step.title}</h2></div></header>
       <p className="publish-description">{step.description}</p>
       <Activity title="이 순서대로 해보세요" steps={step.steps} />
       {index === 0 && <div className="lesson-code-example"><span className="code-file">.gitignore · 올리지 않을 파일 목록</span><pre><code>{`.env*\n!.env.example\nnode_modules/\n.next/\n.vercel/`}</code></pre><p className="course-note">.env.example에는 실제 키를 넣지 않아요. 이미 Git에 기록된 비밀 파일은 이 목록만으로 사라지지 않아요. 발견하면 업로드를 멈추고 강사와 키 폐기·재발급부터 진행해요.</p></div>}
-      {index === 1 && <details className="publish-help"><summary>이미 GitHub에 연결했거나 버튼이 안 보이나요?</summary><p>기존 저장소가 있다면 새로 만들지 않아요. 연결된 저장소가 내 것인지 확인하고 Commit → 소스 제어의 … → Push로 올려요. 변경 사항이 없고 이미 올라갔다면 GitHub에서 파일을 확인한 뒤 3단계로 가요. Git 설치·이름·이메일 설정 안내가 나오면 강사와 함께 설정해요.</p></details>}
+      {index === 1 && <><LessonPublishPrompt title="AI에게 보낼 GitHub 업로드 요청" buttonLabel="GitHub 업로드 프롬프트 복사" prompt={GITHUB_UPLOAD_PROMPT} /><details className="publish-help"><summary>AI가 직접 올리지 못한다고 하나요?</summary><p>도구마다 파일 접근·명령 실행·GitHub 연결 권한이 달라요. AI가 안내하는 로그인이나 연결을 먼저 진행해요. 계속 막히면 현재 안내를 강사에게 보여주세요. 완료했다는 답변만 믿지 말고 GitHub 링크에서 파일을 확인해요.</p></details></>}
       {index === 2 && <a className="lesson-primary-action" href="https://vercel.com/new" target="_blank" rel="noreferrer">Vercel 열기 ↗</a>}
       {index === 3 && <><div className="publish-env-example" aria-label="환경 변수 입력 예시"><span>예시 · 실제 값은 내 앱의 설정을 사용해요</span><code>DATABASE_URL=내_DB_연결주소</code><div><p><small>Key / Name · 이름</small><strong>DATABASE_URL</strong></p><p><small>Value · 값</small><strong>내_DB_연결주소</strong></p></div></div><p className="course-note">Clerk 앱은 공개 키와 비밀 키, AI 앱은 API 키 등 내 앱이 쓰는 항목만 넣어요. 비밀 키 이름에 NEXT_PUBLIC_을 붙이면 안 돼요. 외부 서비스에서도 배포 도메인·운영 설정을 확인해요.</p><details className="publish-help"><summary>이미 배포한 뒤 설정을 추가하려면?</summary><p>내 프로젝트 → Settings → Environment Variables에서 이름과 값을 넣고 Production을 선택해 저장해요. 미리보기에도 필요하면 Preview를 선택해요. 그다음 Deployments → 해당 배포의 … → Redeploy로 다시 배포해야 적용돼요.</p></details></>}
+      {index === 4 && <LessonPublishPrompt title="수정한 뒤 AI에게 보내요" buttonLabel="수정 반영 프롬프트 복사" prompt={GITHUB_UPDATE_PROMPT} />}
       <div className="publish-check"><strong>여기까지 됐나요?</strong><p>{step.check}</p></div>
       {index === 1 && <p className="publish-break">잠깐 쉬어요 · 00:45–00:55 · GitHub에 내 파일이 보이면 10분 휴식</p>}
     </section>)}

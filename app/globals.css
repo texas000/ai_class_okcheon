@@ -1808,3 +1808,5 @@ a svg {
   .publish-step h2 { font-size: 20px; }
   .publish-env-example > div { grid-template-columns: 1fr; }
 }
+.publish-prompt .lesson-action { margin-top: 12px; }
+.publish-prompt pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; line-height: 1.9; }
