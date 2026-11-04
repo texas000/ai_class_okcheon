@@ -8,3 +8,6 @@ out/
 *.log
 .DS_Store
 coverage/
+
+# 강사용 로컬 전용 자료
+.local-only/

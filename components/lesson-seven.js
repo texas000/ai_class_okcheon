@@ -8,7 +8,6 @@ export default function LessonSeven() {
       <h2>만든 앱, 이제 주소로 공유해요.</h2>
       <p>지금 작업한 앱 폴더를 열고 시작하세요.<br />오늘은 이 흐름만 따라가면 됩니다.</p>
       <div className="publish-route"><span>내 컴퓨터<small>작업한 앱</small></span><b aria-hidden="true">→</b><span>GitHub<small>코드 보관함</small></span><b aria-hidden="true">→</b><span>Vercel<small>공유할 웹 주소</small></span></div>
-      <a href="/materials/lesson-seven-teacher-script.md" download className="publish-script-link">강사용 수업 진행 스크립트 내려받기 ↓</a>
     </section>
     <nav className="publish-nav" aria-label="배포 5단계 바로가기">{LESSON_SEVEN_STEPS.map((step, index) => <a key={step.id} href={`#${step.id}`}><span>{index + 1}</span>{step.label}</a>)}</nav>
     <p className="publish-preparation">준비물 · 기존 앱 폴더 / VS Code·Git 설치 / GitHub·Vercel 로그인</p>
@@ -21,7 +20,6 @@ export default function LessonSeven() {
       {index === 2 && <a className="lesson-primary-action" href="https://vercel.com/new" target="_blank" rel="noreferrer">Vercel 열기 ↗</a>}
       {index === 3 && <><div className="publish-env-example" aria-label="환경 변수 입력 예시"><span>예시 · 실제 값은 내 앱의 설정을 사용해요</span><code>DATABASE_URL=내_DB_연결주소</code><div><p><small>Key / Name · 이름</small><strong>DATABASE_URL</strong></p><p><small>Value · 값</small><strong>내_DB_연결주소</strong></p></div></div><p className="course-note">Clerk 앱은 공개 키와 비밀 키, AI 앱은 API 키 등 내 앱이 쓰는 항목만 넣어요. 비밀 키 이름에 NEXT_PUBLIC_을 붙이면 안 돼요. 외부 서비스에서도 배포 도메인·운영 설정을 확인해요.</p><details className="publish-help"><summary>이미 배포한 뒤 설정을 추가하려면?</summary><p>내 프로젝트 → Settings → Environment Variables에서 이름과 값을 넣고 Production을 선택해 저장해요. 미리보기에도 필요하면 Preview를 선택해요. 그다음 Deployments → 해당 배포의 … → Redeploy로 다시 배포해야 적용돼요.</p></details></>}
       <div className="publish-check"><strong>여기까지 됐나요?</strong><p>{step.check}</p></div>
-      <details className="publish-teacher"><summary>강사용 · 이 단계에서 읽을 멘트</summary><blockquote>{step.speech}</blockquote><p><strong>진행 메모</strong> {step.pause}</p></details>
       {index === 1 && <p className="publish-break">잠깐 쉬어요 · 00:45–00:55 · GitHub에 내 파일이 보이면 10분 휴식</p>}
     </section>)}
     <section className="publish-faq" aria-labelledby="publish-faq-title"><h2 id="publish-faq-title">막혔다면 여기부터 확인해요</h2><Review items={[

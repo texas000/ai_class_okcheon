@@ -1764,7 +1764,6 @@ a svg {
 .publish-route > span { flex: 1; padding: 17px 12px; background: #fffdf8; border: 1px solid #d8dfd0; border-radius: 10px; text-align: center; font-size: 17px; font-weight: 700; color: var(--publish-ink); }
 .publish-route small { display: block; margin-top: 7px; font-size: 12px; font-weight: 400; color: #6f7a67; }
 .publish-route b { color: #829075; }
-.publish-script-link { display: inline-block; font-size: 13px; line-height: 1.8; color: var(--publish-ink); text-underline-offset: 4px; }
 .publish-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 14px; }
 .publish-nav a { display: flex; align-items: center; gap: 7px; padding: 10px 13px; background: #fffdf8; border: 1px solid #dcd5c9; border-radius: 8px; text-decoration: none; color: #635d50; font-size: 12px; }
 .publish-nav a:hover { background: #eef2e8; border-color: #809274; }
@@ -1784,10 +1783,9 @@ a svg {
 .publish-check { border-left: 3px solid #69815b; background: #eff3e9; padding: 15px 18px; margin-top: 24px; border-radius: 0 8px 8px 0; }
 .publish-check strong { font-size: 12px; color: #4e6741; }
 .publish-check p { font-size: 14px; line-height: 1.8; color: #4c6044; margin: 7px 0 0; }
-.publish-help, .publish-teacher { border-top: 1px solid #e5dfd5; margin-top: 20px; padding-top: 16px; }
-.publish-help summary, .publish-teacher summary, .publish-schedule > summary { cursor: pointer; font-size: 13px; color: #6b624f; line-height: 1.8; }
-.publish-help p, .publish-teacher p { font-size: 13px; line-height: 1.95; color: #6c6457; }
-.publish-teacher blockquote { margin: 18px 0; padding: 16px 20px; background: #f4efe6; border-radius: 8px; font-size: 15px; line-height: 2; color: #514a3d; }
+.publish-help { border-top: 1px solid #e5dfd5; margin-top: 20px; padding-top: 16px; }
+.publish-help summary, .publish-schedule > summary { cursor: pointer; font-size: 13px; color: #6b624f; line-height: 1.8; }
+.publish-help p { font-size: 13px; line-height: 1.95; color: #6c6457; }
 .publish-break { border-top: 1px dashed #d2c7b5; padding-top: 20px; margin: 24px 0 0; color: #81745f; font-size: 12px; line-height: 1.8; }
 .publish-env-example { padding: 20px; background: #f4f0e8; border: 1px solid #e2dacb; border-radius: 10px; }
 .publish-env-example > span { font-size: 11px; color: #7a6c55; }
